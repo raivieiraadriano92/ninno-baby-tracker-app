@@ -14,6 +14,7 @@ type TextProps = RNTextProps & {
 export const Text: FunctionComponent<TextProps> = ({
   bold,
   children,
+  className,
   medium,
   semibold,
   style,
@@ -32,7 +33,10 @@ export const Text: FunctionComponent<TextProps> = ({
   }, [bold, medium, semibold])
 
   return (
-    <RNText {...props} style={[style, { fontFamily }]}>
+    <RNText
+      {...props}
+      className={`text-base text-custom-primary ${className}`}
+      style={[style, { fontFamily }]}>
       {children}
     </RNText>
   )
