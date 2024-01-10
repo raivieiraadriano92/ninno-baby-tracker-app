@@ -1,14 +1,17 @@
+import type { FunctionComponent } from 'react'
 import { useCallback } from 'react'
 
+import { NavigationContainer } from '@react-navigation/native'
 import * as SplashScreen from 'expo-splash-screen'
 import { StatusBar } from 'expo-status-bar'
-import { StyleSheet, Text, View } from 'react-native'
 import { usePreloadApp } from 'src/hooks'
+import { RootNavigator } from 'src/navigation/root-navigator'
+import { theme } from 'src/theme'
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync()
 
-export default function App() {
+const App: FunctionComponent = () => {
   const { appIsReady } = usePreloadApp()
 
   const onLayoutRootView = useCallback(async () => {
@@ -27,19 +30,11 @@ export default function App() {
   }
 
   return (
-    <View onLayout={onLayoutRootView} style={styles.container}>
-      <Text style={{ fontFamily: 'Nunito_700Bold' }}>
-        Open up App.tsx to start working on your app!
-      </Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer onReady={onLayoutRootView} theme={theme}>
+      <RootNavigator />
+      <StatusBar style="dark" />
+    </NavigationContainer>
   )
 }
 
-const styles = StyleSheet.create({
-  container: {
-    alignItems: 'center',
-    flex: 1,
-    justifyContent: 'center'
-  }
-})
+export default App

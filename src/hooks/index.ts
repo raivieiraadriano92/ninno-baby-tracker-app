@@ -1,1 +1,1 @@
-export { usePreloadApp } from './usePreloadApp'
+export { usePreloadApp } from './use-preload-app'
