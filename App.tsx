@@ -3,8 +3,7 @@ import { useCallback } from 'react'
 import * as SplashScreen from 'expo-splash-screen'
 import { StatusBar } from 'expo-status-bar'
 import { StyleSheet, Text, View } from 'react-native'
-
-import { usePreloadApp } from './src/hooks'
+import { usePreloadApp } from 'src/hooks'
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync()
