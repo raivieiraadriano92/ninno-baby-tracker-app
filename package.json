@@ -13,7 +13,9 @@
     "lint-eslint": "eslint . --ext js,jsx,ts,tsx --max-warnings=0 --config .eslintrc.js"
   },
   "dependencies": {
+    "@expo-google-fonts/nunito": "^0.2.3",
     "expo": "~49.0.15",
+    "expo-splash-screen": "~0.20.5",
     "expo-status-bar": "~1.6.0",
     "react": "18.2.0",
     "react-native": "0.72.6"
