@@ -21,6 +21,6 @@ export const WelcomeScreen: RootStackScreen<'Welcome'> = ({ navigation }) => (
         Keep track of baby's feeding, sleeps, diapers & growth in one place.
       </Text>
     </View>
-    <Button onPress={() => navigation.navigate('Tabs')} title="Get started" />
+    <Button onPress={() => navigation.navigate('BabyProfileCreation')} title="Get started" />
   </AnimatedSafeAreaView>
 )

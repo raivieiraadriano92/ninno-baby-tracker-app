@@ -5,6 +5,7 @@ import type { CompositeScreenProps, NavigatorScreenParams } from '@react-navigat
 import type { NativeStackScreenProps } from '@react-navigation/native-stack'
 
 export type RootStackParamList = {
+  BabyProfileCreation: undefined
   Tabs: undefined | NavigatorScreenParams<TabParamList>
   Welcome: undefined
 }
