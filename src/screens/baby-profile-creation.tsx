@@ -1,21 +1,34 @@
 import { useEffect, useRef, useState } from 'react'
 import type { PropsWithChildren, FunctionComponent, Dispatch, SetStateAction } from 'react'
 
+import { format } from 'date-fns'
 import { Dimensions, Image, TextInput, View } from 'react-native'
+import DateTimePickerModal from 'react-native-modal-datetime-picker'
 import PagerView from 'react-native-pager-view'
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Button, Text } from 'src/components'
 import colors from 'src/theme/colors'
+import twColors from 'tailwindcss/colors'
 
 import type { RootStackScreen } from 'src/navigation/types'
 
+type LengthData = {
+  value: number
+  unit: 'cm' | 'in'
+}
+
+type WeightData = {
+  value: number
+  unit: 'kg' | 'lb' | 'st'
+}
+
 type BabyProfileDraft = {
-  gender?: 'F' | 'M'
+  gender: 'F' | 'M'
   name?: string
-  birthday?: Date
-  weight?: number
-  height?: number
-  headCircumference?: number
+  birthday: Date
+  weight: WeightData
+  height: LengthData
+  headCircumference: LengthData
 }
 
 type StepContainerProps = PropsWithChildren<{
@@ -96,7 +109,15 @@ const NameStep: FunctionComponent<StepProps> = ({
 
   const refInputNameValue = useRef<string>('')
 
+  const [placeholderTextColor, setPlaceholderTextColor] = useState(colors.custom.iconOff)
+
   const handleMoveNext = () => {
+    if (!refInputNameValue.current) {
+      setPlaceholderTextColor(twColors.red[500])
+
+      return
+    }
+
     setBabyProfileDraft((prev) => ({ ...prev, name: refInputNameValue.current }))
 
     moveNext(index)
@@ -112,10 +133,11 @@ const NameStep: FunctionComponent<StepProps> = ({
     <StepContainer title="What's the name of the baby?">
       <View className="space-y-10">
         <TextInput
+          autoCapitalize="words"
           className="text-2xl text-center text-custom-primary"
           onChangeText={(text) => (refInputNameValue.current = text)}
           placeholder="Enter the name"
-          placeholderTextColor={colors.custom.iconOff}
+          placeholderTextColor={placeholderTextColor}
           ref={refInputName}
           style={{ fontFamily: 'Nunito_700Bold' }}
         />
@@ -125,14 +147,48 @@ const NameStep: FunctionComponent<StepProps> = ({
   )
 }
 
-const BirthdayStep: FunctionComponent<StepProps> = ({ babyProfileDraft, index, moveNext }) => (
-  <StepContainer title={`When is the birthday of ${babyProfileDraft.name}?`}>
-    <View className="space-y-10">
-      <Text>calendar</Text>
-      <Button onPress={() => moveNext(index)} title="Next" />
-    </View>
-  </StepContainer>
-)
+const BirthdayStep: FunctionComponent<StepProps> = ({
+  babyProfileDraft,
+  index,
+  moveNext,
+  setBabyProfileDraft
+}) => {
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false)
+
+  const showDatePicker = () => {
+    setDatePickerVisibility(true)
+  }
+
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false)
+  }
+
+  const handleConfirm = (date: Date) => {
+    setBabyProfileDraft((prev) => ({ ...prev, birthday: date }))
+
+    hideDatePicker()
+  }
+
+  return (
+    <StepContainer title={`When is the birthday of ${babyProfileDraft.name}?`}>
+      <View className="space-y-10">
+        <DateTimePickerModal
+          date={babyProfileDraft.birthday}
+          isVisible={isDatePickerVisible}
+          mode="date"
+          onConfirm={handleConfirm}
+          onCancel={hideDatePicker}
+        />
+        <Button
+          onPress={showDatePicker}
+          title={format(babyProfileDraft.birthday, 'PP')}
+          variant="outline"
+        />
+        <Button onPress={() => moveNext(index)} title="Next" />
+      </View>
+    </StepContainer>
+  )
+}
 
 const WeightStep: FunctionComponent<StepProps> = ({ babyProfileDraft, index, moveNext }) => (
   <StepContainer title={`What is the weight of ${babyProfileDraft.name}?`}>
@@ -202,7 +258,22 @@ export const BabyProfileCreationScreen: RootStackScreen<'BabyProfileCreation'> =
 
   const [currentPage, setCurrentPage] = useState(0)
 
-  const [babyProfileDraft, setBabyProfileDraft] = useState<BabyProfileDraft>({})
+  const [babyProfileDraft, setBabyProfileDraft] = useState<BabyProfileDraft>({
+    birthday: new Date(),
+    gender: 'M',
+    height: {
+      unit: 'cm',
+      value: 50
+    },
+    weight: {
+      unit: 'kg',
+      value: 3.5
+    },
+    headCircumference: {
+      unit: 'cm',
+      value: 30
+    }
+  })
 
   const cancel = () => {
     navigation.goBack()
