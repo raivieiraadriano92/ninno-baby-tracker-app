@@ -18,7 +18,7 @@ export const WelcomeScreen: RootStackScreen<'Welcome'> = ({ navigation }) => (
     <View className="space-y-10">
       <Image className="self-center" source={require('assets/logo-ninno-face.png')} />
       <Text className="text-center" medium>
-        Keep track of baby's feeding, sleeps, diapers & growth in one place.
+        {`Keep track of baby's feeding, sleeps,\ndiapers & growth in one place.`}
       </Text>
     </View>
     <Button onPress={() => navigation.navigate('BabyProfileCreation')} title="Get started" />
