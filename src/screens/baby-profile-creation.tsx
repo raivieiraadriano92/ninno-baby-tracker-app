@@ -46,6 +46,8 @@ type StepProps = {
   setBabyProfileDraft: Dispatch<SetStateAction<BabyProfileDraft>>
 }
 
+const lengthUnits: LengthData['unit'][] = ['cm', 'in']
+
 const weightUnits: WeightData['unit'][] = ['kg', 'lb', 'st']
 
 const { height: WINDOW_HEIGHT } = Dimensions.get('window')
@@ -204,6 +206,10 @@ const WeightStep: FunctionComponent<StepProps> = ({
     .split('.')
     .map((v) => parseInt(v, 10) - 1)
 
+  if (weight.length === 1) {
+    weight.push(0)
+  }
+
   const [selectedIndex, setSelectedIndex] = useState([weight[0], weight[1], 0])
 
   const handleMoveNext = () => {
@@ -242,7 +248,7 @@ const WeightStep: FunctionComponent<StepProps> = ({
               itemHeight={60}
               itemTextStyle={{ fontFamily: 'Nunito_700Bold', fontSize: 24 }}
               onChange={(index) => setSelectedIndex([selectedIndex[0], index, selectedIndex[2]])}
-              options={Array.from({ length: 99 }, (_, i) => `${i + 1}`)}
+              options={Array.from({ length: 100 }, (_, i) => `${i + 1}`)}
               scaleFunction={(x) => x * 0.7}
               selectedIndex={selectedIndex[1]}
               selectedIndicatorStyle={{ backgroundColor: 'transparent' }}
@@ -261,9 +267,6 @@ const WeightStep: FunctionComponent<StepProps> = ({
               visibleRest={1}
             />
           </View>
-          {/* <Text bold className="text-2xl">
-            {babyProfileDraft.weight.unit}
-          </Text> */}
           <View
             className="absolute border-custom-line border-b-[1px] border-t-[1px] h-14 w-full"
             pointerEvents="none"
@@ -275,14 +278,88 @@ const WeightStep: FunctionComponent<StepProps> = ({
   )
 }
 
-const HeightStep: FunctionComponent<StepProps> = ({ babyProfileDraft, index, moveNext }) => (
-  <StepContainer title={`What is the height of ${babyProfileDraft.name}?`}>
-    <View className="space-y-10">
-      <Text>height</Text>
-      <Button onPress={() => moveNext(index)} title="Next" />
-    </View>
-  </StepContainer>
-)
+const HeightStep: FunctionComponent<StepProps> = ({
+  babyProfileDraft,
+  index,
+  moveNext,
+  setBabyProfileDraft
+}) => {
+  const height = babyProfileDraft.height.value
+    .toString()
+    .split('.')
+    .map((v) => parseInt(v, 10) - 1)
+
+  if (height.length === 1) {
+    height.push(0)
+  }
+
+  const [selectedIndex, setSelectedIndex] = useState([height[0], height[1], 0])
+
+  const handleMoveNext = () => {
+    setBabyProfileDraft((prev) => ({
+      ...prev,
+      height: {
+        unit: lengthUnits[selectedIndex[2]],
+        value: parseFloat(`${selectedIndex[0] + 1}.${selectedIndex[1] + 1}`)
+      }
+    }))
+
+    moveNext(index)
+  }
+
+  return (
+    <StepContainer title={`What is the height of ${babyProfileDraft.name}?`}>
+      <View className="space-y-10">
+        <View className="flex-row items-center justify-center space-x-3">
+          <View>
+            <WheelPicker
+              itemHeight={60}
+              itemTextStyle={{ fontFamily: 'Nunito_700Bold', fontSize: 24 }}
+              onChange={(index) => setSelectedIndex([index, selectedIndex[1], selectedIndex[2]])}
+              options={Array.from({ length: 99 }, (_, i) => `${i + 1}`)}
+              scaleFunction={(x) => x * 0.7}
+              selectedIndex={selectedIndex[0]}
+              selectedIndicatorStyle={{ backgroundColor: 'transparent' }}
+              visibleRest={1}
+            />
+          </View>
+          <Text bold className="text-2xl">
+            ,
+          </Text>
+          <View>
+            <WheelPicker
+              itemHeight={60}
+              itemTextStyle={{ fontFamily: 'Nunito_700Bold', fontSize: 24 }}
+              onChange={(index) => setSelectedIndex([selectedIndex[0], index, selectedIndex[2]])}
+              options={Array.from({ length: 100 }, (_, i) => `${i + 1}`)}
+              scaleFunction={(x) => x * 0.7}
+              selectedIndex={selectedIndex[1]}
+              selectedIndicatorStyle={{ backgroundColor: 'transparent' }}
+              visibleRest={1}
+            />
+          </View>
+          <View>
+            <WheelPicker
+              itemHeight={60}
+              itemTextStyle={{ fontFamily: 'Nunito_700Bold', fontSize: 24 }}
+              onChange={(index) => setSelectedIndex([selectedIndex[0], selectedIndex[1], index])}
+              options={lengthUnits}
+              scaleFunction={(x) => x * 0.7}
+              selectedIndex={selectedIndex[2]}
+              selectedIndicatorStyle={{ backgroundColor: 'transparent' }}
+              visibleRest={1}
+            />
+          </View>
+          <View
+            className="absolute border-custom-line border-b-[1px] border-t-[1px] h-14 w-full"
+            pointerEvents="none"
+          />
+        </View>
+        <Button onPress={handleMoveNext} title="Next" />
+      </View>
+    </StepContainer>
+  )
+}
 
 const HeadCircumferenceStep: FunctionComponent<StepProps> = ({
   babyProfileDraft,
@@ -338,7 +415,7 @@ export const BabyProfileCreationScreen: RootStackScreen<'BabyProfileCreation'> =
     birthday: new Date(),
     gender: 'M',
     height: {
-      unit: 'cm',
+      unit: lengthUnits[0],
       value: 50
     },
     weight: {
@@ -346,12 +423,10 @@ export const BabyProfileCreationScreen: RootStackScreen<'BabyProfileCreation'> =
       value: 3.5
     },
     headCircumference: {
-      unit: 'cm',
+      unit: lengthUnits[0],
       value: 30
     }
   })
-
-  console.log(babyProfileDraft.weight)
 
   const cancel = () => {
     navigation.goBack()
