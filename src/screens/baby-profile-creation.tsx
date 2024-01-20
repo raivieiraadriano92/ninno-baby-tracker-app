@@ -6,30 +6,24 @@ import { Dimensions, Image, TextInput, View } from 'react-native'
 import DateTimePickerModal from 'react-native-modal-datetime-picker'
 import PagerView from 'react-native-pager-view'
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
-import WheelPicker from 'react-native-wheely'
-import { Button, Text } from 'src/components'
+import { Button, MeasuresPicker, Text } from 'src/components'
 import colors from 'src/theme/colors'
 import twColors from 'tailwindcss/colors'
 
 import type { RootStackScreen } from 'src/navigation/types'
 
-type LengthData = {
+type MeasureData = {
   value: number
-  unit: 'cm' | 'in'
-}
-
-type WeightData = {
-  value: number
-  unit: 'kg' | 'lb' | 'st'
+  unit: string
 }
 
 type BabyProfileDraft = {
   gender: 'F' | 'M'
   name?: string
   birthday: Date
-  weight: WeightData
-  height: LengthData
-  headCircumference: LengthData
+  weight: MeasureData
+  height: MeasureData
+  headCircumference: MeasureData
 }
 
 type StepContainerProps = PropsWithChildren<{
@@ -45,10 +39,6 @@ type StepProps = {
   save: () => void
   setBabyProfileDraft: Dispatch<SetStateAction<BabyProfileDraft>>
 }
-
-const lengthUnits: LengthData['unit'][] = ['cm', 'in']
-
-const weightUnits: WeightData['unit'][] = ['kg', 'lb', 'st']
 
 const { height: WINDOW_HEIGHT } = Dimensions.get('window')
 
@@ -200,175 +190,65 @@ const WeightStep: FunctionComponent<StepProps> = ({
   index,
   moveNext,
   setBabyProfileDraft
-}) => {
-  const weight = babyProfileDraft.weight.value
-    .toString()
-    .split('.')
-    .map((v) => parseInt(v, 10) - 1)
-
-  if (weight.length === 1) {
-    weight.push(0)
-  }
-
-  const [selectedIndex, setSelectedIndex] = useState([weight[0], weight[1], 0])
-
-  const handleMoveNext = () => {
-    setBabyProfileDraft((prev) => ({
-      ...prev,
-      weight: {
-        unit: weightUnits[selectedIndex[2]],
-        value: parseFloat(`${selectedIndex[0] + 1}.${selectedIndex[1] + 1}`)
-      }
-    }))
-
-    moveNext(index)
-  }
-
-  return (
-    <StepContainer title={`What is the weight of ${babyProfileDraft.name}?`}>
-      <View className="space-y-10">
-        <View className="flex-row items-center justify-center space-x-3">
-          <View>
-            <WheelPicker
-              itemHeight={60}
-              itemTextStyle={{ fontFamily: 'Nunito_700Bold', fontSize: 24 }}
-              onChange={(index) => setSelectedIndex([index, selectedIndex[1], selectedIndex[2]])}
-              options={Array.from({ length: 20 }, (_, i) => `${i + 1}`)}
-              scaleFunction={(x) => x * 0.7}
-              selectedIndex={selectedIndex[0]}
-              selectedIndicatorStyle={{ backgroundColor: 'transparent' }}
-              visibleRest={1}
-            />
-          </View>
-          <Text bold className="text-2xl">
-            ,
-          </Text>
-          <View>
-            <WheelPicker
-              itemHeight={60}
-              itemTextStyle={{ fontFamily: 'Nunito_700Bold', fontSize: 24 }}
-              onChange={(index) => setSelectedIndex([selectedIndex[0], index, selectedIndex[2]])}
-              options={Array.from({ length: 100 }, (_, i) => `${i + 1}`)}
-              scaleFunction={(x) => x * 0.7}
-              selectedIndex={selectedIndex[1]}
-              selectedIndicatorStyle={{ backgroundColor: 'transparent' }}
-              visibleRest={1}
-            />
-          </View>
-          <View>
-            <WheelPicker
-              itemHeight={60}
-              itemTextStyle={{ fontFamily: 'Nunito_700Bold', fontSize: 24 }}
-              onChange={(index) => setSelectedIndex([selectedIndex[0], selectedIndex[1], index])}
-              options={weightUnits}
-              scaleFunction={(x) => x * 0.7}
-              selectedIndex={selectedIndex[2]}
-              selectedIndicatorStyle={{ backgroundColor: 'transparent' }}
-              visibleRest={1}
-            />
-          </View>
-          <View
-            className="absolute border-custom-line border-b-[1px] border-t-[1px] h-14 w-full"
-            pointerEvents="none"
-          />
-        </View>
-        <Button onPress={handleMoveNext} title="Next" />
-      </View>
-    </StepContainer>
-  )
-}
+}) => (
+  <StepContainer title={`What is the weight of ${babyProfileDraft.name}?`}>
+    <View className="space-y-10">
+      <MeasuresPicker
+        initialValue={babyProfileDraft.weight}
+        onChange={(weight) =>
+          setBabyProfileDraft((prev) => ({
+            ...prev,
+            weight
+          }))
+        }
+        type="weight"
+      />
+      <Button onPress={() => moveNext(index)} title="Next" />
+    </View>
+  </StepContainer>
+)
 
 const HeightStep: FunctionComponent<StepProps> = ({
   babyProfileDraft,
   index,
   moveNext,
   setBabyProfileDraft
-}) => {
-  const height = babyProfileDraft.height.value
-    .toString()
-    .split('.')
-    .map((v) => parseInt(v, 10) - 1)
-
-  if (height.length === 1) {
-    height.push(0)
-  }
-
-  const [selectedIndex, setSelectedIndex] = useState([height[0], height[1], 0])
-
-  const handleMoveNext = () => {
-    setBabyProfileDraft((prev) => ({
-      ...prev,
-      height: {
-        unit: lengthUnits[selectedIndex[2]],
-        value: parseFloat(`${selectedIndex[0] + 1}.${selectedIndex[1] + 1}`)
-      }
-    }))
-
-    moveNext(index)
-  }
-
-  return (
-    <StepContainer title={`What is the height of ${babyProfileDraft.name}?`}>
-      <View className="space-y-10">
-        <View className="flex-row items-center justify-center space-x-3">
-          <View>
-            <WheelPicker
-              itemHeight={60}
-              itemTextStyle={{ fontFamily: 'Nunito_700Bold', fontSize: 24 }}
-              onChange={(index) => setSelectedIndex([index, selectedIndex[1], selectedIndex[2]])}
-              options={Array.from({ length: 99 }, (_, i) => `${i + 1}`)}
-              scaleFunction={(x) => x * 0.7}
-              selectedIndex={selectedIndex[0]}
-              selectedIndicatorStyle={{ backgroundColor: 'transparent' }}
-              visibleRest={1}
-            />
-          </View>
-          <Text bold className="text-2xl">
-            ,
-          </Text>
-          <View>
-            <WheelPicker
-              itemHeight={60}
-              itemTextStyle={{ fontFamily: 'Nunito_700Bold', fontSize: 24 }}
-              onChange={(index) => setSelectedIndex([selectedIndex[0], index, selectedIndex[2]])}
-              options={Array.from({ length: 100 }, (_, i) => `${i + 1}`)}
-              scaleFunction={(x) => x * 0.7}
-              selectedIndex={selectedIndex[1]}
-              selectedIndicatorStyle={{ backgroundColor: 'transparent' }}
-              visibleRest={1}
-            />
-          </View>
-          <View>
-            <WheelPicker
-              itemHeight={60}
-              itemTextStyle={{ fontFamily: 'Nunito_700Bold', fontSize: 24 }}
-              onChange={(index) => setSelectedIndex([selectedIndex[0], selectedIndex[1], index])}
-              options={lengthUnits}
-              scaleFunction={(x) => x * 0.7}
-              selectedIndex={selectedIndex[2]}
-              selectedIndicatorStyle={{ backgroundColor: 'transparent' }}
-              visibleRest={1}
-            />
-          </View>
-          <View
-            className="absolute border-custom-line border-b-[1px] border-t-[1px] h-14 w-full"
-            pointerEvents="none"
-          />
-        </View>
-        <Button onPress={handleMoveNext} title="Next" />
-      </View>
-    </StepContainer>
-  )
-}
+}) => (
+  <StepContainer title={`What is the height of ${babyProfileDraft.name}?`}>
+    <View className="space-y-10">
+      <MeasuresPicker
+        initialValue={babyProfileDraft.height}
+        onChange={(height) =>
+          setBabyProfileDraft((prev) => ({
+            ...prev,
+            height
+          }))
+        }
+        type="length"
+      />
+      <Button onPress={() => moveNext(index)} title="Next" />
+    </View>
+  </StepContainer>
+)
 
 const HeadCircumferenceStep: FunctionComponent<StepProps> = ({
   babyProfileDraft,
   index,
-  moveNext
+  moveNext,
+  setBabyProfileDraft
 }) => (
   <StepContainer title={`What is the head circumference of ${babyProfileDraft.name}?`}>
     <View className="space-y-10">
-      <Text>head circumference</Text>
+      <MeasuresPicker
+        initialValue={babyProfileDraft.headCircumference}
+        onChange={(headCircumference) =>
+          setBabyProfileDraft((prev) => ({
+            ...prev,
+            headCircumference
+          }))
+        }
+        type="length"
+      />
       <Button onPress={() => moveNext(index)} title="Next" />
     </View>
   </StepContainer>
@@ -415,15 +295,15 @@ export const BabyProfileCreationScreen: RootStackScreen<'BabyProfileCreation'> =
     birthday: new Date(),
     gender: 'M',
     height: {
-      unit: lengthUnits[0],
+      unit: 'cm',
       value: 50
     },
     weight: {
-      unit: weightUnits[0],
+      unit: 'kg',
       value: 3.5
     },
     headCircumference: {
-      unit: lengthUnits[0],
+      unit: 'cm',
       value: 30
     }
   })
