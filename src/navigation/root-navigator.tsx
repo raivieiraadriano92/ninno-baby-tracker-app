@@ -11,13 +11,14 @@ import type { RootStackParamList } from './types'
 const NativeStack = createNativeStackNavigator<RootStackParamList>()
 
 export const RootNavigator: FunctionComponent = () => (
-  <NativeStack.Navigator initialRouteName="Welcome">
+  <NativeStack.Navigator
+    initialRouteName="Welcome"
+    screenOptions={{ contentStyle: { backgroundColor: colors.custom.background } }}>
     <NativeStack.Screen component={TabNavigator} name="Tabs" options={{ headerShown: false }} />
     <NativeStack.Screen
       component={BabyProfileCreationScreen}
       name="BabyProfileCreation"
       options={{
-        contentStyle: { backgroundColor: 'white' },
         headerTintColor: colors.custom.primary,
         headerTitle: '',
         headerTransparent: true

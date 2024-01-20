@@ -2,18 +2,27 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import type { PropsWithChildren, FunctionComponent, Dispatch, SetStateAction } from 'react'
 
 import { format } from 'date-fns'
-import { Dimensions, Image, TextInput, View } from 'react-native'
+import { Dimensions, Image, ScrollView, TextInput, View } from 'react-native'
 import DateTimePickerModal from 'react-native-modal-datetime-picker'
 import PagerView from 'react-native-pager-view'
-import Animated, { Layout } from 'react-native-reanimated'
+import Animated, {
+  Layout,
+  interpolate,
+  interpolateColor,
+  useAnimatedStyle,
+  useSharedValue
+} from 'react-native-reanimated'
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Button, MeasuresPicker, Text } from 'src/components'
+import { usePagerViewScrollHandler } from 'src/hooks/use-pager-scroll-handler'
 import colors from 'src/theme/colors'
 import twColors from 'tailwindcss/colors'
 import { create } from 'zustand'
 
 import type { ImageSourcePropType } from 'react-native'
 import type { RootStackScreen } from 'src/navigation/types'
+
+const AnimatedPagerView = Animated.createAnimatedComponent(PagerView)
 
 type CurrentPageState = {
   currentPage: number
@@ -38,9 +47,18 @@ type NextButtonIllustrationContainerProps = PropsWithChildren<{
   illustrationSource: ImageSourcePropType
 }>
 
-type StepContainerProps = PropsWithChildren<{
-  title: string
-}>
+type StepContainerProps = PropsWithChildren<
+  | {
+      babyProfileDraft?: never
+      isLast?: never
+      title: string
+    }
+  | {
+      babyProfileDraft: BabyProfileDraft
+      isLast: boolean
+      title?: never
+    }
+>
 
 type StepProps = {
   babyProfileDraft: BabyProfileDraft
@@ -55,6 +73,8 @@ type StepProps = {
 const { height: WINDOW_HEIGHT } = Dimensions.get('window')
 
 const HEADER_BG_HEIGHT = 200
+
+const HEADER_BG_HEIGHT_CONFIRMATION_STEP = 280
 
 const GENDER_STEP_BG_HEIGHT = WINDOW_HEIGHT * 0.39
 
@@ -80,12 +100,34 @@ const NextButtonIllustrationContainer: FunctionComponent<NextButtonIllustrationC
   </View>
 )
 
-const StepContainer: FunctionComponent<StepContainerProps> = ({ children, title }) => (
+const StepContainer: FunctionComponent<StepContainerProps> = ({
+  babyProfileDraft,
+  children,
+  isLast,
+  title
+}) => (
   <View style={{ width: WINDOW_WIDTH }}>
-    <View className="justify-center px-10" style={{ height: HEADER_BG_HEIGHT }}>
-      <Text bold className="text-3xl text-center">
-        {title}
-      </Text>
+    <View
+      className="justify-center px-10"
+      style={{ height: isLast ? HEADER_BG_HEIGHT_CONFIRMATION_STEP : HEADER_BG_HEIGHT }}>
+      {isLast ? (
+        <View className="items-center space-y-5">
+          <Image
+            source={
+              babyProfileDraft.gender === 'F'
+                ? require('assets/ninno-avatar-girl.png')
+                : require('assets/ninno-avatar-boy.png')
+            }
+          />
+          <Text bold className="text-2xl text-center">
+            {babyProfileDraft.name}
+          </Text>
+        </View>
+      ) : (
+        <Text bold className="text-3xl text-center">
+          {title}
+        </Text>
+      )}
     </View>
     <View className="p-10 py-5">{children}</View>
   </View>
@@ -304,24 +346,53 @@ const HeadCircumferenceStep: FunctionComponent<StepProps> = ({
   )
 }
 
-const ConfirmationStep: FunctionComponent<StepProps> = ({ cancel, save }) => (
-  <StepContainer title="Confirmation">
-    <View className="space-y-5">
-      <View className="space-y-3">
-        <View className="bg-white-100 flex-row items-center justify-between px-4 py-3 rounded-2xl">
-          <View className="flex-row items-center space-x-4">
-            <View className="bg-custom-yellow1 h-11 items-center justify-center w-11 rounded-lg" />
-            <Text medium>Birthday</Text>
-          </View>
-          <Text medium>2 August 2023</Text>
+const ConfirmationStep: FunctionComponent<StepProps> = ({ babyProfileDraft, cancel, save }) => (
+  <ScrollView showsVerticalScrollIndicator={false}>
+    <StepContainer babyProfileDraft={babyProfileDraft} isLast>
+      <View className="space-y-5">
+        <View className="space-y-3">
+          {[
+            [
+              require('assets/icon-growth.png'),
+              'Birthday',
+              format(babyProfileDraft.birthday, 'd MMM yyyy')
+            ],
+            [
+              require('assets/icon-weight.png'),
+              'Weight',
+              `${babyProfileDraft.weight.value}${babyProfileDraft.weight.unit}`
+            ],
+            [
+              require('assets/icon-height.png'),
+              'Height',
+              `${babyProfileDraft.height.value}${babyProfileDraft.height.unit}`
+            ],
+            [
+              require('assets/icon-head-circ.png'),
+              'Head circumference',
+              `${babyProfileDraft.headCircumference.value}${babyProfileDraft.headCircumference.unit}`
+            ]
+          ].map((item) => (
+            <View
+              className="bg-white flex-row items-center justify-between px-4 py-3 rounded-2xl"
+              key={item[1]}>
+              <View className="flex-row items-center space-x-4">
+                <View className="bg-custom-yellow1 h-11 items-center justify-center w-11 rounded-lg">
+                  <Image className="h-11 w-11" source={item[0]} />
+                </View>
+                <Text medium>{item[1]}</Text>
+              </View>
+              <Text medium>{item[2]}</Text>
+            </View>
+          ))}
+        </View>
+        <View className="flex-row space-x-5">
+          <Button className="flex-1" onPress={cancel} variant="outline" title="Cancel" />
+          <Button className="flex-1" onPress={save} title="Save" />
         </View>
       </View>
-      <View className="flex-row space-x-5">
-        <Button className="flex-1" onPress={cancel} title="Cancel" />
-        <Button className="flex-1" onPress={save} title="Save" />
-      </View>
-    </View>
-  </StepContainer>
+    </StepContainer>
+  </ScrollView>
 )
 
 const steps = [
@@ -364,18 +435,19 @@ export const BabyProfileCreationScreen: RootStackScreen<'BabyProfileCreation'> =
 
   const [babyProfileDraft, setBabyProfileDraft] = useState<BabyProfileDraft>({
     birthday: new Date(),
-    gender: 'M',
+    headCircumference: {
+      unit: 'cm',
+      value: 30
+    },
     height: {
       unit: 'cm',
       value: 50
     },
+    gender: 'M',
+    name: 'Test',
     weight: {
       unit: 'kg',
       value: 3.5
-    },
-    headCircumference: {
-      unit: 'cm',
-      value: 30
     }
   })
 
@@ -389,6 +461,53 @@ export const BabyProfileCreationScreen: RootStackScreen<'BabyProfileCreation'> =
 
   const save = () => navigation.replace('Tabs')
 
+  const progress = useSharedValue(0)
+
+  const animatedBackgroundStyle = useAnimatedStyle(() => ({
+    backgroundColor: interpolateColor(
+      progress.value,
+      steps.map((_, index) => index),
+      steps.map((_, index) => (index === steps.length - 1 ? colors.custom.background : 'white'))
+    )
+  }))
+
+  const animatedGrassStyle = useAnimatedStyle(() => ({
+    opacity: interpolate(
+      progress.value,
+      steps.map((_, index) => index),
+      steps.map((_, index) => (index === steps.length - 1 ? 0 : 1))
+    ),
+    transform: [
+      {
+        translateY: interpolate(
+          progress.value,
+          steps.map((_, index) => index),
+          steps.map((_, index) => (index === steps.length - 1 ? GRASS_HEIGHT : 0))
+        )
+      }
+    ]
+  }))
+
+  const animatedHeaderStyle = useAnimatedStyle(() => ({
+    height: interpolate(
+      progress.value,
+      steps.map((_, index) => index),
+      steps.map(
+        (_, index) =>
+          (index === steps.length - 1 ? HEADER_BG_HEIGHT_CONFIRMATION_STEP : HEADER_BG_HEIGHT) +
+          insets.top
+      )
+    )
+  }))
+
+  const handler = usePagerViewScrollHandler({
+    onPageScroll: (e: any) => {
+      'worklet'
+
+      progress.value = e.offset + e.position
+    }
+  })
+
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => <ProgressBar />
@@ -396,10 +515,10 @@ export const BabyProfileCreationScreen: RootStackScreen<'BabyProfileCreation'> =
   }, [navigation])
 
   return (
-    <>
-      <View
+    <Animated.View className="flex-1" style={animatedBackgroundStyle}>
+      <Animated.View
         className="items-center justify-end overflow-hidden w-full"
-        style={{ height: HEADER_BG_HEIGHT + insets.top }}>
+        style={animatedHeaderStyle}>
         <Image
           source={
             babyProfileDraft.gender === 'F'
@@ -407,11 +526,12 @@ export const BabyProfileCreationScreen: RootStackScreen<'BabyProfileCreation'> =
               : require('assets/bg-shape-header-blue.png')
           }
         />
-      </View>
+      </Animated.View>
       <SafeAreaView className="absolute h-full w-full" edges={['top']}>
-        <PagerView
+        <AnimatedPagerView
           className="flex-1"
           initialPage={0}
+          onPageScroll={handler}
           onPageSelected={(e) => {
             setCurrentPage(e.nativeEvent.position)
           }}
@@ -425,13 +545,13 @@ export const BabyProfileCreationScreen: RootStackScreen<'BabyProfileCreation'> =
               {...{ babyProfileDraft, cancel, index, moveNext, save, setBabyProfileDraft }}
             />
           ))}
-        </PagerView>
+        </AnimatedPagerView>
       </SafeAreaView>
-      <View
+      <Animated.View
         className="absolute bottom-0 items-center justify-start overflow-hidden w-full"
-        style={{ height: GRASS_HEIGHT }}>
+        style={[animatedGrassStyle, { height: GRASS_HEIGHT }]}>
         <Image source={require('assets/grass.png')} />
-      </View>
-    </>
+      </Animated.View>
+    </Animated.View>
   )
 }
