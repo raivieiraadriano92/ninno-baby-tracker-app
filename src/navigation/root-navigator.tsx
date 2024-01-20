@@ -16,7 +16,12 @@ export const RootNavigator: FunctionComponent = () => (
     <NativeStack.Screen
       component={BabyProfileCreationScreen}
       name="BabyProfileCreation"
-      options={{ contentStyle: { backgroundColor: 'white' }, headerShown: false }}
+      options={{
+        contentStyle: { backgroundColor: 'white' },
+        headerTintColor: colors.custom.primary,
+        headerTitle: '',
+        headerTransparent: true
+      }}
     />
     <NativeStack.Screen
       component={WelcomeScreen}

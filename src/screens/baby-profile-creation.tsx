@@ -1,16 +1,23 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import type { PropsWithChildren, FunctionComponent, Dispatch, SetStateAction } from 'react'
 
 import { format } from 'date-fns'
 import { Dimensions, Image, TextInput, View } from 'react-native'
 import DateTimePickerModal from 'react-native-modal-datetime-picker'
 import PagerView from 'react-native-pager-view'
+import Animated, { Layout } from 'react-native-reanimated'
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Button, MeasuresPicker, Text } from 'src/components'
 import colors from 'src/theme/colors'
 import twColors from 'tailwindcss/colors'
+import { create } from 'zustand'
 
 import type { RootStackScreen } from 'src/navigation/types'
+
+type CurrentPageState = {
+  currentPage: number
+  setCurrentPage: (_index: number) => void
+}
 
 type MeasureData = {
   value: number
@@ -42,28 +49,26 @@ type StepProps = {
 
 const { height: WINDOW_HEIGHT } = Dimensions.get('window')
 
-const HEADER_BG_HEIGHT = 280
+const HEADER_BG_HEIGHT = 200
 
-const GENDER_STEP_BG_HEIGHT = WINDOW_HEIGHT * 0.35
+const GENDER_STEP_BG_HEIGHT = WINDOW_HEIGHT * 0.39
 
 const GRASS_HEIGHT = 65
 
+const PROGRESS_BAR_WIDTH = 90
+
 const { width: WINDOW_WIDTH } = Dimensions.get('window')
 
-const StepContainer: FunctionComponent<StepContainerProps> = ({ children, title }) => {
-  const insets = useSafeAreaInsets()
-
-  return (
-    <View style={{ width: WINDOW_WIDTH }}>
-      <View className="justify-center px-10" style={{ height: HEADER_BG_HEIGHT - insets.top }}>
-        <Text bold className="text-3xl text-center">
-          {title}
-        </Text>
-      </View>
-      <View className="p-10">{children}</View>
+const StepContainer: FunctionComponent<StepContainerProps> = ({ children, title }) => (
+  <View style={{ width: WINDOW_WIDTH }}>
+    <View className="justify-center px-10" style={{ height: HEADER_BG_HEIGHT }}>
+      <Text bold className="text-3xl text-center">
+        {title}
+      </Text>
     </View>
-  )
-}
+    <View className="p-10">{children}</View>
+  </View>
+)
 
 const GenderStep: FunctionComponent<StepProps> = ({ index, moveNext, setBabyProfileDraft }) => {
   const handleMoveNext = (gender: 'F' | 'M') => {
@@ -74,7 +79,7 @@ const GenderStep: FunctionComponent<StepProps> = ({ index, moveNext, setBabyProf
 
   return (
     <>
-      <StepContainer title="Let's get to know each other!">
+      <StepContainer title={`Let's get to know\neach other!`}>
         <View className="space-y-10">
           <Text bold className="text-2xl text-center">
             Who is your cutie?
@@ -95,6 +100,7 @@ const GenderStep: FunctionComponent<StepProps> = ({ index, moveNext, setBabyProf
 }
 
 const NameStep: FunctionComponent<StepProps> = ({
+  babyProfileDraft,
   index,
   isFocused,
   moveNext,
@@ -125,7 +131,7 @@ const NameStep: FunctionComponent<StepProps> = ({
   }, [isFocused])
 
   return (
-    <StepContainer title="What's the name of the baby?">
+    <StepContainer title={`What's ${babyProfileDraft.gender === 'F' ? 'her' : 'his'} name?`}>
       <View className="space-y-10">
         <TextInput
           autoCapitalize="words"
@@ -148,6 +154,8 @@ const BirthdayStep: FunctionComponent<StepProps> = ({
   moveNext,
   setBabyProfileDraft
 }) => {
+  const firstName = babyProfileDraft.name?.split(' ')[0]
+
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false)
 
   const showDatePicker = () => {
@@ -165,7 +173,7 @@ const BirthdayStep: FunctionComponent<StepProps> = ({
   }
 
   return (
-    <StepContainer title={`When is the birthday of ${babyProfileDraft.name}?`}>
+    <StepContainer title={`When is\n${firstName}'s birthday?`}>
       <View className="space-y-10">
         <DateTimePickerModal
           date={babyProfileDraft.birthday}
@@ -190,69 +198,81 @@ const WeightStep: FunctionComponent<StepProps> = ({
   index,
   moveNext,
   setBabyProfileDraft
-}) => (
-  <StepContainer title={`What is the weight of ${babyProfileDraft.name}?`}>
-    <View className="space-y-10">
-      <MeasuresPicker
-        initialValue={babyProfileDraft.weight}
-        onChange={(weight) =>
-          setBabyProfileDraft((prev) => ({
-            ...prev,
-            weight
-          }))
-        }
-        type="weight"
-      />
-      <Button onPress={() => moveNext(index)} title="Next" />
-    </View>
-  </StepContainer>
-)
+}) => {
+  const firstName = babyProfileDraft.name?.split(' ')[0]
+
+  return (
+    <StepContainer title={`What is\n${firstName}'s weight?`}>
+      <View className="space-y-10">
+        <MeasuresPicker
+          initialValue={babyProfileDraft.weight}
+          onChange={(weight) =>
+            setBabyProfileDraft((prev) => ({
+              ...prev,
+              weight
+            }))
+          }
+          type="weight"
+        />
+        <Button onPress={() => moveNext(index)} title="Next" />
+      </View>
+    </StepContainer>
+  )
+}
 
 const HeightStep: FunctionComponent<StepProps> = ({
   babyProfileDraft,
   index,
   moveNext,
   setBabyProfileDraft
-}) => (
-  <StepContainer title={`What is the height of ${babyProfileDraft.name}?`}>
-    <View className="space-y-10">
-      <MeasuresPicker
-        initialValue={babyProfileDraft.height}
-        onChange={(height) =>
-          setBabyProfileDraft((prev) => ({
-            ...prev,
-            height
-          }))
-        }
-        type="length"
-      />
-      <Button onPress={() => moveNext(index)} title="Next" />
-    </View>
-  </StepContainer>
-)
+}) => {
+  const firstName = babyProfileDraft.name?.split(' ')[0]
+
+  return (
+    <StepContainer title={`What is\n${firstName}'s height?`}>
+      <View className="space-y-10">
+        <MeasuresPicker
+          initialValue={babyProfileDraft.height}
+          onChange={(height) =>
+            setBabyProfileDraft((prev) => ({
+              ...prev,
+              height
+            }))
+          }
+          type="length"
+        />
+        <Button onPress={() => moveNext(index)} title="Next" />
+      </View>
+    </StepContainer>
+  )
+}
 
 const HeadCircumferenceStep: FunctionComponent<StepProps> = ({
   babyProfileDraft,
   index,
   moveNext,
   setBabyProfileDraft
-}) => (
-  <StepContainer title={`What is the head circumference of ${babyProfileDraft.name}?`}>
-    <View className="space-y-10">
-      <MeasuresPicker
-        initialValue={babyProfileDraft.headCircumference}
-        onChange={(headCircumference) =>
-          setBabyProfileDraft((prev) => ({
-            ...prev,
-            headCircumference
-          }))
-        }
-        type="length"
-      />
-      <Button onPress={() => moveNext(index)} title="Next" />
-    </View>
-  </StepContainer>
-)
+}) => {
+  const firstName = babyProfileDraft.name?.split(' ')[0]
+
+  return (
+    <StepContainer title={`What is ${firstName}'s\nhead circumference?`}>
+      <View className="space-y-10">
+        <MeasuresPicker
+          initialValue={babyProfileDraft.headCircumference}
+          onChange={(headCircumference) =>
+            setBabyProfileDraft((prev) => ({
+              ...prev,
+              headCircumference
+            }))
+          }
+          type="length"
+        />
+        <Button onPress={() => moveNext(index)} title="Next" />
+      </View>
+    </StepContainer>
+  )
+}
 
 const ConfirmationStep: FunctionComponent<StepProps> = ({ cancel, save }) => (
   <StepContainer title="Confirmation">
@@ -284,12 +304,33 @@ const steps = [
   ConfirmationStep
 ]
 
+const useCurrentPageStore = create<CurrentPageState>()((set) => ({
+  currentPage: 0,
+  setCurrentPage: (index) => set(() => ({ currentPage: index }))
+}))
+
+const ProgressBar: FunctionComponent = () => {
+  const currentPage = useCurrentPageStore((state) => state.currentPage)
+
+  return (
+    <View className="bg-white h-2 rounded-full" style={{ width: PROGRESS_BAR_WIDTH }}>
+      <Animated.View
+        className="bg-custom-primary h-2 rounded-full"
+        layout={Layout.springify()}
+        style={{ width: (PROGRESS_BAR_WIDTH / steps.length) * (currentPage + 1) }}
+      />
+    </View>
+  )
+}
+
 export const BabyProfileCreationScreen: RootStackScreen<'BabyProfileCreation'> = ({
   navigation
 }) => {
+  const insets = useSafeAreaInsets()
+
   const pagerViewRef = useRef<PagerView>(null)
 
-  const [currentPage, setCurrentPage] = useState(0)
+  const { currentPage, setCurrentPage } = useCurrentPageStore()
 
   const [babyProfileDraft, setBabyProfileDraft] = useState<BabyProfileDraft>({
     birthday: new Date(),
@@ -318,11 +359,17 @@ export const BabyProfileCreationScreen: RootStackScreen<'BabyProfileCreation'> =
 
   const save = () => navigation.replace('Tabs')
 
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => <ProgressBar />
+    })
+  }, [navigation])
+
   return (
     <>
       <View
         className="items-center justify-end overflow-hidden w-full"
-        style={{ height: HEADER_BG_HEIGHT }}>
+        style={{ height: HEADER_BG_HEIGHT + insets.top }}>
         <Image
           source={
             babyProfileDraft.gender === 'F'
