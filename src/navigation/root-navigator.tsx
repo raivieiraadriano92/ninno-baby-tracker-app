@@ -12,14 +12,17 @@ const NativeStack = createNativeStackNavigator<RootStackParamList>()
 
 export const RootNavigator: FunctionComponent = () => (
   <NativeStack.Navigator
-    initialRouteName="Welcome"
-    screenOptions={{ contentStyle: { backgroundColor: colors.custom.background } }}>
+    initialRouteName="Tabs"
+    screenOptions={{
+      contentStyle: { backgroundColor: colors.custom.background },
+      headerTintColor: colors.custom.primary,
+      headerTitleStyle: { fontFamily: 'Nunito_700Bold' }
+    }}>
     <NativeStack.Screen component={TabNavigator} name="Tabs" options={{ headerShown: false }} />
     <NativeStack.Screen
       component={BabyProfileCreationScreen}
       name="BabyProfileCreation"
       options={{
-        headerTintColor: colors.custom.primary,
         headerTitle: '',
         headerTransparent: true
       }}
