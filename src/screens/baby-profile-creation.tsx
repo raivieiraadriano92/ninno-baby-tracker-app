@@ -12,6 +12,7 @@ import colors from 'src/theme/colors'
 import twColors from 'tailwindcss/colors'
 import { create } from 'zustand'
 
+import type { ImageSourcePropType } from 'react-native'
 import type { RootStackScreen } from 'src/navigation/types'
 
 type CurrentPageState = {
@@ -32,6 +33,10 @@ type BabyProfileDraft = {
   height: MeasureData
   headCircumference: MeasureData
 }
+
+type NextButtonIllustrationContainerProps = PropsWithChildren<{
+  illustrationSource: ImageSourcePropType
+}>
 
 type StepContainerProps = PropsWithChildren<{
   title: string
@@ -59,6 +64,22 @@ const PROGRESS_BAR_WIDTH = 90
 
 const { width: WINDOW_WIDTH } = Dimensions.get('window')
 
+const NextButtonIllustrationContainer: FunctionComponent<NextButtonIllustrationContainerProps> = ({
+  children,
+  illustrationSource
+}) => (
+  <View>
+    {WINDOW_HEIGHT >= 800 && (
+      <View
+        className="items-center -mb-5 overflow-hidden"
+        style={{ height: WINDOW_HEIGHT * 0.28, maxHeight: 300 }}>
+        <Image source={illustrationSource} />
+      </View>
+    )}
+    {children}
+  </View>
+)
+
 const StepContainer: FunctionComponent<StepContainerProps> = ({ children, title }) => (
   <View style={{ width: WINDOW_WIDTH }}>
     <View className="justify-center px-10" style={{ height: HEADER_BG_HEIGHT }}>
@@ -66,7 +87,7 @@ const StepContainer: FunctionComponent<StepContainerProps> = ({ children, title 
         {title}
       </Text>
     </View>
-    <View className="p-10">{children}</View>
+    <View className="p-10 py-5">{children}</View>
   </View>
 )
 
@@ -80,7 +101,7 @@ const GenderStep: FunctionComponent<StepProps> = ({ index, moveNext, setBabyProf
   return (
     <>
       <StepContainer title={`Let's get to know\neach other!`}>
-        <View className="space-y-10">
+        <View className="space-y-5">
           <Text bold className="text-2xl text-center">
             Who is your cutie?
           </Text>
@@ -132,7 +153,7 @@ const NameStep: FunctionComponent<StepProps> = ({
 
   return (
     <StepContainer title={`What's ${babyProfileDraft.gender === 'F' ? 'her' : 'his'} name?`}>
-      <View className="space-y-10">
+      <View className="space-y-5">
         <TextInput
           autoCapitalize="words"
           className="text-2xl text-center text-custom-primary"
@@ -174,7 +195,7 @@ const BirthdayStep: FunctionComponent<StepProps> = ({
 
   return (
     <StepContainer title={`When is\n${firstName}'s birthday?`}>
-      <View className="space-y-10">
+      <View className="space-y-5">
         <DateTimePickerModal
           date={babyProfileDraft.birthday}
           isVisible={isDatePickerVisible}
@@ -203,7 +224,7 @@ const WeightStep: FunctionComponent<StepProps> = ({
 
   return (
     <StepContainer title={`What is\n${firstName}'s weight?`}>
-      <View className="space-y-10">
+      <View className="space-y-5">
         <MeasuresPicker
           initialValue={babyProfileDraft.weight}
           onChange={(weight) =>
@@ -214,7 +235,10 @@ const WeightStep: FunctionComponent<StepProps> = ({
           }
           type="weight"
         />
-        <Button onPress={() => moveNext(index)} title="Next" />
+        <NextButtonIllustrationContainer
+          illustrationSource={require('assets/ninno-weight-step.png')}>
+          <Button onPress={() => moveNext(index)} title="Next" />
+        </NextButtonIllustrationContainer>
       </View>
     </StepContainer>
   )
@@ -230,7 +254,7 @@ const HeightStep: FunctionComponent<StepProps> = ({
 
   return (
     <StepContainer title={`What is\n${firstName}'s height?`}>
-      <View className="space-y-10">
+      <View className="space-y-5">
         <MeasuresPicker
           initialValue={babyProfileDraft.height}
           onChange={(height) =>
@@ -241,7 +265,10 @@ const HeightStep: FunctionComponent<StepProps> = ({
           }
           type="length"
         />
-        <Button onPress={() => moveNext(index)} title="Next" />
+        <NextButtonIllustrationContainer
+          illustrationSource={require('assets/ninno-height-step.png')}>
+          <Button onPress={() => moveNext(index)} title="Next" />
+        </NextButtonIllustrationContainer>
       </View>
     </StepContainer>
   )
@@ -257,7 +284,7 @@ const HeadCircumferenceStep: FunctionComponent<StepProps> = ({
 
   return (
     <StepContainer title={`What is ${firstName}'s\nhead circumference?`}>
-      <View className="space-y-10">
+      <View className="space-y-5">
         <MeasuresPicker
           initialValue={babyProfileDraft.headCircumference}
           onChange={(headCircumference) =>
@@ -268,7 +295,10 @@ const HeadCircumferenceStep: FunctionComponent<StepProps> = ({
           }
           type="length"
         />
-        <Button onPress={() => moveNext(index)} title="Next" />
+        <NextButtonIllustrationContainer
+          illustrationSource={require('assets/ninno-head-circumference-step.png')}>
+          <Button onPress={() => moveNext(index)} title="Next" />
+        </NextButtonIllustrationContainer>
       </View>
     </StepContainer>
   )
@@ -276,7 +306,7 @@ const HeadCircumferenceStep: FunctionComponent<StepProps> = ({
 
 const ConfirmationStep: FunctionComponent<StepProps> = ({ cancel, save }) => (
   <StepContainer title="Confirmation">
-    <View className="space-y-10">
+    <View className="space-y-5">
       <View className="space-y-3">
         <View className="bg-white-100 flex-row items-center justify-between px-4 py-3 rounded-2xl">
           <View className="flex-row items-center space-x-4">
