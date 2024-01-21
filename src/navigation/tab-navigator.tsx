@@ -18,6 +18,7 @@ export const TabNavigator: RootStackScreen<'Tabs'> = () => (
       component={HomeScreen}
       name="Home"
       options={{
+        headerShown: false,
         tabBarShowLabel: false,
         tabBarIcon: () => <Feather name="home" size={24} color="black" />
       }}
