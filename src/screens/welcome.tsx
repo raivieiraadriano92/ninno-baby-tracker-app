@@ -13,12 +13,20 @@ export const WelcomeScreen: RootStackScreen<'Welcome'> = ({ navigation }) => (
       <Text bold className="text-3xl text-center">
         Welcome to
       </Text>
-      <Image className="self-center" source={require('assets/logo-ninno.png')} />
+      <Image
+        className="self-center w-1/2"
+        resizeMode="contain"
+        source={require('assets/logo-ninno.png')}
+      />
     </View>
     <View className="space-y-10">
-      <Image className="self-center" source={require('assets/logo-ninno-face.png')} />
+      <Image
+        className="self-center w-full"
+        resizeMode="contain"
+        source={require('assets/logo-ninno-face.png')}
+      />
       <Text className="text-center" medium>
-        {`Keep track of baby's feeding, sleeps,\ndiapers & growth in one place.`}
+        {`Keep track of baby's feeding, sleeps, diapers & growth in one place.`}
       </Text>
     </View>
     <Button onPress={() => navigation.navigate('BabyProfileCreation')} title="Get started" />

@@ -108,10 +108,10 @@ const StepContainer: FunctionComponent<StepContainerProps> = ({
 }) => (
   <View style={{ width: WINDOW_WIDTH }}>
     <View
-      className="justify-center px-10"
+      className="justify-center"
       style={{ height: isLast ? HEADER_BG_HEIGHT_CONFIRMATION_STEP : HEADER_BG_HEIGHT }}>
       {isLast ? (
-        <View className="items-center space-y-5">
+        <View className="items-center px-10 space-y-5">
           <Image
             source={
               babyProfileDraft.gender === 'F'
