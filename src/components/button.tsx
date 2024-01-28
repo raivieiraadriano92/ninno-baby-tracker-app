@@ -8,11 +8,12 @@ import { Text } from './text'
 import type { TouchableOpacityProps } from 'react-native'
 
 const buttonVariants = tv({
-  base: 'h-14 items-center justify-center rounded-full',
+  base: 'items-center justify-center rounded-full',
   variants: {
     variant: {
-      outline: 'border-custom-primary border-2',
-      solid: 'bg-custom-primary'
+      link: 'bg-transparent',
+      outline: 'border-custom-primary border-2 h-14',
+      solid: 'bg-custom-primary h-14'
     }
   }
 })
@@ -21,6 +22,7 @@ const buttonTextVariants = tv({
   base: 'text-xl',
   variants: {
     variant: {
+      link: 'text-base text-custom-primary',
       outline: 'text-custom-primary',
       solid: 'text-white'
     }

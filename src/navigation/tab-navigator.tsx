@@ -20,7 +20,7 @@ export const TabNavigator: RootStackScreen<'Tabs'> = () => (
       options={{
         headerShown: false,
         tabBarShowLabel: false,
-        tabBarIcon: () => <Feather name="home" size={24} color="black" />
+        tabBarIcon: () => <Feather name="home" size={24} color={colors.custom.primary} />
       }}
     />
   </BottomTab.Navigator>

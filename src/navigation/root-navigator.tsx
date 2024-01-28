@@ -1,7 +1,7 @@
 import type { FunctionComponent } from 'react'
 
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import { BabyProfileCreationScreen, WelcomeScreen } from 'src/screens'
+import { BabyProfileCreationScreen, RecordsScreen, WelcomeScreen } from 'src/screens'
 import colors from 'src/theme/colors'
 
 import { TabNavigator } from './tab-navigator'
@@ -27,6 +27,7 @@ export const RootNavigator: FunctionComponent = () => (
         headerTransparent: true
       }}
     />
+    <NativeStack.Screen component={RecordsScreen} name="Records" />
     <NativeStack.Screen
       component={WelcomeScreen}
       name="Welcome"

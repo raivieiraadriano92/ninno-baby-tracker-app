@@ -5,14 +5,14 @@ import Animated, {
   useSharedValue
 } from 'react-native-reanimated'
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
-import { RecordCard, RecordIcon, Text } from 'src/components'
+import { Button, RecordCard, RecordIcon, Text } from 'src/components'
 import { getRecordTypeInfo } from 'src/utils/records'
 
 import type { TabScreen } from 'src/navigation/types'
 
 const HEADER_BG_HEIGHT = 200
 
-export const HomeScreen: TabScreen<'Home'> = () => {
+export const HomeScreen: TabScreen<'Home'> = ({ navigation }) => {
   const insets = useSafeAreaInsets()
 
   const translationY = useSharedValue(0)
@@ -54,10 +54,13 @@ export const HomeScreen: TabScreen<'Home'> = () => {
             })}
           </View>
         </ScrollView>
-        <Text bold className="mb-3 mt-6 text-center">
-          Latest records
-        </Text>
-        <View className="px-4 space-y-3">
+        <View className="pt-6 px-4 space-y-3">
+          <View className="flex-row justify-between">
+            <Text bold className="text-center">
+              Latest records
+            </Text>
+            <Button onPress={() => navigation.navigate('Records')} title="See all" variant="link" />
+          </View>
           {[
             'weight',
             'height',
