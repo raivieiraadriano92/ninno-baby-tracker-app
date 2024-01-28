@@ -14,3 +14,5 @@ export type RecordType =
   | 'breastFeedingRight'
   | 'pumpingLeft'
   | 'pumpingRight'
+
+export type RecordTypeGroup = [RecordType, RecordType[]]

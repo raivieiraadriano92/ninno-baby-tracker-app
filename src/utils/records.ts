@@ -1,6 +1,23 @@
 import colors from 'src/theme/colors'
 
-import type { RecordType } from 'src/models/record'
+import type { RecordType, RecordTypeGroup } from 'src/models/record'
+
+export const recordTypeGroups: RecordTypeGroup[] = [
+  [
+    'feeding',
+    [
+      'bottleBreast',
+      'bottleFormula',
+      'breastFeedingLeft',
+      'breastFeedingRight',
+      'pumpingLeft',
+      'pumpingRight'
+    ]
+  ],
+  ['sleep', ['sleepDay', 'sleepNight']],
+  ['diaper', ['diaper']],
+  ['growth', ['weight', 'height', 'head']]
+]
 
 export const getRecordTypeInfo = (type: RecordType) => {
   switch (type) {

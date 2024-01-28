@@ -4,6 +4,7 @@ import { useCallback } from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import * as SplashScreen from 'expo-splash-screen'
 import { StatusBar } from 'expo-status-bar'
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { usePreloadApp } from 'src/hooks'
 import { RootNavigator } from 'src/navigation/root-navigator'
 import { theme } from 'src/theme'
@@ -30,10 +31,12 @@ const App: FunctionComponent = () => {
   }
 
   return (
-    <NavigationContainer onReady={onLayoutRootView} theme={theme}>
-      <RootNavigator />
-      <StatusBar style="dark" />
-    </NavigationContainer>
+    <GestureHandlerRootView className="flex-1">
+      <NavigationContainer onReady={onLayoutRootView} theme={theme}>
+        <RootNavigator />
+        <StatusBar style="dark" />
+      </NavigationContainer>
+    </GestureHandlerRootView>
   )
 }
 
