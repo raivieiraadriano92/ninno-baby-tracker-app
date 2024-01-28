@@ -28,6 +28,13 @@ export const getRecordTypeInfo = (type: RecordType) => {
         title: 'Growth'
       }
 
+    case 'birthday':
+      return {
+        color: colors.custom.yellow1,
+        icon: require('assets/icon-growth.png'),
+        title: 'Birthday'
+      }
+
     case 'weight':
       return {
         color: colors.custom.yellow1,

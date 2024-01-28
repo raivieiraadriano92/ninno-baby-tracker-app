@@ -1,5 +1,6 @@
 export type RecordType =
   | 'growth'
+  | 'birthday'
   | 'weight'
   | 'height'
   | 'head'

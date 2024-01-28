@@ -13,13 +13,14 @@ import Animated, {
   useSharedValue
 } from 'react-native-reanimated'
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
-import { Button, MeasuresPicker, Text } from 'src/components'
+import { Button, MeasuresPicker, RecordCard, Text } from 'src/components'
 import { usePagerViewScrollHandler } from 'src/hooks/use-pager-scroll-handler'
 import colors from 'src/theme/colors'
 import twColors from 'tailwindcss/colors'
 import { create } from 'zustand'
 
 import type { ImageSourcePropType } from 'react-native'
+import type { RecordType } from 'src/models/record'
 import type { RootStackScreen } from 'src/navigation/types'
 
 const AnimatedPagerView = Animated.createAnimatedComponent(PagerView)
@@ -346,54 +347,39 @@ const HeadCircumferenceStep: FunctionComponent<StepProps> = ({
   )
 }
 
-const ConfirmationStep: FunctionComponent<StepProps> = ({ babyProfileDraft, cancel, save }) => (
-  <ScrollView showsVerticalScrollIndicator={false}>
-    <StepContainer babyProfileDraft={babyProfileDraft} isLast>
-      <View className="space-y-5">
-        <View className="space-y-3">
-          {[
-            [
-              require('assets/icon-growth.png'),
-              'Birthday',
-              format(babyProfileDraft.birthday, 'd MMM yyyy')
-            ],
-            [
-              require('assets/icon-weight.png'),
-              'Weight',
-              `${babyProfileDraft.weight.value}${babyProfileDraft.weight.unit}`
-            ],
-            [
-              require('assets/icon-height.png'),
-              'Height',
-              `${babyProfileDraft.height.value}${babyProfileDraft.height.unit}`
-            ],
-            [
-              require('assets/icon-head-circ.png'),
-              'Head circumference',
-              `${babyProfileDraft.headCircumference.value}${babyProfileDraft.headCircumference.unit}`
-            ]
-          ].map((item) => (
-            <View
-              className="bg-white flex-row items-center justify-between px-4 py-3 rounded-2xl"
-              key={item[1]}>
-              <View className="flex-row items-center space-x-4">
-                <View className="bg-custom-yellow1 h-11 items-center justify-center w-11 rounded-lg">
-                  <Image className="h-11 w-11" source={item[0]} />
-                </View>
-                <Text medium>{item[1]}</Text>
-              </View>
-              <Text medium>{item[2]}</Text>
-            </View>
-          ))}
+const ConfirmationStep: FunctionComponent<StepProps> = ({ babyProfileDraft, cancel, save }) => {
+  const records: [RecordType, string][] = [
+    ['birthday', format(babyProfileDraft.birthday, 'd MMM yyyy')],
+    ['weight', `${babyProfileDraft.weight.value}${babyProfileDraft.weight.unit}`],
+    ['height', `${babyProfileDraft.height.value}${babyProfileDraft.height.unit}`],
+    [
+      'head',
+      `${babyProfileDraft.headCircumference.value}${babyProfileDraft.headCircumference.unit}`
+    ]
+  ]
+
+  return (
+    <ScrollView showsVerticalScrollIndicator={false}>
+      <StepContainer babyProfileDraft={babyProfileDraft} isLast>
+        <View className="space-y-5">
+          <View className="space-y-3">
+            {records.map((item) => (
+              <RecordCard
+                key={item[0]}
+                renderRight={() => <Text medium>{item[1]}</Text>}
+                type={item[0]}
+              />
+            ))}
+          </View>
+          <View className="flex-row space-x-5">
+            <Button className="flex-1" onPress={cancel} variant="outline" title="Cancel" />
+            <Button className="flex-1" onPress={save} title="Save" />
+          </View>
         </View>
-        <View className="flex-row space-x-5">
-          <Button className="flex-1" onPress={cancel} variant="outline" title="Cancel" />
-          <Button className="flex-1" onPress={save} title="Save" />
-        </View>
-      </View>
-    </StepContainer>
-  </ScrollView>
-)
+      </StepContainer>
+    </ScrollView>
+  )
+}
 
 const steps = [
   GenderStep,

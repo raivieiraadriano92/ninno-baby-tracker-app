@@ -11,12 +11,19 @@ import { Text } from './text'
 import type { RecordType } from 'src/models/record'
 
 type RecordCardProps = ViewProps & {
-  date: Date
-  info: string
+  date?: Date
+  info?: string
+  renderRight?: () => JSX.Element
   type: RecordType
 }
 
-export const RecordCard: FunctionComponent<RecordCardProps> = ({ date, info, type, ...props }) => {
+export const RecordCard: FunctionComponent<RecordCardProps> = ({
+  date,
+  info,
+  renderRight,
+  type,
+  ...props
+}) => {
   const recordTypeInfo = getRecordTypeInfo(type)
 
   return (
@@ -26,13 +33,18 @@ export const RecordCard: FunctionComponent<RecordCardProps> = ({ date, info, typ
         <Text numberOfLines={1} medium>
           {recordTypeInfo?.title}
         </Text>
-        <Text className="text-sm text-[#979797]" medium>
-          {info}
-        </Text>
+        {!!info && (
+          <Text className="text-sm text-[#979797]" medium>
+            {info}
+          </Text>
+        )}
       </View>
-      <Text className="text-sm text-[#979797]" medium>
-        {formatDistanceToNow(date)}
-      </Text>
+      {!!date && (
+        <Text className="text-sm text-[#979797]" medium>
+          {formatDistanceToNow(date)}
+        </Text>
+      )}
+      {renderRight?.()}
     </BaseCard>
   )
 }

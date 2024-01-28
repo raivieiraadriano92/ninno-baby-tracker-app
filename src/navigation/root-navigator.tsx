@@ -12,7 +12,7 @@ const NativeStack = createNativeStackNavigator<RootStackParamList>()
 
 export const RootNavigator: FunctionComponent = () => (
   <NativeStack.Navigator
-    initialRouteName="Tabs"
+    initialRouteName="Welcome"
     screenOptions={{
       contentStyle: { backgroundColor: colors.custom.background },
       headerTintColor: colors.custom.primary,

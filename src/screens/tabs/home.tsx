@@ -14,7 +14,7 @@ import Animated, {
   useSharedValue
 } from 'react-native-reanimated'
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
-import { BaseCard, Button, RecordCard, RecordIcon, Text } from 'src/components'
+import { Button, RecordCard, RecordIcon, Text } from 'src/components'
 import colors from 'src/theme/colors'
 import { getRecordTypeInfo, recordTypeGroups } from 'src/utils/records'
 
@@ -160,21 +160,16 @@ export const HomeScreen: TabScreen<'Home'> = ({ navigation }) => {
         ref={bottomSheetRef}>
         <BottomSheetView onLayout={handleContentLayout} style={{ padding: 16, paddingBottom: 16 }}>
           <View className="space-y-3">
-            {selectedRecordTypeGroup?.[1].map((type) => {
-              const recordTypeInfo = getRecordTypeInfo(type)
-
-              return (
-                <TouchableOpacity key={type} onPress={() => {}}>
-                  <BaseCard>
-                    <RecordIcon size={44} type={type} />
-                    <View className="flex-1">
-                      <Text medium>{recordTypeInfo.title}</Text>
-                    </View>
+            {selectedRecordTypeGroup?.[1].map((type) => (
+              <TouchableOpacity key={type} onPress={() => {}}>
+                <RecordCard
+                  renderRight={() => (
                     <Feather name="plus" size={24} color={colors.custom.primary} />
-                  </BaseCard>
-                </TouchableOpacity>
-              )
-            })}
+                  )}
+                  type={type}
+                />
+              </TouchableOpacity>
+            ))}
           </View>
         </BottomSheetView>
       </BottomSheet>
