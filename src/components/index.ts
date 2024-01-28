@@ -1,3 +1,5 @@
+export { BaseCard } from './base-card'
+
 export { Button } from './button'
 
 export { MeasuresPicker } from './measures-picker'
