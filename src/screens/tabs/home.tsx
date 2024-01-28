@@ -6,8 +6,7 @@ import BottomSheet, {
   BottomSheetView,
   useBottomSheetDynamicSnapPoints
 } from '@gorhom/bottom-sheet'
-import { Image, ScrollView, View } from 'react-native'
-import { TouchableOpacity } from 'react-native-gesture-handler'
+import { Image, ScrollView, TouchableOpacity, View } from 'react-native'
 import Animated, {
   useAnimatedScrollHandler,
   useAnimatedStyle,
@@ -74,6 +73,12 @@ export const HomeScreen: TabScreen<'Home'> = ({ navigation }) => {
   const [selectedRecordTypeGroup, setSelectedRecordTypeGroup] = useState<RecordTypeGroup>()
 
   const addNewRecord = (group: RecordTypeGroup) => {
+    if (group[1].length === 1) {
+      navigation.navigate('RecordForm', { type: group[1][0] })
+
+      return
+    }
+
     setSelectedRecordTypeGroup(group)
 
     bottomSheetRef.current?.expand()
@@ -161,7 +166,16 @@ export const HomeScreen: TabScreen<'Home'> = ({ navigation }) => {
         <BottomSheetView onLayout={handleContentLayout} style={{ padding: 16, paddingBottom: 16 }}>
           <View className="space-y-3">
             {selectedRecordTypeGroup?.[1].map((type) => (
-              <TouchableOpacity key={type} onPress={() => {}}>
+              <TouchableOpacity
+                key={type}
+                onPress={() => {
+                  navigation.navigate('RecordForm', { type })
+
+                  // delaying the close action to allow the navigation to finish
+                  setTimeout(() => {
+                    bottomSheetRef.current?.close()
+                  }, 1000)
+                }}>
                 <RecordCard
                   renderRight={() => (
                     <Feather name="plus" size={24} color={colors.custom.primary} />

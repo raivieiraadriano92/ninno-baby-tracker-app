@@ -1,7 +1,12 @@
 import type { FunctionComponent } from 'react'
 
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import { BabyProfileCreationScreen, RecordsScreen, WelcomeScreen } from 'src/screens'
+import {
+  BabyProfileCreationScreen,
+  RecordFormScreen,
+  RecordsScreen,
+  WelcomeScreen
+} from 'src/screens'
 import colors from 'src/theme/colors'
 
 import { TabNavigator } from './tab-navigator'
@@ -12,7 +17,7 @@ const NativeStack = createNativeStackNavigator<RootStackParamList>()
 
 export const RootNavigator: FunctionComponent = () => (
   <NativeStack.Navigator
-    initialRouteName="Welcome"
+    initialRouteName="Tabs"
     screenOptions={{
       contentStyle: { backgroundColor: colors.custom.background },
       headerTintColor: colors.custom.primary,
@@ -27,6 +32,7 @@ export const RootNavigator: FunctionComponent = () => (
         headerTransparent: true
       }}
     />
+    <NativeStack.Screen component={RecordFormScreen} name="RecordForm" />
     <NativeStack.Screen component={RecordsScreen} name="Records" />
     <NativeStack.Screen
       component={WelcomeScreen}
