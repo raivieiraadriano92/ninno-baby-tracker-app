@@ -20,6 +20,7 @@ export const RootNavigator: FunctionComponent = () => (
     initialRouteName="Tabs"
     screenOptions={{
       contentStyle: { backgroundColor: colors.custom.background },
+      headerBackTitleVisible: false,
       headerTintColor: colors.custom.primary,
       headerTitleStyle: { fontFamily: 'Nunito_700Bold' }
     }}>
