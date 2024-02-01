@@ -14,7 +14,7 @@ import Animated, {
 } from 'react-native-reanimated'
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Button, MeasuresPicker, RecordCard, Text } from 'src/components'
-import { usePagerViewScrollHandler } from 'src/hooks/use-pager-scroll-handler'
+import { usePagerViewScrollHandler } from 'src/hooks'
 import colors from 'src/theme/colors'
 import twColors from 'tailwindcss/colors'
 import { create } from 'zustand'
