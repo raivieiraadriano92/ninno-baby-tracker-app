@@ -1,4 +1,8 @@
+export { BabyProfilesScreen } from './tabs/baby-profiles'
+
 export { HomeScreen } from './tabs/home'
+
+export { SettingsScreen } from './tabs/settings'
 
 export { BabyProfileCreationScreen } from './baby-profile-creation'
 

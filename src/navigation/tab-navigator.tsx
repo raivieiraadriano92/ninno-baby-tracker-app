@@ -1,6 +1,6 @@
-import { Feather } from '@expo/vector-icons'
+import { Feather, MaterialCommunityIcons } from '@expo/vector-icons'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { HomeScreen } from 'src/screens'
+import { BabyProfilesScreen, HomeScreen, SettingsScreen } from 'src/screens'
 import colors from 'src/theme/colors'
 
 import type { RootStackScreen, TabParamList } from './types'
@@ -21,6 +21,29 @@ export const TabNavigator: RootStackScreen<'Tabs'> = () => (
         headerShown: false,
         tabBarShowLabel: false,
         tabBarIcon: () => <Feather name="home" size={24} color={colors.custom.primary} />
+      }}
+    />
+    <BottomTab.Screen
+      component={BabyProfilesScreen}
+      name="BabyProfiles"
+      options={{
+        headerTitle: 'My ninnos',
+        tabBarShowLabel: false,
+        tabBarIcon: () => (
+          <MaterialCommunityIcons
+            name="baby-face-outline"
+            size={24}
+            color={colors.custom.primary}
+          />
+        )
+      }}
+    />
+    <BottomTab.Screen
+      component={SettingsScreen}
+      name="Settings"
+      options={{
+        tabBarShowLabel: false,
+        tabBarIcon: () => <Feather name="settings" size={24} color={colors.custom.primary} />
       }}
     />
   </BottomTab.Navigator>

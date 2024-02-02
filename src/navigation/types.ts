@@ -23,7 +23,9 @@ export type RootStackScreen<RouteName extends keyof RootStackParamList> = Functi
 >
 
 export type TabParamList = {
+  BabyProfiles: undefined
   Home: undefined
+  Settings: undefined
 }
 
 export type TabScreenProps<T extends keyof TabParamList> = CompositeScreenProps<
