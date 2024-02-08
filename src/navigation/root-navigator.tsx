@@ -42,14 +42,27 @@ export const RootNavigator: FunctionComponent = () => {
   }, [appIsReady, session])
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session)
-    })
-
-    supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session)
+    supabase.auth.getSession().then(({ data }) => {
+      setSession(data.session)
     })
   }, [])
+
+  useEffect(() => {
+    // avoid re-rendering the component when the session changes
+    if (session !== undefined) {
+      const {
+        data: { subscription }
+      } = supabase.auth.onAuthStateChange((_event, authSession) => {
+        if (authSession?.access_token !== session?.access_token) {
+          setSession(authSession)
+        }
+      })
+
+      return () => {
+        subscription.unsubscribe()
+      }
+    }
+  }, [session])
 
   if (!appIsReady || session === undefined) {
     return null
