@@ -4,6 +4,8 @@ export { Button } from './button'
 
 export { EmptyStateHomeScreen } from './empty-state-home-screen'
 
+export { FirstBabyProfile } from './first-baby-profile'
+
 export { GlobalErrorBottomSheet } from './global-error-bottom-sheet'
 
 export type { GlobalErrorBottomSheetElement } from './global-error-bottom-sheet'

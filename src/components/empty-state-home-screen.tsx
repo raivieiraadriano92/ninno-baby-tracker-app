@@ -20,7 +20,7 @@ export const EmptyStateHomeScreen: FunctionComponent<EmptyStateHomeScreenProps> 
         New Beginnings
       </Text>
       <Text medium className="text-center">
-        {`Ready to Start Recording Memories?\nLet's Begin!`}
+        {`Ready to start recording memories?\nLet's begin!`}
       </Text>
     </View>
     <View className="px-10">
