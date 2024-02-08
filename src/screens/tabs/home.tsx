@@ -13,7 +13,7 @@ import Animated, {
   useSharedValue
 } from 'react-native-reanimated'
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
-import { Button, RecordCard, RecordIcon, Text } from 'src/components'
+import { Button, EmptyStateHomeScreen, RecordCard, RecordIcon, Text } from 'src/components'
 import colors from 'src/theme/colors'
 import { getRecordTypeInfo, recordTypeGroups } from 'src/utils/records'
 
@@ -83,6 +83,8 @@ export const HomeScreen: TabScreen<'Home'> = ({ navigation }) => {
 
     bottomSheetRef.current?.expand()
   }
+
+  return <EmptyStateHomeScreen goToAddRecord={() => navigation.navigate('BabyProfileCreation')} />
 
   return (
     <>

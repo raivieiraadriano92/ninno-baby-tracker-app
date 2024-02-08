@@ -522,8 +522,7 @@ export const BabyProfileCreationScreen: RootStackScreen<'BabyProfileCreation'> =
             setCurrentPage(e.nativeEvent.position)
           }}
           ref={pagerViewRef}
-          //   scrollEnabled={false}
-        >
+          scrollEnabled={false}>
           {steps.map((Step, index) => (
             <Step
               key={index}
