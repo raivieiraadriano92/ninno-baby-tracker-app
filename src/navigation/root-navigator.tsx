@@ -30,8 +30,6 @@ export const RootNavigator: FunctionComponent = () => {
 
   const [session, setSession] = useState<Session | null | undefined>(undefined)
 
-  console.log('session', session)
-
   const onLayoutRootView = useCallback(async () => {
     if (appIsReady && session !== undefined) {
       // This tells the splash screen to hide immediately! If we call this after

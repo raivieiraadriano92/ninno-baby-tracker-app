@@ -24,7 +24,7 @@ export const usePreloadApp = () => {
           Nunito_700Bold
         })
       } catch (e) {
-        console.warn(e)
+        // console.warn(e)
       } finally {
         // Tell the application to render
         setAppIsReady(true)

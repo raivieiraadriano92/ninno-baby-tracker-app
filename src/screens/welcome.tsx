@@ -3,13 +3,16 @@ import Animated, { FadeInUp } from 'react-native-reanimated'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Button, Text } from 'src/components'
 import { useAnonymousAuth } from 'src/hooks'
+import { globalErrorBottomSheetRef } from 'src/utils/global-refs'
 
 import type { RootStackScreen } from 'src/navigation/types'
 
 const AnimatedSafeAreaView = Animated.createAnimatedComponent(SafeAreaView)
 
 export const WelcomeScreen: RootStackScreen<'Welcome'> = () => {
-  const { authenticate } = useAnonymousAuth()
+  const { authenticate, loading } = useAnonymousAuth({
+    onError: (error) => globalErrorBottomSheetRef.current?.expand(error)
+  })
 
   return (
     <AnimatedSafeAreaView className="flex-1 justify-between p-10" entering={FadeInUp}>
@@ -33,7 +36,7 @@ export const WelcomeScreen: RootStackScreen<'Welcome'> = () => {
           {`Keep track of baby's feeding, sleeps, diapers & growth in one place.`}
         </Text>
       </View>
-      <Button onPress={authenticate} title="Get started" />
+      <Button isLoading={loading} onPress={authenticate} title="Get started" />
     </AnimatedSafeAreaView>
   )
 }
