@@ -1,6 +1,6 @@
 import type { FunctionComponent } from 'react'
 
-import { TouchableOpacity } from 'react-native'
+import { ActivityIndicator, TouchableOpacity } from 'react-native'
 import { tv, type VariantProps } from 'tailwind-variants'
 
 import { Text } from './text'
@@ -31,18 +31,34 @@ const buttonTextVariants = tv({
 
 type ButtonProps = TouchableOpacityProps &
   VariantProps<typeof buttonVariants> & {
+    isLoading?: boolean
     title: string
   }
 
 export const Button: FunctionComponent<ButtonProps> = ({
   className,
+  disabled,
+  isLoading,
+  style,
   title,
   variant = 'solid',
   ...props
-}) => (
-  <TouchableOpacity className={`${buttonVariants({ variant })} ${className}`} {...props}>
-    <Text bold className={buttonTextVariants({ variant })}>
-      {title}
-    </Text>
-  </TouchableOpacity>
-)
+}) => {
+  const isDisabled = disabled ?? isLoading
+
+  return (
+    <TouchableOpacity
+      className={`${buttonVariants({ variant })} ${className}`}
+      disabled={isDisabled}
+      style={[style, isDisabled && { opacity: 0.8 }]}
+      {...props}>
+      {isLoading ? (
+        <ActivityIndicator color="white" />
+      ) : (
+        <Text bold className={buttonTextVariants({ variant })}>
+          {title}
+        </Text>
+      )}
+    </TouchableOpacity>
+  )
+}
