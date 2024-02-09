@@ -2,8 +2,6 @@ export { BaseCard } from './base-card'
 
 export { Button } from './button'
 
-export { EmptyStateHomeScreen } from './empty-state-home-screen'
-
 export { FirstBabyProfile } from './first-baby-profile'
 
 export { GlobalErrorBottomSheet } from './global-error-bottom-sheet'
