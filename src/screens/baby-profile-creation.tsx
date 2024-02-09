@@ -16,6 +16,7 @@ import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Button, MeasuresPicker, RecordCard, Text } from 'src/components'
 import { usePagerViewScrollHandler } from 'src/hooks'
 import colors from 'src/theme/colors'
+import { supabase } from 'src/utils/supabase'
 import twColors from 'tailwindcss/colors'
 import { create } from 'zustand'
 
@@ -66,6 +67,7 @@ type StepProps = {
   cancel: () => void
   index: number
   isFocused: boolean
+  isSaving?: boolean
   moveNext: (_index: number) => void
   save: () => void
   setBabyProfileDraft: Dispatch<SetStateAction<BabyProfileDraft>>
@@ -200,6 +202,7 @@ const NameStep: FunctionComponent<StepProps> = ({
         <TextInput
           autoCapitalize="words"
           className="text-2xl text-center text-custom-primary"
+          maxLength={50}
           onChangeText={(text) => (refInputNameValue.current = text)}
           placeholder="Enter the name"
           placeholderTextColor={placeholderTextColor}
@@ -347,7 +350,12 @@ const HeadCircumferenceStep: FunctionComponent<StepProps> = ({
   )
 }
 
-const ConfirmationStep: FunctionComponent<StepProps> = ({ babyProfileDraft, cancel, save }) => {
+const ConfirmationStep: FunctionComponent<StepProps> = ({
+  babyProfileDraft,
+  cancel,
+  isSaving,
+  save
+}) => {
   const records: [RecordType, string][] = [
     ['birthday', format(babyProfileDraft.birthday, 'd MMM yyyy')],
     ['weight', `${babyProfileDraft.weight.value}${babyProfileDraft.weight.unit}`],
@@ -372,8 +380,14 @@ const ConfirmationStep: FunctionComponent<StepProps> = ({ babyProfileDraft, canc
             ))}
           </View>
           <View className="flex-row space-x-5">
-            <Button className="flex-1" onPress={cancel} variant="outline" title="Cancel" />
-            <Button className="flex-1" onPress={save} title="Save" />
+            <Button
+              className="flex-1"
+              isLoading={isSaving}
+              onPress={cancel}
+              variant="outline"
+              title="Cancel"
+            />
+            <Button className="flex-1" isLoading={isSaving} onPress={save} title="Save" />
           </View>
         </View>
       </StepContainer>
@@ -411,13 +425,16 @@ const ProgressBar: FunctionComponent = () => {
 }
 
 export const BabyProfileCreationScreen: RootStackScreen<'BabyProfileCreation'> = ({
-  navigation
+  navigation,
+  route: { params }
 }) => {
   const insets = useSafeAreaInsets()
 
   const pagerViewRef = useRef<PagerView>(null)
 
   const { currentPage, setCurrentPage } = useCurrentPageStore()
+
+  const [isSaving, setIsSaving] = useState(false)
 
   const [babyProfileDraft, setBabyProfileDraft] = useState<BabyProfileDraft>({
     birthday: new Date(),
@@ -445,7 +462,29 @@ export const BabyProfileCreationScreen: RootStackScreen<'BabyProfileCreation'> =
     pagerViewRef.current?.setPage(index + 1)
   }
 
-  const save = () => navigation.replace('Tabs')
+  const save = async () => {
+    setIsSaving(true)
+
+    const response = await supabase.from('baby_profiles').insert({
+      is_selected: params?.isFirst,
+      gender: babyProfileDraft.gender,
+      name: babyProfileDraft.name,
+      birthday: format(babyProfileDraft.birthday, 'yyyy-MM-dd')
+    })
+    //   .select()
+
+    console.log(response)
+
+    if (response.error) {
+      // show error
+
+      setIsSaving(false)
+
+      return
+    }
+
+    navigation.goBack()
+  }
 
   const progress = useSharedValue(0)
 
@@ -527,6 +566,7 @@ export const BabyProfileCreationScreen: RootStackScreen<'BabyProfileCreation'> =
             <Step
               key={index}
               isFocused={index === currentPage}
+              isSaving={isSaving}
               {...{ babyProfileDraft, cancel, index, moveNext, save, setBabyProfileDraft }}
             />
           ))}

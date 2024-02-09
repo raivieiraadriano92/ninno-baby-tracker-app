@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import { useFocusEffect } from '@react-navigation/native'
 import { ActivityIndicator, View } from 'react-native'
 import { FirstBabyProfile } from 'src/components'
 import { BabyProfilesScreen, HomeScreen, SettingsScreen } from 'src/screens'
@@ -18,12 +19,14 @@ export const TabNavigator: RootStackScreen<'Tabs'> = ({ navigation }) => {
   const verifyHasBabyProfiles = async () => {
     const response = await supabase.from('baby_profiles').select('id').limit(1).maybeSingle()
 
-    setHasBabyProfile(!!response.count)
+    setHasBabyProfile(!!response.data)
   }
 
-  useEffect(() => {
-    verifyHasBabyProfiles()
-  }, [])
+  useFocusEffect(
+    useCallback(() => {
+      verifyHasBabyProfiles()
+    }, [])
+  )
 
   if (hasBabyProfile === undefined) {
     return (
@@ -34,7 +37,11 @@ export const TabNavigator: RootStackScreen<'Tabs'> = ({ navigation }) => {
   }
 
   if (hasBabyProfile === false) {
-    return <FirstBabyProfile goToAddRecord={() => navigation.navigate('BabyProfileCreation')} />
+    return (
+      <FirstBabyProfile
+        goToAddRecord={() => navigation.navigate('BabyProfileCreation', { isFirst: true })}
+      />
+    )
   }
 
   return (
