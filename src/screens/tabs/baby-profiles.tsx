@@ -5,14 +5,13 @@ import { FlatList, TouchableOpacity, View } from 'react-native'
 import { BabyProfileCard, PageLoader } from 'src/components'
 import { useOnSaveBabyProfileEvent } from 'src/hooks'
 import colors from 'src/theme/colors'
-import { supabase } from 'src/utils/supabase'
+import { fetchBabyProfiles } from 'src/utils/supabase'
 
 import type { BabyProfileRow } from 'src/models/baby-profile'
 import type { TabScreen } from 'src/navigation/types'
-import type { Database } from 'src/utils/supabase/types'
 
 type State = {
-  babyProfiles: Database['public']['Tables']['baby_profiles']['Row'][]
+  babyProfiles: BabyProfileRow[]
   loading: boolean
 }
 
@@ -20,8 +19,6 @@ const INITIAL_STATE: State = {
   babyProfiles: [],
   loading: true
 }
-
-const fetchBabyProfiles = () => supabase.from('baby_profiles').select().order('name')
 
 export const BabyProfilesScreen: TabScreen<'BabyProfiles'> = ({ navigation }) => {
   const [state, setState] = useState<State>(INITIAL_STATE)
@@ -39,17 +36,13 @@ export const BabyProfilesScreen: TabScreen<'BabyProfiles'> = ({ navigation }) =>
   )
 
   useEffect(() => {
-    const fetchData = async () => {
-      const responseBabyProfiles = await fetchBabyProfiles()
-
+    fetchBabyProfiles().then((response) =>
       setState((prev) => ({
         ...prev,
-        babyProfiles: responseBabyProfiles.data ?? [],
+        babyProfiles: response.data ?? [],
         loading: false
       }))
-    }
-
-    fetchData()
+    )
   }, [])
 
   useLayoutEffect(() => {

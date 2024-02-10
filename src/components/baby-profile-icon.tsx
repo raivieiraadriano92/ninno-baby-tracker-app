@@ -4,10 +4,10 @@ import { Image, View } from 'react-native'
 import colors from 'src/theme/colors'
 
 import type { ViewProps } from 'react-native'
-import type { Database } from 'src/utils/supabase/types'
+import type { BabyProfileRow } from 'src/models/baby-profile'
 
 type BabyProfileIconProps = ViewProps & {
-  gender: Database['public']['Tables']['baby_profiles']['Row']['gender']
+  gender: BabyProfileRow['gender']
   size: number
 }
 

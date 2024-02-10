@@ -8,10 +8,7 @@ import { BaseCard } from './base-card'
 import { RecordIcon } from './record-icon'
 import { Text } from './text'
 
-import type { MeasureData, RecordType } from 'src/models/record'
-import type { Database } from 'src/utils/supabase/types'
-
-type RecordRow = Database['public']['Tables']['records']['Row']
+import type { MeasureData, RecordRow, RecordType } from 'src/models/record'
 
 type RecordCardProps = ViewProps & {
   attributes?: RecordRow['attributes']

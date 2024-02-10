@@ -14,26 +14,29 @@ import Animated, {
   useSharedValue
 } from 'react-native-reanimated'
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
-import { Button, PageLoader, RecordCard, RecordIcon, Text } from 'src/components'
+import { BabyProfileCard, Button, PageLoader, RecordCard, RecordIcon, Text } from 'src/components'
+import { useOnSaveBabyProfileEvent } from 'src/hooks'
 import colors from 'src/theme/colors'
 import { STORAGE_KEY_SELECTED_BABY_PROFILE_ID } from 'src/utils/baby-profiles'
 import { getRecordTypeInfo, recordTypeGroups } from 'src/utils/records'
-import { supabase } from 'src/utils/supabase'
+import { fetchBabyProfiles, supabase } from 'src/utils/supabase'
 
 import type { BottomSheetDefaultBackdropProps } from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types'
-import type { RecordTypeGroup } from 'src/models/record'
+import type { BabyProfileRow } from 'src/models/baby-profile'
+import type { RecordRow, RecordTypeGroup } from 'src/models/record'
 import type { TabScreen } from 'src/navigation/types'
-import type { Database } from 'src/utils/supabase/types'
 
 type State = {
-  babyProfile?: Database['public']['Tables']['baby_profiles']['Row'] | null
-  records: Database['public']['Tables']['records']['Row'][]
+  babyProfiles: BabyProfileRow[]
   loading: boolean
+  records: RecordRow[]
+  selectedBabyProfile?: BabyProfileRow
 }
 
 const INITIAL_STATE: State = {
-  records: [],
-  loading: true
+  babyProfiles: [],
+  loading: true,
+  records: []
 }
 
 const HEADER_BG_HEIGHT = 200
@@ -46,33 +49,6 @@ const fetchRecords = (baby_profile_id: number) =>
     .limit(10)
     .order('date', { ascending: false })
     .order('time', { ascending: false })
-
-const fetchSelectedBabyProfile = async () => {
-  const selectedBabyProfileId = await AsyncStorage.getItem(STORAGE_KEY_SELECTED_BABY_PROFILE_ID)
-
-  if (selectedBabyProfileId) {
-    return supabase
-      .from('baby_profiles')
-      .select()
-      .eq('id', +selectedBabyProfileId)
-      .limit(1)
-      .single()
-  }
-
-  const lastBabyProfile = await supabase
-    .from('baby_profiles')
-    .select()
-    .order('id', { ascending: false })
-    .limit(1)
-    .single()
-
-  await AsyncStorage.setItem(
-    STORAGE_KEY_SELECTED_BABY_PROFILE_ID,
-    lastBabyProfile.data?.id.toString() ?? ''
-  )
-
-  return lastBabyProfile
-}
 
 export const HomeScreen: TabScreen<'Home'> = ({ navigation }) => {
   const insets = useSafeAreaInsets()
@@ -92,7 +68,9 @@ export const HomeScreen: TabScreen<'Home'> = ({ navigation }) => {
     ]
   }))
 
-  const bottomSheetRef = useRef<BottomSheet>(null)
+  const bottomSheetNewRecordRef = useRef<BottomSheet>(null)
+
+  const bottomSheetSwitchBabyProfileRef = useRef<BottomSheet>(null)
 
   const renderBackdrop = useCallback(
     (props: BottomSheetDefaultBackdropProps) => (
@@ -117,30 +95,70 @@ export const HomeScreen: TabScreen<'Home'> = ({ navigation }) => {
 
     setSelectedRecordTypeGroup(group)
 
-    bottomSheetRef.current?.expand()
+    bottomSheetNewRecordRef.current?.expand()
+  }
+
+  const handleSwitchBabyProfile = async (babyProfile: BabyProfileRow) => {
+    setState((prev) => ({ ...prev, selectedBabyProfile: babyProfile, loading: true }))
+
+    const responseRecords = await fetchRecords(babyProfile.id)
+
+    setState((prev) => ({ ...prev, loading: false, records: responseRecords.data ?? [] }))
   }
 
   const [state, setState] = useState<State>(INITIAL_STATE)
 
-  // fetch records and selected baby profile
-  useEffect(() => {
-    const fetchData = async () => {
-      const responseSelectedBabyProfile = await fetchSelectedBabyProfile()
+  useOnSaveBabyProfileEvent(
+    useCallback((row: BabyProfileRow) => {
+      setState((prev) => ({
+        ...prev,
+        babyProfiles: [
+          ...prev.babyProfiles.filter((babyProfile) => babyProfile.id !== row.id),
+          row
+        ].sort((a, b) => a.name.localeCompare(b.name))
+      }))
+    }, [])
+  )
 
-      if (responseSelectedBabyProfile.data?.id) {
-        const responseRecords = await fetchRecords(responseSelectedBabyProfile.data.id)
+  useEffect(() => {
+    fetchBabyProfiles().then(async (responseBabyProfiles) => {
+      if (responseBabyProfiles.data?.length) {
+        const selectedBabyProfileId = await AsyncStorage.getItem(
+          STORAGE_KEY_SELECTED_BABY_PROFILE_ID
+        )
+
+        const lastBabyProfile = responseBabyProfiles.data[responseBabyProfiles.data.length - 1]
+
+        let selectedBabyProfile = lastBabyProfile
+
+        // if the selected baby profile is not found or not in the list, use the last baby profile
+        if (!selectedBabyProfileId || selectedBabyProfileId !== selectedBabyProfile.id.toString()) {
+          selectedBabyProfile =
+            responseBabyProfiles.data.find(
+              (item) => item.id.toString() === selectedBabyProfileId
+            ) ?? lastBabyProfile
+        }
+
+        const responseRecords = await fetchRecords(selectedBabyProfile.id)
 
         setState((prev) => ({
           ...prev,
-          babyProfile: responseSelectedBabyProfile.data,
+          babyProfiles: responseBabyProfiles.data,
+          loading: false,
           records: responseRecords.data ?? [],
-          loading: false
+          selectedBabyProfile
         }))
       }
-    }
-
-    fetchData()
+    })
   }, [])
+
+  useEffect(() => {
+    !!state.selectedBabyProfile?.id &&
+      AsyncStorage.setItem(
+        STORAGE_KEY_SELECTED_BABY_PROFILE_ID,
+        state.selectedBabyProfile?.id.toString()
+      )
+  }, [state.selectedBabyProfile?.id])
 
   if (state.loading) {
     return <PageLoader />
@@ -201,7 +219,7 @@ export const HomeScreen: TabScreen<'Home'> = ({ navigation }) => {
           style={bgAnimatedStyle}>
           <Image
             source={
-              state.babyProfile?.gender === 'M'
+              state.selectedBabyProfile?.gender === 'M'
                 ? require('assets/bg-shape-header-blue.png')
                 : require('assets/bg-shape-header-pink.png')
             }
@@ -209,9 +227,18 @@ export const HomeScreen: TabScreen<'Home'> = ({ navigation }) => {
           <View
             className="absolute items-center justify-center space-y-6"
             style={{ height: HEADER_BG_HEIGHT }}>
-            <Text bold className="text-4xl">
-              {state.babyProfile?.name}
-            </Text>
+            <View className="items-center justify-center">
+              <Text bold className="text-4xl">
+                {state.selectedBabyProfile?.name}
+              </Text>
+              {state.babyProfiles.length > 1 && (
+                <TouchableOpacity
+                  className="absolute -right-10"
+                  onPress={() => bottomSheetSwitchBabyProfileRef.current?.expand()}>
+                  <Feather name="chevron-down" size={24} color={colors.custom.primary} />
+                </TouchableOpacity>
+              )}
+            </View>
             <View className="flex-row space-x-4">
               {['5.8kg', '2 mon, 3 days', '58.4cm'].map((item) => (
                 <View className="bg-custom-yellow1 px-4 py-0.5 rounded-full" key={item}>
@@ -236,7 +263,7 @@ export const HomeScreen: TabScreen<'Home'> = ({ navigation }) => {
         }}
         index={-1}
         snapPoints={animatedSnapPoints}
-        ref={bottomSheetRef}>
+        ref={bottomSheetNewRecordRef}>
         <BottomSheetView onLayout={handleContentLayout} style={{ padding: 16, paddingBottom: 16 }}>
           <View className="space-y-3">
             {selectedRecordTypeGroup?.[1].map((type) => (
@@ -247,7 +274,7 @@ export const HomeScreen: TabScreen<'Home'> = ({ navigation }) => {
 
                   // delaying the close action to allow the navigation to finish
                   setTimeout(() => {
-                    bottomSheetRef.current?.close()
+                    bottomSheetNewRecordRef.current?.close()
                   }, 1000)
                 }}>
                 <RecordCard
@@ -255,6 +282,36 @@ export const HomeScreen: TabScreen<'Home'> = ({ navigation }) => {
                     <Feather name="plus" size={24} color={colors.custom.primary} />
                   )}
                   type={type}
+                />
+              </TouchableOpacity>
+            ))}
+          </View>
+        </BottomSheetView>
+      </BottomSheet>
+      <BottomSheet
+        backgroundStyle={{ backgroundColor: colors.custom.background }}
+        backdropComponent={renderBackdrop}
+        contentHeight={animatedContentHeight}
+        enablePanDownToClose
+        handleHeight={animatedHandleHeight}
+        handleIndicatorStyle={{
+          backgroundColor: colors.custom.iconOff,
+          borderRadius: 6,
+          height: 6,
+          width: 80
+        }}
+        index={-1}
+        snapPoints={animatedSnapPoints}
+        ref={bottomSheetSwitchBabyProfileRef}>
+        <BottomSheetView onLayout={handleContentLayout} style={{ padding: 16, paddingBottom: 16 }}>
+          <View className="space-y-3">
+            {state.babyProfiles.map((item) => (
+              <TouchableOpacity key={item.id} onPress={() => handleSwitchBabyProfile(item)}>
+                <BabyProfileCard
+                  className="mx-4"
+                  birthday={item.birthday}
+                  gender={item.gender}
+                  name={item.name}
                 />
               </TouchableOpacity>
             ))}

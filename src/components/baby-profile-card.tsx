@@ -7,9 +7,7 @@ import { BabyProfileIcon } from './baby-profile-icon'
 import { BaseCard } from './base-card'
 import { Text } from './text'
 
-import type { Database } from 'src/utils/supabase/types'
-
-type BabyProfileRow = Database['public']['Tables']['baby_profiles']['Row']
+import type { BabyProfileRow } from 'src/models/baby-profile'
 
 type BabyProfileCardProps = ViewProps & {
   name: BabyProfileRow['name']

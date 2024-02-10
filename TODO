@@ -1,0 +1,13 @@
+- schedule annual birthday's notification for each profile
+
+  - remove notification on delete profile
+  - handle with scenario where an user shares a profile
+
+- implement share profile feature
+
+  - it needs to enable user to switch the anonymous auth
+
+- implement feature to upload the baby's profile picture
+
+- implement feature to follow the baby's growth with pictures
+  - use the height record type
