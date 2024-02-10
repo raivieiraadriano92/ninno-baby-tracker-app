@@ -8,7 +8,7 @@ import { BaseCard } from './base-card'
 import { RecordIcon } from './record-icon'
 import { Text } from './text'
 
-import type { RecordType } from 'src/models/record'
+import type { MeasureData, RecordType } from 'src/models/record'
 import type { Database } from 'src/utils/supabase/types'
 
 type RecordRow = Database['public']['Tables']['records']['Row']
@@ -19,6 +19,16 @@ type RecordCardProps = ViewProps & {
   renderRight?: () => JSX.Element
   time?: RecordRow['time']
   type: RecordType
+}
+
+const formatAttributes = (type: RecordType, attributes: RecordRow['attributes']) => {
+  if ((['head', 'height', 'weight'] as RecordType[]).includes(type)) {
+    const attr = attributes as MeasureData
+
+    return `${attr.value}${attr.unit}`
+  }
+
+  return '-'
 }
 
 export const RecordCard: FunctionComponent<RecordCardProps> = ({
@@ -38,11 +48,11 @@ export const RecordCard: FunctionComponent<RecordCardProps> = ({
         <Text numberOfLines={1} medium>
           {recordTypeInfo?.title}
         </Text>
-        {/* {!!info && (
+        {!!attributes && (
           <Text className="text-sm text-[#979797]" medium>
-            {info}
+            {formatAttributes(type, attributes)}
           </Text>
-        )} */}
+        )}
       </View>
       {!!date && !!time && (
         <Text className="text-sm text-[#979797]" medium>

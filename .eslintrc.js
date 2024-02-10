@@ -61,6 +61,7 @@ module.exports = {
       'error',
       { blankLine: 'always', prev: '*', next: '*' },
       { blankLine: 'any', prev: 'import', next: 'import' }
-    ]
+    ],
+    'no-fallthrough': ['error', { allowEmptyCase: true }]
   }
 }

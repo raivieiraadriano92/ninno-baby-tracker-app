@@ -24,7 +24,7 @@ import twColors from 'tailwindcss/colors'
 import { create } from 'zustand'
 
 import type { ImageSourcePropType } from 'react-native'
-import type { RecordType } from 'src/models/record'
+import type { MeasureData, RecordType } from 'src/models/record'
 import type { RootStackScreen } from 'src/navigation/types'
 import type { Database } from 'src/utils/supabase/types'
 
@@ -33,11 +33,6 @@ const AnimatedPagerView = Animated.createAnimatedComponent(PagerView)
 type CurrentPageState = {
   currentPage: number
   setCurrentPage: (_index: number) => void
-}
-
-type MeasureData = {
-  value: number
-  unit: string
 }
 
 type BabyProfileDraft = {
