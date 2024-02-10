@@ -41,7 +41,7 @@ type MeasureData = {
 }
 
 type BabyProfileDraft = {
-  gender: Database['public']['Enums']['gender']
+  gender: Database['public']['Enums']['babyprofilegender']
   name?: string
   birthday: Date
   weight: MeasureData

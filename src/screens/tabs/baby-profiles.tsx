@@ -64,7 +64,7 @@ export const BabyProfilesScreen: TabScreen<'BabyProfiles'> = ({ navigation }) =>
       renderItem={({ item }) => (
         <BabyProfileCard
           className="mx-4"
-          birthDate={new Date(item.birthday)}
+          birthday={item.birthday}
           gender={item.gender}
           name={item.name}
         />

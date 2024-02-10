@@ -134,5 +134,3 @@ export const getRecordTypeInfo = (type: RecordType) => {
       }
   }
 }
-
-export const mountRecordDate = (date: string, time: string) => new Date(`${date}T${time}`)

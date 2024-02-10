@@ -17,11 +17,11 @@ import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Button, PageLoader, RecordCard, RecordIcon, Text } from 'src/components'
 import colors from 'src/theme/colors'
 import { STORAGE_KEY_SELECTED_BABY_PROFILE_ID } from 'src/utils/baby-profiles'
-import { getRecordTypeInfo, mountRecordDate, recordTypeGroups } from 'src/utils/records'
+import { getRecordTypeInfo, recordTypeGroups } from 'src/utils/records'
 import { supabase } from 'src/utils/supabase'
 
 import type { BottomSheetDefaultBackdropProps } from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types'
-import type { RecordType, RecordTypeGroup } from 'src/models/record'
+import type { RecordTypeGroup } from 'src/models/record'
 import type { TabScreen } from 'src/navigation/types'
 import type { Database } from 'src/utils/supabase/types'
 
@@ -186,13 +186,12 @@ export const HomeScreen: TabScreen<'Home'> = ({ navigation }) => {
               />
             </View>
             {state.records.map((record) => (
-              // const attributes = record.attributes as RecordTypeGroup
-
               <RecordCard
-                date={mountRecordDate(record.date, record.time)}
-                info="5.2kg"
+                attributes={record.attributes}
+                date={record.date}
                 key={record.id}
-                type={record.type as RecordType}
+                time={record.time}
+                type={record.type}
               />
             ))}
           </View>

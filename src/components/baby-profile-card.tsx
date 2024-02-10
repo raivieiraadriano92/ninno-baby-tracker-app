@@ -7,14 +7,18 @@ import { BabyProfileIcon } from './baby-profile-icon'
 import { BaseCard } from './base-card'
 import { Text } from './text'
 
+import type { Database } from 'src/utils/supabase/types'
+
+type BabyProfileRow = Database['public']['Tables']['baby_profiles']['Row']
+
 type BabyProfileCardProps = ViewProps & {
-  name: string
-  birthDate: Date
-  gender: 'F' | 'M'
+  name: BabyProfileRow['name']
+  birthday: BabyProfileRow['birthday']
+  gender: BabyProfileRow['gender']
 }
 
 export const BabyProfileCard: FunctionComponent<BabyProfileCardProps> = ({
-  birthDate,
+  birthday,
   gender,
   name,
   ...props
@@ -27,7 +31,7 @@ export const BabyProfileCard: FunctionComponent<BabyProfileCardProps> = ({
       </Text>
     </View>
     <Text className="text-sm text-[#979797]" medium>
-      {format(birthDate, 'MMM d, yyyy')}
+      {format(new Date(birthday), 'MMM d, yyyy')}
     </Text>
   </BaseCard>
 )

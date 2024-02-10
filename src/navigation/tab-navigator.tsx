@@ -32,11 +32,7 @@ export const TabNavigator: RootStackScreen<'Tabs'> = ({ navigation }) => {
   }
 
   if (hasBabyProfile === false) {
-    return (
-      <FirstBabyProfile
-        goToAddRecord={() => navigation.navigate('BabyProfileCreation', { isFirst: true })}
-      />
-    )
+    return <FirstBabyProfile goToAddRecord={() => navigation.navigate('BabyProfileCreation')} />
   }
 
   return (

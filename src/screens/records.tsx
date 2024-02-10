@@ -56,7 +56,7 @@ export const RecordsScreen: RootStackScreen<'Records'> = ({ navigation }) => {
       ItemSeparatorComponent={() => <View className="h-4" />}
       ListFooterComponent={<SafeAreaView className="pb-4" edges={['bottom']} />}
       renderItem={({ item }) => (
-        <RecordCard className="mx-4" date={new Date()} info="5.2kg" type={item} />
+        <RecordCard className="mx-4" date="1992-12-12" time="11:11:11" info="5.2kg" type={item} />
       )}
       renderSectionHeader={({ section: { title } }) => (
         <Text className="pb-3 pt-6 text-center" medium>

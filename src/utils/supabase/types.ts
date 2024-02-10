@@ -6,19 +6,19 @@ export type Database = {
       baby_profiles: {
         Row: {
           birthday: string
-          gender: Database['public']['Enums']['gender']
+          gender: Database['public']['Enums']['babyprofilegender']
           id: number
           name: string
         }
         Insert: {
           birthday: string
-          gender: Database['public']['Enums']['gender']
+          gender?: Database['public']['Enums']['babyprofilegender']
           id?: number
           name: string
         }
         Update: {
           birthday?: string
-          gender?: Database['public']['Enums']['gender']
+          gender?: Database['public']['Enums']['babyprofilegender']
           id?: number
           name?: string
         }
@@ -62,7 +62,7 @@ export type Database = {
           id: number
           notes: string | null
           time: string
-          type: string
+          type: Database['public']['Enums']['babyprofilerecord']
         }
         Insert: {
           attributes?: Json | null
@@ -71,7 +71,7 @@ export type Database = {
           id?: number
           notes?: string | null
           time: string
-          type: string
+          type: Database['public']['Enums']['babyprofilerecord']
         }
         Update: {
           attributes?: Json | null
@@ -80,7 +80,7 @@ export type Database = {
           id?: number
           notes?: string | null
           time?: string
-          type?: string
+          type?: Database['public']['Enums']['babyprofilerecord']
         }
         Relationships: [
           {
@@ -100,7 +100,24 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      gender: 'F' | 'M'
+      babyprofilegender: 'F' | 'M'
+      babyprofilerecord:
+        | 'growth'
+        | 'birthday'
+        | 'weight'
+        | 'height'
+        | 'head'
+        | 'diaper'
+        | 'sleep'
+        | 'sleepDay'
+        | 'sleepNight'
+        | 'feeding'
+        | 'bottleBreast'
+        | 'bottleFormula'
+        | 'breastFeedingLeft'
+        | 'breastFeedingRight'
+        | 'pumpingLeft'
+        | 'pumpingRight'
     }
     CompositeTypes: {
       [_ in never]: never

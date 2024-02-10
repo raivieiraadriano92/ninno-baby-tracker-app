@@ -1,19 +1,5 @@
-export type RecordType =
-  | 'growth'
-  | 'birthday'
-  | 'weight'
-  | 'height'
-  | 'head'
-  | 'diaper'
-  | 'sleep'
-  | 'sleepDay'
-  | 'sleepNight'
-  | 'feeding'
-  | 'bottleBreast'
-  | 'bottleFormula'
-  | 'breastFeedingLeft'
-  | 'breastFeedingRight'
-  | 'pumpingLeft'
-  | 'pumpingRight'
+import type { Database } from 'src/utils/supabase/types'
+
+export type RecordType = Database['public']['Enums']['babyprofilerecord']
 
 export type RecordTypeGroup = [RecordType, RecordType[]]

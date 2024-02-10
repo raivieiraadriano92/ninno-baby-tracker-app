@@ -9,18 +9,23 @@ import { RecordIcon } from './record-icon'
 import { Text } from './text'
 
 import type { RecordType } from 'src/models/record'
+import type { Database } from 'src/utils/supabase/types'
+
+type RecordRow = Database['public']['Tables']['records']['Row']
 
 type RecordCardProps = ViewProps & {
-  date?: Date
-  info?: string
+  attributes?: RecordRow['attributes']
+  date?: RecordRow['date']
   renderRight?: () => JSX.Element
+  time?: RecordRow['time']
   type: RecordType
 }
 
 export const RecordCard: FunctionComponent<RecordCardProps> = ({
+  attributes,
   date,
-  info,
   renderRight,
+  time,
   type,
   ...props
 }) => {
@@ -33,15 +38,15 @@ export const RecordCard: FunctionComponent<RecordCardProps> = ({
         <Text numberOfLines={1} medium>
           {recordTypeInfo?.title}
         </Text>
-        {!!info && (
+        {/* {!!info && (
           <Text className="text-sm text-[#979797]" medium>
             {info}
           </Text>
-        )}
+        )} */}
       </View>
-      {!!date && (
+      {!!date && !!time && (
         <Text className="text-sm text-[#979797]" medium>
-          {formatDistanceToNow(date)}
+          {formatDistanceToNow(new Date(`${date}T${time}`))}
         </Text>
       )}
       {renderRight?.()}
