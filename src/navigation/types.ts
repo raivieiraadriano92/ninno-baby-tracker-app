@@ -6,7 +6,7 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack'
 import type { RecordType } from 'src/models/record'
 
 export type RootStackParamList = {
-  BabyProfileCreation: { isFirst: boolean } | undefined
+  BabyProfileCreation: undefined
   RecordForm: { id?: string; type: RecordType }
   Records: undefined
   Tabs: undefined | NavigatorScreenParams<TabParamList>

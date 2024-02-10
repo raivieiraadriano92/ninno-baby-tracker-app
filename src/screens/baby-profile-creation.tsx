@@ -429,8 +429,7 @@ const ProgressBar: FunctionComponent = () => {
 }
 
 export const BabyProfileCreationScreen: RootStackScreen<'BabyProfileCreation'> = ({
-  navigation,
-  route: {}
+  navigation
 }) => {
   const insets = useSafeAreaInsets()
 
@@ -475,6 +474,16 @@ export const BabyProfileCreationScreen: RootStackScreen<'BabyProfileCreation'> =
       name: babyProfileDraft.name!
     })
 
+    if (responseBabyProfile.error) {
+      globalErrorBottomSheetRef.current?.expand(
+        'An error occurred while saving the baby profile.\n Make sure you provided all the required information.'
+      )
+
+      setIsSaving(false)
+
+      return
+    }
+
     const babyProfile = await supabase
       .from('baby_profiles')
       .select('id')
@@ -483,10 +492,15 @@ export const BabyProfileCreationScreen: RootStackScreen<'BabyProfileCreation'> =
       .single()
 
     if (babyProfile.data?.id) {
-      await AsyncStorage.setItem(
-        STORAGE_KEY_SELECTED_BABY_PROFILE_ID,
-        babyProfile.data?.id.toString()
-      )
+      const selectedBabyProfileId = await AsyncStorage.getItem(STORAGE_KEY_SELECTED_BABY_PROFILE_ID)
+
+      // it means that the user has no baby profile yet
+      if (selectedBabyProfileId) {
+        await AsyncStorage.setItem(
+          STORAGE_KEY_SELECTED_BABY_PROFILE_ID,
+          babyProfile.data?.id.toString()
+        )
+      }
 
       await supabase.from('records').insert([
         {
@@ -511,14 +525,6 @@ export const BabyProfileCreationScreen: RootStackScreen<'BabyProfileCreation'> =
           time: format(new Date(), 'HH:mm:ss')
         }
       ])
-    }
-
-    if (responseBabyProfile.error) {
-      globalErrorBottomSheetRef.current?.expand(responseBabyProfile.error.message)
-
-      setIsSaving(false)
-
-      return
     }
 
     navigation.goBack()
