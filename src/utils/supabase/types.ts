@@ -5,25 +5,25 @@ export type Database = {
     Tables: {
       baby_profiles: {
         Row: {
-          birthday: string | null
-          gender: string | null
+          birthday: string
+          gender: string
           id: number
-          is_selected: boolean | null
-          name: string | null
+          is_selected: boolean
+          name: string
         }
         Insert: {
-          birthday?: string | null
-          gender?: string | null
+          birthday: string
+          gender: string
           id?: number
-          is_selected?: boolean | null
-          name?: string | null
+          is_selected?: boolean
+          name: string
         }
         Update: {
-          birthday?: string | null
-          gender?: string | null
+          birthday?: string
+          gender?: string
           id?: number
-          is_selected?: boolean | null
-          name?: string | null
+          is_selected?: boolean
+          name?: string
         }
         Relationships: []
       }

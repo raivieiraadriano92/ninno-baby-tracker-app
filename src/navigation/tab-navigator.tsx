@@ -3,8 +3,7 @@ import { useCallback, useState } from 'react'
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { useFocusEffect } from '@react-navigation/native'
-import { ActivityIndicator, View } from 'react-native'
-import { FirstBabyProfile } from 'src/components'
+import { FirstBabyProfile, PageLoader } from 'src/components'
 import { BabyProfilesScreen, HomeScreen, SettingsScreen } from 'src/screens'
 import colors from 'src/theme/colors'
 import { supabase } from 'src/utils/supabase'
@@ -29,11 +28,7 @@ export const TabNavigator: RootStackScreen<'Tabs'> = ({ navigation }) => {
   )
 
   if (hasBabyProfile === undefined) {
-    return (
-      <View className="bg-white flex-1 items-center justify-center">
-        <ActivityIndicator />
-      </View>
-    )
+    return <PageLoader className="bg-white" />
   }
 
   if (hasBabyProfile === false) {

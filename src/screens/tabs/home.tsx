@@ -49,6 +49,18 @@ const recordTypes: RecordType[] = [
   'pumpingRight'
 ]
 
+const fetchRecords = (baby_profile_id: number) =>
+  supabase
+    .from('records')
+    .select()
+    .eq('baby_profile_id', baby_profile_id)
+    .limit(10)
+    .order('date', { ascending: false })
+    .order('time', { ascending: false })
+
+const fetchSelectedBabyProfile = () =>
+  supabase.from('baby_profiles').select().eq('is_selected', true).limit(1).single()
+
 export const HomeScreen: TabScreen<'Home'> = ({ navigation }) => {
   const insets = useSafeAreaInsets()
 
@@ -97,30 +109,23 @@ export const HomeScreen: TabScreen<'Home'> = ({ navigation }) => {
 
   const [state, setState] = useState<State>(INITIAL_STATE)
 
-  const fetchRecords = () =>
-    supabase
-      .from('records')
-      .select()
-      .limit(10)
-      .order('date', { ascending: false })
-      .order('time', { ascending: false })
-
-  const fetchSelectedBabyProfile = () =>
-    supabase.from('baby_profiles').select().eq('is_selected', true).limit(1).single()
-
+  // fetch records and selected baby profile
   useEffect(() => {
-    // fetch records and selected baby profile
-    Promise.all([fetchRecords(), fetchSelectedBabyProfile()]).then((data) => {
-      const records = data[0].data ?? []
+    const fetchData = async () => {
+      const responseSelectedBabyProfile = await fetchSelectedBabyProfile()
 
-      const babyProfile = data[1].data
+      if (responseSelectedBabyProfile.data?.id) {
+        const responseRecords = await fetchRecords(responseSelectedBabyProfile.data.id)
 
-      setState((prev) => ({
-        ...prev,
-        babyProfile,
-        records
-      }))
-    })
+        setState((prev) => ({
+          ...prev,
+          babyProfile: responseSelectedBabyProfile.data,
+          records: responseRecords.data ?? []
+        }))
+      }
+    }
+
+    fetchData()
   }, [])
 
   return (
