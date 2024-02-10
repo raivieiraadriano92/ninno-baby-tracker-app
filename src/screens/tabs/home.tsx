@@ -6,6 +6,7 @@ import BottomSheet, {
   BottomSheetView,
   useBottomSheetDynamicSnapPoints
 } from '@gorhom/bottom-sheet'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Image, ScrollView, TouchableOpacity, View } from 'react-native'
 import Animated, {
   useAnimatedScrollHandler,
@@ -13,8 +14,9 @@ import Animated, {
   useSharedValue
 } from 'react-native-reanimated'
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
-import { Button, RecordCard, RecordIcon, Text } from 'src/components'
+import { Button, PageLoader, RecordCard, RecordIcon, Text } from 'src/components'
 import colors from 'src/theme/colors'
+import { STORAGE_KEY_SELECTED_BABY_PROFILE_ID } from 'src/utils/baby-profiles'
 import { getRecordTypeInfo, mountRecordDate, recordTypeGroups } from 'src/utils/records'
 import { supabase } from 'src/utils/supabase'
 
@@ -26,28 +28,15 @@ import type { Database } from 'src/utils/supabase/types'
 type State = {
   babyProfile?: Database['public']['Tables']['baby_profiles']['Row'] | null
   records: Database['public']['Tables']['records']['Row'][]
+  loading: boolean
 }
 
 const INITIAL_STATE: State = {
-  records: []
+  records: [],
+  loading: true
 }
 
 const HEADER_BG_HEIGHT = 200
-
-const recordTypes: RecordType[] = [
-  'weight',
-  'height',
-  'head',
-  'diaper',
-  'sleepDay',
-  'sleepNight',
-  'bottleBreast',
-  'bottleFormula',
-  'breastFeedingLeft',
-  'breastFeedingRight',
-  'pumpingLeft',
-  'pumpingRight'
-]
 
 const fetchRecords = (baby_profile_id: number) =>
   supabase
@@ -58,8 +47,32 @@ const fetchRecords = (baby_profile_id: number) =>
     .order('date', { ascending: false })
     .order('time', { ascending: false })
 
-const fetchSelectedBabyProfile = () =>
-  supabase.from('baby_profiles').select().eq('is_selected', true).limit(1).single()
+const fetchSelectedBabyProfile = async () => {
+  const selectedBabyProfileId = await AsyncStorage.getItem(STORAGE_KEY_SELECTED_BABY_PROFILE_ID)
+
+  if (selectedBabyProfileId) {
+    return supabase
+      .from('baby_profiles')
+      .select()
+      .eq('id', +selectedBabyProfileId)
+      .limit(1)
+      .single()
+  }
+
+  const lastBabyProfile = await supabase
+    .from('baby_profiles')
+    .select()
+    .order('id', { ascending: false })
+    .limit(1)
+    .single()
+
+  await AsyncStorage.setItem(
+    STORAGE_KEY_SELECTED_BABY_PROFILE_ID,
+    lastBabyProfile.data?.id.toString() ?? ''
+  )
+
+  return lastBabyProfile
+}
 
 export const HomeScreen: TabScreen<'Home'> = ({ navigation }) => {
   const insets = useSafeAreaInsets()
@@ -120,13 +133,18 @@ export const HomeScreen: TabScreen<'Home'> = ({ navigation }) => {
         setState((prev) => ({
           ...prev,
           babyProfile: responseSelectedBabyProfile.data,
-          records: responseRecords.data ?? []
+          records: responseRecords.data ?? [],
+          loading: false
         }))
       }
     }
 
     fetchData()
   }, [])
+
+  if (state.loading) {
+    return <PageLoader />
+  }
 
   return (
     <>

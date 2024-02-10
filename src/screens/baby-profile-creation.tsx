@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import type { PropsWithChildren, FunctionComponent, Dispatch, SetStateAction } from 'react'
 
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { format } from 'date-fns'
 import { Dimensions, Image, ScrollView, TextInput, View } from 'react-native'
 import DateTimePickerModal from 'react-native-modal-datetime-picker'
@@ -16,6 +17,8 @@ import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Button, MeasuresPicker, RecordCard, Text } from 'src/components'
 import { usePagerViewScrollHandler } from 'src/hooks'
 import colors from 'src/theme/colors'
+import { STORAGE_KEY_SELECTED_BABY_PROFILE_ID } from 'src/utils/baby-profiles'
+import { globalErrorBottomSheetRef } from 'src/utils/global-refs'
 import { supabase } from 'src/utils/supabase'
 import twColors from 'tailwindcss/colors'
 import { create } from 'zustand'
@@ -23,6 +26,7 @@ import { create } from 'zustand'
 import type { ImageSourcePropType } from 'react-native'
 import type { RecordType } from 'src/models/record'
 import type { RootStackScreen } from 'src/navigation/types'
+import type { Database } from 'src/utils/supabase/types'
 
 const AnimatedPagerView = Animated.createAnimatedComponent(PagerView)
 
@@ -37,7 +41,7 @@ type MeasureData = {
 }
 
 type BabyProfileDraft = {
-  gender: 'F' | 'M'
+  gender: Database['public']['Enums']['gender']
   name?: string
   birthday: Date
   weight: MeasureData
@@ -426,7 +430,7 @@ const ProgressBar: FunctionComponent = () => {
 
 export const BabyProfileCreationScreen: RootStackScreen<'BabyProfileCreation'> = ({
   navigation,
-  route: { params }
+  route: {}
 }) => {
   const insets = useSafeAreaInsets()
 
@@ -466,10 +470,9 @@ export const BabyProfileCreationScreen: RootStackScreen<'BabyProfileCreation'> =
     setIsSaving(true)
 
     const responseBabyProfile = await supabase.from('baby_profiles').insert({
-      is_selected: params?.isFirst,
+      birthday: format(babyProfileDraft.birthday, 'yyyy-MM-dd'),
       gender: babyProfileDraft.gender,
-      name: babyProfileDraft.name,
-      birthday: format(babyProfileDraft.birthday, 'yyyy-MM-dd')
+      name: babyProfileDraft.name!
     })
 
     const babyProfile = await supabase
@@ -480,7 +483,12 @@ export const BabyProfileCreationScreen: RootStackScreen<'BabyProfileCreation'> =
       .single()
 
     if (babyProfile.data?.id) {
-      const responseRecords = await supabase.from('records').insert([
+      await AsyncStorage.setItem(
+        STORAGE_KEY_SELECTED_BABY_PROFILE_ID,
+        babyProfile.data?.id.toString()
+      )
+
+      await supabase.from('records').insert([
         {
           baby_profile_id: babyProfile.data.id,
           type: 'weight',
@@ -506,7 +514,7 @@ export const BabyProfileCreationScreen: RootStackScreen<'BabyProfileCreation'> =
     }
 
     if (responseBabyProfile.error) {
-      // show error
+      globalErrorBottomSheetRef.current?.expand(responseBabyProfile.error.message)
 
       setIsSaving(false)
 

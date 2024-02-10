@@ -6,23 +6,20 @@ export type Database = {
       baby_profiles: {
         Row: {
           birthday: string
-          gender: string
+          gender: Database['public']['Enums']['gender']
           id: number
-          is_selected: boolean
           name: string
         }
         Insert: {
           birthday: string
-          gender: string
+          gender: Database['public']['Enums']['gender']
           id?: number
-          is_selected?: boolean
           name: string
         }
         Update: {
           birthday?: string
-          gender?: string
+          gender?: Database['public']['Enums']['gender']
           id?: number
-          is_selected?: boolean
           name?: string
         }
         Relationships: []
@@ -103,7 +100,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      gender: 'F' | 'M'
     }
     CompositeTypes: {
       [_ in never]: never
