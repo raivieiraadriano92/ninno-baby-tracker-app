@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import { Feather } from '@expo/vector-icons'
 import BottomSheet, {
@@ -15,11 +15,22 @@ import Animated, {
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Button, RecordCard, RecordIcon, Text } from 'src/components'
 import colors from 'src/theme/colors'
-import { getRecordTypeInfo, recordTypeGroups } from 'src/utils/records'
+import { getRecordTypeInfo, mountRecordDate, recordTypeGroups } from 'src/utils/records'
+import { supabase } from 'src/utils/supabase'
 
 import type { BottomSheetDefaultBackdropProps } from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types'
 import type { RecordType, RecordTypeGroup } from 'src/models/record'
 import type { TabScreen } from 'src/navigation/types'
+import type { Database } from 'src/utils/supabase/types'
+
+type State = {
+  babyProfile?: Database['public']['Tables']['baby_profiles']['Row'] | null
+  records: Database['public']['Tables']['records']['Row'][]
+}
+
+const INITIAL_STATE: State = {
+  records: []
+}
 
 const HEADER_BG_HEIGHT = 200
 
@@ -84,6 +95,34 @@ export const HomeScreen: TabScreen<'Home'> = ({ navigation }) => {
     bottomSheetRef.current?.expand()
   }
 
+  const [state, setState] = useState<State>(INITIAL_STATE)
+
+  const fetchRecords = () =>
+    supabase
+      .from('records')
+      .select()
+      .limit(10)
+      .order('date', { ascending: false })
+      .order('time', { ascending: false })
+
+  const fetchSelectedBabyProfile = () =>
+    supabase.from('baby_profiles').select().eq('is_selected', true).limit(1).single()
+
+  useEffect(() => {
+    // fetch records and selected baby profile
+    Promise.all([fetchRecords(), fetchSelectedBabyProfile()]).then((data) => {
+      const records = data[0].data ?? []
+
+      const babyProfile = data[1].data
+
+      setState((prev) => ({
+        ...prev,
+        babyProfile,
+        records
+      }))
+    })
+  }, [])
+
   return (
     <>
       <Animated.ScrollView
@@ -123,20 +162,33 @@ export const HomeScreen: TabScreen<'Home'> = ({ navigation }) => {
                 variant="link"
               />
             </View>
-            {recordTypes.map((type) => (
-              <RecordCard date={new Date()} info="5.2kg" key={type} type={type} />
+            {state.records.map((record) => (
+              // const attributes = record.attributes as RecordTypeGroup
+
+              <RecordCard
+                date={mountRecordDate(record.date, record.time)}
+                info="5.2kg"
+                key={record.id}
+                type={record.type as RecordType}
+              />
             ))}
           </View>
         </SafeAreaView>
         <Animated.View
           className="absolute items-center justify-end overflow-hidden w-full"
           style={bgAnimatedStyle}>
-          <Image source={require('assets/bg-shape-header-blue.png')} />
+          <Image
+            source={
+              state.babyProfile?.gender === 'M'
+                ? require('assets/bg-shape-header-blue.png')
+                : require('assets/bg-shape-header-pink.png')
+            }
+          />
           <View
             className="absolute items-center justify-center space-y-6"
             style={{ height: HEADER_BG_HEIGHT }}>
             <Text bold className="text-4xl">
-              Dorothy Emma
+              {state.babyProfile?.name}
             </Text>
             <View className="flex-row space-x-4">
               {['5.8kg', '2 mon, 3 days', '58.4cm'].map((item) => (

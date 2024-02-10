@@ -465,17 +465,47 @@ export const BabyProfileCreationScreen: RootStackScreen<'BabyProfileCreation'> =
   const save = async () => {
     setIsSaving(true)
 
-    const response = await supabase.from('baby_profiles').insert({
+    const responseBabyProfile = await supabase.from('baby_profiles').insert({
       is_selected: params?.isFirst,
       gender: babyProfileDraft.gender,
       name: babyProfileDraft.name,
       birthday: format(babyProfileDraft.birthday, 'yyyy-MM-dd')
     })
-    //   .select()
 
-    console.log(response)
+    const babyProfile = await supabase
+      .from('baby_profiles')
+      .select('id')
+      .order('id', { ascending: false })
+      .limit(1)
+      .single()
 
-    if (response.error) {
+    if (babyProfile.data?.id) {
+      const responseRecords = await supabase.from('records').insert([
+        {
+          baby_profile_id: babyProfile.data.id,
+          type: 'weight',
+          attributes: babyProfileDraft.weight,
+          date: format(new Date(), 'yyyy-MM-dd'),
+          time: format(new Date(), 'HH:mm:ss')
+        },
+        {
+          baby_profile_id: babyProfile.data.id,
+          type: 'height',
+          attributes: babyProfileDraft.height,
+          date: format(new Date(), 'yyyy-MM-dd'),
+          time: format(new Date(), 'HH:mm:ss')
+        },
+        {
+          baby_profile_id: babyProfile.data.id,
+          type: 'head',
+          attributes: babyProfileDraft.headCircumference,
+          date: format(new Date(), 'yyyy-MM-dd'),
+          time: format(new Date(), 'HH:mm:ss')
+        }
+      ])
+    }
+
+    if (responseBabyProfile.error) {
       // show error
 
       setIsSaving(false)

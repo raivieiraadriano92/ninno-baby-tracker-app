@@ -1,48 +1,96 @@
 export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[]
 
-export interface Database {
+export type Database = {
   public: {
     Tables: {
       baby_profiles: {
         Row: {
-          birthday: string
-          created_at: string
-          gender: string
-          head_circumference: Json
-          height: Json
+          birthday: string | null
+          gender: string | null
           id: number
-          name: string
-          user_id: string
-          weight: Json
+          is_selected: boolean | null
+          name: string | null
         }
         Insert: {
-          birthday: string
-          created_at?: string
-          gender: string
-          head_circumference: Json
-          height: Json
+          birthday?: string | null
+          gender?: string | null
           id?: number
-          name: string
-          user_id: string
-          weight: Json
+          is_selected?: boolean | null
+          name?: string | null
         }
         Update: {
-          birthday?: string
-          created_at?: string
-          gender?: string
-          head_circumference?: Json
-          height?: Json
+          birthday?: string | null
+          gender?: string | null
           id?: number
-          name?: string
+          is_selected?: boolean | null
+          name?: string | null
+        }
+        Relationships: []
+      }
+      baby_profiles_users: {
+        Row: {
+          baby_profile_id: number
+          user_id: string
+        }
+        Insert: {
+          baby_profile_id: number
+          user_id: string
+        }
+        Update: {
+          baby_profile_id?: number
           user_id?: string
-          weight?: Json
         }
         Relationships: [
           {
-            foreignKeyName: 'baby_profiles_user_id_fkey'
+            foreignKeyName: 'baby_profiles_users_baby_profile_id_fkey'
+            columns: ['baby_profile_id']
+            isOneToOne: false
+            referencedRelation: 'baby_profiles'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'baby_profiles_users_user_id_fkey'
             columns: ['user_id']
             isOneToOne: false
             referencedRelation: 'users'
+            referencedColumns: ['id']
+          }
+        ]
+      }
+      records: {
+        Row: {
+          attributes: Json | null
+          baby_profile_id: number
+          date: string
+          id: number
+          notes: string | null
+          time: string
+          type: string
+        }
+        Insert: {
+          attributes?: Json | null
+          baby_profile_id: number
+          date: string
+          id?: number
+          notes?: string | null
+          time: string
+          type: string
+        }
+        Update: {
+          attributes?: Json | null
+          baby_profile_id?: number
+          date?: string
+          id?: number
+          notes?: string | null
+          time?: string
+          type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'records_baby_profile_id_fkey'
+            columns: ['baby_profile_id']
+            isOneToOne: false
+            referencedRelation: 'baby_profiles'
             referencedColumns: ['id']
           }
         ]
