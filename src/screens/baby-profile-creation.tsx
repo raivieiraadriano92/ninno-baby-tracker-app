@@ -15,7 +15,7 @@ import Animated, {
 } from 'react-native-reanimated'
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Button, MeasuresPicker, RecordCard, Text } from 'src/components'
-import { usePagerViewScrollHandler } from 'src/hooks'
+import { useOnSaveBabyProfileEvent, usePagerViewScrollHandler } from 'src/hooks'
 import colors from 'src/theme/colors'
 import { STORAGE_KEY_SELECTED_BABY_PROFILE_ID } from 'src/utils/baby-profiles'
 import { globalErrorBottomSheetRef } from 'src/utils/global-refs'
@@ -452,6 +452,8 @@ export const BabyProfileCreationScreen: RootStackScreen<'BabyProfileCreation'> =
     }
   })
 
+  const { emit } = useOnSaveBabyProfileEvent()
+
   const cancel = () => {
     navigation.goBack()
   }
@@ -481,7 +483,7 @@ export const BabyProfileCreationScreen: RootStackScreen<'BabyProfileCreation'> =
 
     const babyProfile = await supabase
       .from('baby_profiles')
-      .select('id')
+      .select()
       .order('id', { ascending: false })
       .limit(1)
       .single()
@@ -490,12 +492,14 @@ export const BabyProfileCreationScreen: RootStackScreen<'BabyProfileCreation'> =
       const selectedBabyProfileId = await AsyncStorage.getItem(STORAGE_KEY_SELECTED_BABY_PROFILE_ID)
 
       // it means that the user has no baby profile yet
-      if (selectedBabyProfileId) {
+      if (!selectedBabyProfileId) {
         await AsyncStorage.setItem(
           STORAGE_KEY_SELECTED_BABY_PROFILE_ID,
           babyProfile.data?.id.toString()
         )
       }
+
+      emit(babyProfile.data)
 
       await supabase.from('records').insert([
         {

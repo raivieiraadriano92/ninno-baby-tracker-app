@@ -1,11 +1,13 @@
-import { useEffect, useLayoutEffect, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useState } from 'react'
 
 import { Feather } from '@expo/vector-icons'
 import { FlatList, TouchableOpacity, View } from 'react-native'
 import { BabyProfileCard, PageLoader } from 'src/components'
+import { useOnSaveBabyProfileEvent } from 'src/hooks'
 import colors from 'src/theme/colors'
 import { supabase } from 'src/utils/supabase'
 
+import type { BabyProfileRow } from 'src/models/baby-profile'
 import type { TabScreen } from 'src/navigation/types'
 import type { Database } from 'src/utils/supabase/types'
 
@@ -23,6 +25,18 @@ const fetchBabyProfiles = () => supabase.from('baby_profiles').select().order('n
 
 export const BabyProfilesScreen: TabScreen<'BabyProfiles'> = ({ navigation }) => {
   const [state, setState] = useState<State>(INITIAL_STATE)
+
+  useOnSaveBabyProfileEvent(
+    useCallback((row: BabyProfileRow) => {
+      setState((prev) => ({
+        ...prev,
+        babyProfiles: [
+          ...prev.babyProfiles.filter((babyProfile) => babyProfile.id !== row.id),
+          row
+        ].sort((a, b) => a.name.localeCompare(b.name))
+      }))
+    }, [])
+  )
 
   useEffect(() => {
     const fetchData = async () => {
