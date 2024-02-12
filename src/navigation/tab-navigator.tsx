@@ -1,12 +1,13 @@
 import { useCallback, useState } from 'react'
 
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { useFocusEffect } from '@react-navigation/native'
 import { FirstBabyProfile, PageLoader } from 'src/components'
 import { BabyProfilesScreen, HomeScreen, SettingsScreen } from 'src/screens'
 import colors from 'src/theme/colors'
-import { supabase } from 'src/utils/supabase'
+import { STORAGE_KEY_SELECTED_BABY_PROFILE_ID } from 'src/utils/baby-profiles'
 
 import type { RootStackScreen, TabParamList } from './types'
 
@@ -16,9 +17,9 @@ export const TabNavigator: RootStackScreen<'Tabs'> = ({ navigation }) => {
   const [hasBabyProfile, setHasBabyProfile] = useState<boolean>()
 
   const verifyHasBabyProfiles = async () => {
-    const response = await supabase.from('baby_profiles').select('id').limit(1).maybeSingle()
+    const selectedBabyProfileId = await AsyncStorage.getItem(STORAGE_KEY_SELECTED_BABY_PROFILE_ID)
 
-    setHasBabyProfile(!!response.data)
+    setHasBabyProfile(!!selectedBabyProfileId)
   }
 
   useFocusEffect(
