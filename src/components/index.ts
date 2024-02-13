@@ -2,6 +2,10 @@ export { BabyProfileCard } from './baby-profile-card'
 
 export { BabyProfileIcon } from './baby-profile-icon'
 
+export { BabyProfilePickerBottomSheet } from './baby-profile-picker-bottom-sheet'
+
+export type { BabyProfilePickerBottomSheetElement } from './baby-profile-picker-bottom-sheet'
+
 export { BaseCard } from './base-card'
 
 export { Button } from './button'

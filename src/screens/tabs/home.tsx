@@ -14,7 +14,14 @@ import Animated, {
   useSharedValue
 } from 'react-native-reanimated'
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
-import { BabyProfileCard, Button, PageLoader, RecordCard, RecordIcon, Text } from 'src/components'
+import {
+  BabyProfilePickerBottomSheet,
+  Button,
+  PageLoader,
+  RecordCard,
+  RecordIcon,
+  Text
+} from 'src/components'
 import { useOnSaveBabyProfileEvent } from 'src/hooks'
 import colors from 'src/theme/colors'
 import { STORAGE_KEY_SELECTED_BABY_PROFILE_ID } from 'src/utils/baby-profiles'
@@ -22,6 +29,7 @@ import { getRecordTypeInfo, recordTypeGroups } from 'src/utils/records'
 import { fetchBabyProfiles, supabase } from 'src/utils/supabase'
 
 import type { BottomSheetDefaultBackdropProps } from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types'
+import type { BabyProfilePickerBottomSheetElement } from 'src/components'
 import type { BabyProfileRow } from 'src/models/baby-profile'
 import type { RecordRow, RecordTypeGroup } from 'src/models/record'
 import type { TabScreen } from 'src/navigation/types'
@@ -70,7 +78,7 @@ export const HomeScreen: TabScreen<'Home'> = ({ navigation }) => {
 
   const bottomSheetNewRecordRef = useRef<BottomSheet>(null)
 
-  const bottomSheetSwitchBabyProfileRef = useRef<BottomSheet>(null)
+  const bottomSheetSwitchBabyProfileRef = useRef<BabyProfilePickerBottomSheetElement>(null)
 
   const renderBackdrop = useCallback(
     (props: BottomSheetDefaultBackdropProps) => (
@@ -234,7 +242,9 @@ export const HomeScreen: TabScreen<'Home'> = ({ navigation }) => {
               {state.babyProfiles.length > 1 && (
                 <TouchableOpacity
                   className="absolute -right-10"
-                  onPress={() => bottomSheetSwitchBabyProfileRef.current?.expand()}>
+                  onPress={() =>
+                    bottomSheetSwitchBabyProfileRef.current?.expand(state.babyProfiles)
+                  }>
                   <Feather name="chevron-down" size={24} color={colors.custom.primary} />
                 </TouchableOpacity>
               )}
@@ -288,36 +298,10 @@ export const HomeScreen: TabScreen<'Home'> = ({ navigation }) => {
           </View>
         </BottomSheetView>
       </BottomSheet>
-      <BottomSheet
-        backgroundStyle={{ backgroundColor: colors.custom.background }}
-        backdropComponent={renderBackdrop}
-        contentHeight={animatedContentHeight}
-        enablePanDownToClose
-        handleHeight={animatedHandleHeight}
-        handleIndicatorStyle={{
-          backgroundColor: colors.custom.iconOff,
-          borderRadius: 6,
-          height: 6,
-          width: 80
-        }}
-        index={-1}
-        snapPoints={animatedSnapPoints}
-        ref={bottomSheetSwitchBabyProfileRef}>
-        <BottomSheetView onLayout={handleContentLayout} style={{ padding: 16, paddingBottom: 16 }}>
-          <View className="space-y-3">
-            {state.babyProfiles.map((item) => (
-              <TouchableOpacity key={item.id} onPress={() => handleSwitchBabyProfile(item)}>
-                <BabyProfileCard
-                  className="mx-4"
-                  birthday={item.birthday}
-                  gender={item.gender}
-                  name={item.name}
-                />
-              </TouchableOpacity>
-            ))}
-          </View>
-        </BottomSheetView>
-      </BottomSheet>
+      <BabyProfilePickerBottomSheet
+        onSelecteBabyProfile={(item) => handleSwitchBabyProfile(item)}
+        ref={bottomSheetSwitchBabyProfileRef}
+      />
     </>
   )
 }
