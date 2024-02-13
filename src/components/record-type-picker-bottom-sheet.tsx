@@ -1,32 +1,39 @@
 import { forwardRef, useCallback, useImperativeHandle, useMemo, useRef, useState } from 'react'
 
+import { Feather } from '@expo/vector-icons'
 import BottomSheet, {
   BottomSheetBackdrop,
   BottomSheetView,
   useBottomSheetDynamicSnapPoints
 } from '@gorhom/bottom-sheet'
 import { TouchableOpacity, View } from 'react-native'
-import { BabyProfileCard } from 'src/components'
+import { RecordCard } from 'src/components'
 import colors from 'src/theme/colors'
 
 import type { BottomSheetDefaultBackdropProps } from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types'
-import type { BabyProfileRow } from 'src/models/baby-profile'
+import type { RecordType, RecordTypeGroup } from 'src/models/record'
 
-export type BabyProfilePickerBottomSheetElement = {
-  expand(_babyProfileList: BabyProfileRow[]): void
+export type RecordTypePickerBottomSheetElement = {
+  close(): void
+  expand(_selectedRecordTypeGroup: RecordTypeGroup): void
 }
 
-type BabyProfilePickerBottomSheetProps = {
-  onSelectBabyProfile: (_babyProfile: BabyProfileRow) => void
+type RecordTypePickerBottomSheetProps = {
+  onSelectRecordType: (_recordType: RecordType) => void
 }
 
-export const BabyProfilePickerBottomSheet = forwardRef<
-  BabyProfilePickerBottomSheetElement,
-  BabyProfilePickerBottomSheetProps
->(({ onSelectBabyProfile }, ref) => {
+export const RecordTypePickerBottomSheet = forwardRef<
+  RecordTypePickerBottomSheetElement,
+  RecordTypePickerBottomSheetProps
+>(({ onSelectRecordType }, ref) => {
   const bottomSheetRef = useRef<BottomSheet>(null)
 
-  const [babyProfiles, setBabyProfiles] = useState<BabyProfileRow[]>([])
+  const [recordTypeGroup, setRecordTypeGroup] = useState<RecordTypeGroup>()
+
+  const initialSnapPoints = useMemo(() => ['CONTENT_HEIGHT'], [])
+
+  const { animatedHandleHeight, animatedSnapPoints, animatedContentHeight, handleContentLayout } =
+    useBottomSheetDynamicSnapPoints(initialSnapPoints)
 
   const renderBackdrop = useCallback(
     (props: BottomSheetDefaultBackdropProps) => (
@@ -35,14 +42,10 @@ export const BabyProfilePickerBottomSheet = forwardRef<
     []
   )
 
-  const initialSnapPoints = useMemo(() => ['CONTENT_HEIGHT'], [])
-
-  const { animatedHandleHeight, animatedSnapPoints, animatedContentHeight, handleContentLayout } =
-    useBottomSheetDynamicSnapPoints(initialSnapPoints)
-
   useImperativeHandle(ref, () => ({
-    expand: (babyProfileList) => {
-      setBabyProfiles(babyProfileList)
+    close: () => bottomSheetRef.current?.close(),
+    expand: (selectedRecordTypeGroup) => {
+      setRecordTypeGroup(selectedRecordTypeGroup)
 
       bottomSheetRef.current?.expand()
     }
@@ -66,13 +69,11 @@ export const BabyProfilePickerBottomSheet = forwardRef<
       ref={bottomSheetRef}>
       <BottomSheetView onLayout={handleContentLayout} style={{ padding: 16, paddingBottom: 16 }}>
         <View className="space-y-3">
-          {babyProfiles.map((item) => (
-            <TouchableOpacity key={item.id} onPress={() => onSelectBabyProfile(item)}>
-              <BabyProfileCard
-                className="mx-4"
-                birthday={item.birthday}
-                gender={item.gender}
-                name={item.name}
+          {recordTypeGroup?.[1].map((type) => (
+            <TouchableOpacity key={type} onPress={() => onSelectRecordType(type)}>
+              <RecordCard
+                renderRight={() => <Feather name="plus" size={24} color={colors.custom.primary} />}
+                type={type}
               />
             </TouchableOpacity>
           ))}

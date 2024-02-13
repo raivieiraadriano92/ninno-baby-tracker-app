@@ -24,4 +24,8 @@ export { RecordCard } from './record-card'
 
 export { RecordIcon } from './record-icon'
 
+export { RecordTypePickerBottomSheet } from './record-type-picker-bottom-sheet'
+
+export type { RecordTypePickerBottomSheetElement } from './record-type-picker-bottom-sheet'
+
 export { Text } from './text'

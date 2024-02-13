@@ -1,11 +1,6 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { Feather } from '@expo/vector-icons'
-import BottomSheet, {
-  BottomSheetBackdrop,
-  BottomSheetView,
-  useBottomSheetDynamicSnapPoints
-} from '@gorhom/bottom-sheet'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Image, ScrollView, TouchableOpacity, View } from 'react-native'
 import Animated, {
@@ -20,6 +15,7 @@ import {
   PageLoader,
   RecordCard,
   RecordIcon,
+  RecordTypePickerBottomSheet,
   Text
 } from 'src/components'
 import { useOnSaveBabyProfileEvent } from 'src/hooks'
@@ -28,8 +24,10 @@ import { STORAGE_KEY_SELECTED_BABY_PROFILE_ID } from 'src/utils/baby-profiles'
 import { getRecordTypeInfo, recordTypeGroups } from 'src/utils/records'
 import { fetchBabyProfiles, supabase } from 'src/utils/supabase'
 
-import type { BottomSheetDefaultBackdropProps } from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types'
-import type { BabyProfilePickerBottomSheetElement } from 'src/components'
+import type {
+  BabyProfilePickerBottomSheetElement,
+  RecordTypePickerBottomSheetElement
+} from 'src/components'
 import type { BabyProfileRow } from 'src/models/baby-profile'
 import type { RecordRow, RecordTypeGroup } from 'src/models/record'
 import type { TabScreen } from 'src/navigation/types'
@@ -76,23 +74,9 @@ export const HomeScreen: TabScreen<'Home'> = ({ navigation }) => {
     ]
   }))
 
-  const bottomSheetNewRecordRef = useRef<BottomSheet>(null)
+  const bottomSheetNewRecordRef = useRef<RecordTypePickerBottomSheetElement>(null)
 
   const bottomSheetSwitchBabyProfileRef = useRef<BabyProfilePickerBottomSheetElement>(null)
-
-  const renderBackdrop = useCallback(
-    (props: BottomSheetDefaultBackdropProps) => (
-      <BottomSheetBackdrop {...props} disappearsOnIndex={-1} appearsOnIndex={0} />
-    ),
-    []
-  )
-
-  const initialSnapPoints = useMemo(() => ['CONTENT_HEIGHT'], [])
-
-  const { animatedHandleHeight, animatedSnapPoints, animatedContentHeight, handleContentLayout } =
-    useBottomSheetDynamicSnapPoints(initialSnapPoints)
-
-  const [selectedRecordTypeGroup, setSelectedRecordTypeGroup] = useState<RecordTypeGroup>()
 
   const addNewRecord = (group: RecordTypeGroup) => {
     if (group[1].length === 1) {
@@ -101,9 +85,7 @@ export const HomeScreen: TabScreen<'Home'> = ({ navigation }) => {
       return
     }
 
-    setSelectedRecordTypeGroup(group)
-
-    bottomSheetNewRecordRef.current?.expand()
+    bottomSheetNewRecordRef.current?.expand(group)
   }
 
   const handleSwitchBabyProfile = async (babyProfile: BabyProfileRow) => {
@@ -259,47 +241,19 @@ export const HomeScreen: TabScreen<'Home'> = ({ navigation }) => {
           </View>
         </Animated.View>
       </Animated.ScrollView>
-      <BottomSheet
-        backgroundStyle={{ backgroundColor: colors.custom.background }}
-        backdropComponent={renderBackdrop}
-        contentHeight={animatedContentHeight}
-        enablePanDownToClose
-        handleHeight={animatedHandleHeight}
-        handleIndicatorStyle={{
-          backgroundColor: colors.custom.iconOff,
-          borderRadius: 6,
-          height: 6,
-          width: 80
-        }}
-        index={-1}
-        snapPoints={animatedSnapPoints}
-        ref={bottomSheetNewRecordRef}>
-        <BottomSheetView onLayout={handleContentLayout} style={{ padding: 16, paddingBottom: 16 }}>
-          <View className="space-y-3">
-            {selectedRecordTypeGroup?.[1].map((type) => (
-              <TouchableOpacity
-                key={type}
-                onPress={() => {
-                  navigation.navigate('RecordForm', { type })
+      <RecordTypePickerBottomSheet
+        onSelectRecordType={(type) => {
+          navigation.navigate('RecordForm', { type })
 
-                  // delaying the close action to allow the navigation to finish
-                  setTimeout(() => {
-                    bottomSheetNewRecordRef.current?.close()
-                  }, 1000)
-                }}>
-                <RecordCard
-                  renderRight={() => (
-                    <Feather name="plus" size={24} color={colors.custom.primary} />
-                  )}
-                  type={type}
-                />
-              </TouchableOpacity>
-            ))}
-          </View>
-        </BottomSheetView>
-      </BottomSheet>
+          // delaying the close action to allow the navigation to finish
+          setTimeout(() => {
+            bottomSheetNewRecordRef.current?.close()
+          }, 1000)
+        }}
+        ref={bottomSheetNewRecordRef}
+      />
       <BabyProfilePickerBottomSheet
-        onSelecteBabyProfile={(item) => handleSwitchBabyProfile(item)}
+        onSelectBabyProfile={(item) => handleSwitchBabyProfile(item)}
         ref={bottomSheetSwitchBabyProfileRef}
       />
     </>
