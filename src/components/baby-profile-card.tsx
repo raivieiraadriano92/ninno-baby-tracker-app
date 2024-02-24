@@ -1,6 +1,6 @@
 import type { FunctionComponent } from 'react'
 
-import { format } from 'date-fns'
+import { format, parseISO } from 'date-fns'
 import { View, type ViewProps } from 'react-native'
 
 import { BabyProfileIcon } from './baby-profile-icon'
@@ -29,7 +29,7 @@ export const BabyProfileCard: FunctionComponent<BabyProfileCardProps> = ({
       </Text>
     </View>
     <Text className="text-sm text-[#979797]" medium>
-      {format(new Date(birthday), 'MMM d, yyyy')}
+      {format(parseISO(birthday), 'MMM d, yyyy')}
     </Text>
   </BaseCard>
 )

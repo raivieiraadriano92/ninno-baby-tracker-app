@@ -20,7 +20,7 @@ import {
 } from 'src/components'
 import { useOnSaveBabyProfileEvent } from 'src/hooks'
 import colors from 'src/theme/colors'
-import { STORAGE_KEY_SELECTED_BABY_PROFILE_ID } from 'src/utils/baby-profiles'
+import { STORAGE_KEY_SELECTED_BABY_PROFILE_ID, formatBirthday } from 'src/utils/baby-profiles'
 import { getRecordTypeInfo, recordTypeGroups } from 'src/utils/records'
 import { fetchBabyProfiles, supabase } from 'src/utils/supabase'
 
@@ -232,11 +232,13 @@ export const HomeScreen: TabScreen<'Home'> = ({ navigation }) => {
               )}
             </View>
             <View className="flex-row space-x-4">
-              {['5.8kg', '2 mon, 3 days', '58.4cm'].map((item) => (
-                <View className="bg-custom-yellow1 px-4 py-0.5 rounded-full" key={item}>
-                  <Text medium>{item}</Text>
-                </View>
-              ))}
+              {['5.8kg', formatBirthday(state.selectedBabyProfile?.birthday), '58.4cm'].map(
+                (item) => (
+                  <View className="bg-custom-yellow1 px-4 py-0.5 rounded-full" key={item}>
+                    <Text medium>{item}</Text>
+                  </View>
+                )
+              )}
             </View>
           </View>
         </Animated.View>
