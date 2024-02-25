@@ -54,7 +54,7 @@ export const GlobalErrorBottomSheet = forwardRef<
 
   return (
     <BottomSheet
-      backgroundStyle={{ backgroundColor: colors.custom.background }}
+      backgroundStyle={{ backgroundColor: 'white' }}
       backdropComponent={renderBackdrop}
       contentHeight={animatedContentHeight}
       enablePanDownToClose

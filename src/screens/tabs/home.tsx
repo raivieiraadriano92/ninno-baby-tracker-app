@@ -18,7 +18,7 @@ import {
   RecordTypePickerBottomSheet,
   Text
 } from 'src/components'
-import { useOnSaveBabyProfileEvent } from 'src/hooks'
+import { useOnOnDeleteRecordEvent, useOnSaveBabyProfileEvent } from 'src/hooks'
 import colors from 'src/theme/colors'
 import { STORAGE_KEY_SELECTED_BABY_PROFILE_ID, formatBirthday } from 'src/utils/baby-profiles'
 import { getRecordTypeInfo, recordTypeGroups } from 'src/utils/records'
@@ -97,6 +97,13 @@ export const HomeScreen: TabScreen<'Home'> = ({ navigation }) => {
   }
 
   const [state, setState] = useState<State>(INITIAL_STATE)
+
+  useOnOnDeleteRecordEvent((row) => {
+    setState((prev) => ({
+      ...prev,
+      records: prev.records.filter((record) => record.id !== row.id)
+    }))
+  })
 
   useOnSaveBabyProfileEvent(
     useCallback((row: BabyProfileRow) => {
@@ -194,13 +201,16 @@ export const HomeScreen: TabScreen<'Home'> = ({ navigation }) => {
               />
             </View>
             {state.records.map((record) => (
-              <RecordCard
-                attributes={record.attributes}
-                date={record.date}
+              <TouchableOpacity
                 key={record.id}
-                time={record.time}
-                type={record.type}
-              />
+                onPress={() => navigation.navigate('RecordForm', { record, type: record.type })}>
+                <RecordCard
+                  attributes={record.attributes}
+                  date={record.date}
+                  time={record.time}
+                  type={record.type}
+                />
+              </TouchableOpacity>
             ))}
           </View>
         </SafeAreaView>

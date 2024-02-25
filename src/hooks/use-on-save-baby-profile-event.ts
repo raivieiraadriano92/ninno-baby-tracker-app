@@ -6,15 +6,13 @@ import type { BabyProfileRow } from 'src/models/baby-profile'
 
 const event = new EventEmitter()
 
-// event.emit(eventName, "rami")
-
-type UseSaveBabyProfileEvent = (_handler?: (_row: BabyProfileRow) => void) => {
+type UseOnSaveBabyProfileEvent = (_handler?: (_row: BabyProfileRow) => void) => {
   emit(_row: BabyProfileRow): void
 }
 
 const EVENT_NAME = 'onSaveBabyProfile'
 
-export const useOnSaveBabyProfileEvent: UseSaveBabyProfileEvent = (handler) => {
+export const useOnSaveBabyProfileEvent: UseOnSaveBabyProfileEvent = (handler) => {
   const emit = (row: BabyProfileRow) => event.emit(EVENT_NAME, row)
 
   useEffect(() => {

@@ -3,11 +3,11 @@ import type { FunctionComponent } from 'react'
 import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs'
 import type { CompositeScreenProps, NavigatorScreenParams } from '@react-navigation/native'
 import type { NativeStackScreenProps } from '@react-navigation/native-stack'
-import type { RecordType } from 'src/models/record'
+import type { RecordRow, RecordType } from 'src/models/record'
 
 export type RootStackParamList = {
   BabyProfileCreation: undefined
-  RecordForm: { id?: string; type: RecordType }
+  RecordForm: { record?: RecordRow; type: RecordType }
   Records: undefined
   Tabs: undefined | NavigatorScreenParams<TabParamList>
   Welcome: undefined

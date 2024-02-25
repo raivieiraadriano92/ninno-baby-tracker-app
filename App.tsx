@@ -1,5 +1,6 @@
 import type { FunctionComponent } from 'react'
 
+import { PortalProvider } from '@gorhom/portal'
 import { StatusBar } from 'expo-status-bar'
 import { AppState } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
@@ -24,9 +25,11 @@ AppState.addEventListener('change', (state) => {
 const App: FunctionComponent = () => (
   <SafeAreaProvider>
     <GestureHandlerRootView className="flex-1">
-      <RootNavigator />
-      <GlobalErrorBottomSheet ref={globalErrorBottomSheetRef} />
-      <StatusBar style="dark" />
+      <PortalProvider>
+        <RootNavigator />
+        <GlobalErrorBottomSheet ref={globalErrorBottomSheetRef} />
+        <StatusBar style="dark" />
+      </PortalProvider>
     </GestureHandlerRootView>
   </SafeAreaProvider>
 )
