@@ -18,7 +18,11 @@ import {
   RecordTypePickerBottomSheet,
   Text
 } from 'src/components'
-import { useOnOnDeleteRecordEvent, useOnSaveBabyProfileEvent } from 'src/hooks'
+import {
+  useOnOnDeleteRecordEvent,
+  useOnSaveBabyProfileEvent,
+  useOnSaveRecordEvent
+} from 'src/hooks'
 import colors from 'src/theme/colors'
 import { STORAGE_KEY_SELECTED_BABY_PROFILE_ID, formatBirthday } from 'src/utils/baby-profiles'
 import { getRecordTypeInfo, recordTypeGroups } from 'src/utils/records'
@@ -79,8 +83,15 @@ export const HomeScreen: TabScreen<'Home'> = ({ navigation }) => {
   const bottomSheetSwitchBabyProfileRef = useRef<BabyProfilePickerBottomSheetElement>(null)
 
   const addNewRecord = (group: RecordTypeGroup) => {
+    if (!state.selectedBabyProfile) {
+      return
+    }
+
     if (group[1].length === 1) {
-      navigation.navigate('RecordForm', { type: group[1][0] })
+      navigation.navigate('RecordForm', {
+        type: group[1][0],
+        babyProfileId: state.selectedBabyProfile.id
+      })
 
       return
     }
@@ -98,12 +109,14 @@ export const HomeScreen: TabScreen<'Home'> = ({ navigation }) => {
 
   const [state, setState] = useState<State>(INITIAL_STATE)
 
-  useOnOnDeleteRecordEvent((row) => {
-    setState((prev) => ({
-      ...prev,
-      records: prev.records.filter((record) => record.id !== row.id)
-    }))
-  })
+  useOnOnDeleteRecordEvent(
+    useCallback((row: RecordRow) => {
+      setState((prev) => ({
+        ...prev,
+        records: prev.records.filter((record) => record.id !== row.id)
+      }))
+    }, [])
+  )
 
   useOnSaveBabyProfileEvent(
     useCallback((row: BabyProfileRow) => {
@@ -115,6 +128,28 @@ export const HomeScreen: TabScreen<'Home'> = ({ navigation }) => {
         ].sort((a, b) => a.name.localeCompare(b.name))
       }))
     }, [])
+  )
+
+  useOnSaveRecordEvent(
+    useCallback(
+      (row: RecordRow) => {
+        const recordsDraft = [...state.records]
+
+        const recordIndex = state.records.findIndex((record) => record.id === row.id)
+
+        if (recordIndex !== -1) {
+          recordsDraft[recordIndex] = row
+        } else {
+          recordsDraft.unshift(row)
+        }
+
+        setState((prev) => ({
+          ...prev,
+          records: recordsDraft
+        }))
+      },
+      [state.records]
+    )
   )
 
   useEffect(() => {
@@ -203,7 +238,13 @@ export const HomeScreen: TabScreen<'Home'> = ({ navigation }) => {
             {state.records.map((record) => (
               <TouchableOpacity
                 key={record.id}
-                onPress={() => navigation.navigate('RecordForm', { record, type: record.type })}>
+                onPress={() =>
+                  navigation.navigate('RecordForm', {
+                    record,
+                    type: record.type,
+                    babyProfileId: state.selectedBabyProfile!.id
+                  })
+                }>
                 <RecordCard
                   attributes={record.attributes}
                   date={record.date}
@@ -242,7 +283,7 @@ export const HomeScreen: TabScreen<'Home'> = ({ navigation }) => {
               )}
             </View>
             <View className="flex-row space-x-4">
-              {['5.8kg', formatBirthday(state.selectedBabyProfile?.birthday), '58.4cm'].map(
+              {['5.8kg', formatBirthday(state.selectedBabyProfile!.birthday), '58.4cm'].map(
                 (item) => (
                   <View className="bg-custom-yellow1 px-4 py-0.5 rounded-full" key={item}>
                     <Text medium>{item}</Text>
@@ -255,7 +296,7 @@ export const HomeScreen: TabScreen<'Home'> = ({ navigation }) => {
       </Animated.ScrollView>
       <RecordTypePickerBottomSheet
         onSelectRecordType={(type) => {
-          navigation.navigate('RecordForm', { type })
+          navigation.navigate('RecordForm', { type, babyProfileId: state.selectedBabyProfile!.id })
 
           // delaying the close action to allow the navigation to finish
           setTimeout(() => {

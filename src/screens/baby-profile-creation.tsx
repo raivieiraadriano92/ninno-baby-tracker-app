@@ -19,6 +19,7 @@ import { useOnSaveBabyProfileEvent, usePagerViewScrollHandler } from 'src/hooks'
 import colors from 'src/theme/colors'
 import { STORAGE_KEY_SELECTED_BABY_PROFILE_ID } from 'src/utils/baby-profiles'
 import { globalErrorBottomSheetRef } from 'src/utils/global-refs'
+import { DEFAULT_HEAD_CIRCUMFERENCE, DEFAULT_HEIGHT, DEFAULT_WEIGHT } from 'src/utils/records'
 import { supabase } from 'src/utils/supabase'
 import twColors from 'tailwindcss/colors'
 import { create } from 'zustand'
@@ -436,20 +437,11 @@ export const BabyProfileCreationScreen: RootStackScreen<'BabyProfileCreation'> =
 
   const [babyProfileDraft, setBabyProfileDraft] = useState<BabyProfileDraft>({
     birthday: new Date(),
-    headCircumference: {
-      unit: 'cm',
-      value: 30
-    },
-    height: {
-      unit: 'cm',
-      value: 50
-    },
+    headCircumference: DEFAULT_HEAD_CIRCUMFERENCE,
+    height: DEFAULT_HEIGHT,
     gender: 'M',
-    name: 'Test',
-    weight: {
-      unit: 'kg',
-      value: 3.5
-    }
+    name: '',
+    weight: DEFAULT_WEIGHT
   })
 
   const { emit } = useOnSaveBabyProfileEvent()

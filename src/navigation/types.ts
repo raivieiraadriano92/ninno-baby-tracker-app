@@ -7,7 +7,7 @@ import type { RecordRow, RecordType } from 'src/models/record'
 
 export type RootStackParamList = {
   BabyProfileCreation: undefined
-  RecordForm: { record?: RecordRow; type: RecordType }
+  RecordForm: { record?: RecordRow; type: RecordType; babyProfileId: number }
   Records: undefined
   Tabs: undefined | NavigatorScreenParams<TabParamList>
   Welcome: undefined

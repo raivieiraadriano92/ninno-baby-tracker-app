@@ -1,6 +1,6 @@
 import colors from 'src/theme/colors'
 
-import type { RecordType, RecordTypeGroup } from 'src/models/record'
+import type { MeasureData, RecordType, RecordTypeGroup } from 'src/models/record'
 
 export const recordTypeGroups: RecordTypeGroup[] = [
   [
@@ -23,6 +23,7 @@ export const getRecordTypeInfo = (type: RecordType) => {
   switch (type) {
     case 'growth':
       return {
+        attributes: {},
         color: colors.custom.yellow1,
         icon: require('assets/icon-growth.png'),
         title: 'Growth'
@@ -30,6 +31,7 @@ export const getRecordTypeInfo = (type: RecordType) => {
 
     case 'birthday':
       return {
+        attributes: {},
         color: colors.custom.yellow1,
         icon: require('assets/icon-growth.png'),
         title: 'Birthday'
@@ -37,6 +39,7 @@ export const getRecordTypeInfo = (type: RecordType) => {
 
     case 'weight':
       return {
+        attributes: DEFAULT_WEIGHT,
         color: colors.custom.yellow1,
         icon: require('assets/icon-weight.png'),
         title: 'Weight'
@@ -44,6 +47,7 @@ export const getRecordTypeInfo = (type: RecordType) => {
 
     case 'height':
       return {
+        attributes: DEFAULT_HEIGHT,
         color: colors.custom.yellow1,
         icon: require('assets/icon-height.png'),
         title: 'Height'
@@ -51,6 +55,7 @@ export const getRecordTypeInfo = (type: RecordType) => {
 
     case 'head':
       return {
+        attributes: DEFAULT_HEAD_CIRCUMFERENCE,
         color: colors.custom.yellow1,
         icon: require('assets/icon-head-circ.png'),
         title: 'Head Circumference'
@@ -58,6 +63,7 @@ export const getRecordTypeInfo = (type: RecordType) => {
 
     case 'diaper':
       return {
+        attributes: {},
         color: colors.custom.green4,
         icon: require('assets/icon-diaper.png'),
         title: 'Diaper'
@@ -65,6 +71,7 @@ export const getRecordTypeInfo = (type: RecordType) => {
 
     case 'sleep':
       return {
+        attributes: {},
         color: colors.custom.blue4,
         icon: require('assets/icon-night.png'),
         title: 'Sleep'
@@ -72,6 +79,7 @@ export const getRecordTypeInfo = (type: RecordType) => {
 
     case 'sleepDay':
       return {
+        attributes: {},
         color: colors.custom.blue4,
         icon: require('assets/icon-day.png'),
         title: 'Sleep - Day'
@@ -79,6 +87,7 @@ export const getRecordTypeInfo = (type: RecordType) => {
 
     case 'sleepNight':
       return {
+        attributes: {},
         color: colors.custom.blue4,
         icon: require('assets/icon-night.png'),
         title: 'Sleep - Night'
@@ -86,6 +95,7 @@ export const getRecordTypeInfo = (type: RecordType) => {
 
     case 'feeding':
       return {
+        attributes: {},
         color: colors.custom.pink1,
         icon: require('assets/icon-bottle.png'),
         title: 'Feeding'
@@ -93,6 +103,7 @@ export const getRecordTypeInfo = (type: RecordType) => {
 
     case 'bottleBreast':
       return {
+        attributes: {},
         color: colors.custom.pink1,
         icon: require('assets/icon-bottle.png'),
         title: 'Bottle - Breast'
@@ -100,6 +111,7 @@ export const getRecordTypeInfo = (type: RecordType) => {
 
     case 'bottleFormula':
       return {
+        attributes: {},
         color: colors.custom.pink1,
         icon: require('assets/icon-bottle.png'),
         title: 'Bottle - Formula'
@@ -107,6 +119,7 @@ export const getRecordTypeInfo = (type: RecordType) => {
 
     case 'breastFeedingLeft':
       return {
+        attributes: {},
         color: colors.custom.pink1,
         icon: require('assets/icon-bra-left.png'),
         title: 'Breast Feeding - Left'
@@ -114,6 +127,7 @@ export const getRecordTypeInfo = (type: RecordType) => {
 
     case 'breastFeedingRight':
       return {
+        attributes: {},
         color: colors.custom.pink1,
         icon: require('assets/icon-bra-right.png'),
         title: 'Breast Feeding - Right'
@@ -121,6 +135,7 @@ export const getRecordTypeInfo = (type: RecordType) => {
 
     case 'pumpingLeft':
       return {
+        attributes: {},
         color: colors.custom.pink1,
         icon: require('assets/icon-pumping-left.png'),
         title: 'Pumping - Left'
@@ -128,9 +143,25 @@ export const getRecordTypeInfo = (type: RecordType) => {
 
     case 'pumpingRight':
       return {
+        attributes: {},
         color: colors.custom.pink1,
         icon: require('assets/icon-pumping-right.png'),
         title: 'Pumping - Right'
       }
   }
+}
+
+export const DEFAULT_HEAD_CIRCUMFERENCE: MeasureData = {
+  unit: 'cm',
+  value: 30
+}
+
+export const DEFAULT_HEIGHT: MeasureData = {
+  unit: 'cm',
+  value: 50
+}
+
+export const DEFAULT_WEIGHT: MeasureData = {
+  unit: 'kg',
+  value: 3.5
 }

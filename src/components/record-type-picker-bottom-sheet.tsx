@@ -7,8 +7,9 @@ import BottomSheet, {
   useBottomSheetDynamicSnapPoints
 } from '@gorhom/bottom-sheet'
 import { TouchableOpacity, View } from 'react-native'
-import { RecordCard } from 'src/components'
 import colors from 'src/theme/colors'
+
+import { RecordCard } from './record-card'
 
 import type { BottomSheetDefaultBackdropProps } from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types'
 import type { RecordType, RecordTypeGroup } from 'src/models/record'

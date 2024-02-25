@@ -20,6 +20,10 @@ export { GlobalErrorBottomSheet } from './global-error-bottom-sheet'
 
 export type { GlobalErrorBottomSheetElement } from './global-error-bottom-sheet'
 
+export { MeasuresPickerBottomSheet } from './measures-picker-bottom-sheet'
+
+export type { MeasuresPickerBottomSheetElement } from './measures-picker-bottom-sheet'
+
 export { MeasuresPicker } from './measures-picker'
 
 export { PageLoader } from './page-loader'

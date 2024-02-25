@@ -1,6 +1,6 @@
 import type { FunctionComponent } from 'react'
 
-import { formatDistanceToNow } from 'date-fns'
+import { format } from 'date-fns'
 import { View, type ViewProps } from 'react-native'
 import { getRecordTypeInfo } from 'src/utils/records'
 
@@ -38,6 +38,8 @@ export const RecordCard: FunctionComponent<RecordCardProps> = ({
 }) => {
   const recordTypeInfo = getRecordTypeInfo(type)
 
+  const fullDate = new Date(`${date}T${time}`)
+
   return (
     <BaseCard {...props}>
       <RecordIcon size={44} type={type} />
@@ -52,8 +54,8 @@ export const RecordCard: FunctionComponent<RecordCardProps> = ({
         )}
       </View>
       {!!date && !!time && (
-        <Text className="text-sm text-[#979797]" medium>
-          {formatDistanceToNow(new Date(`${date}T${time}`))}
+        <Text className="text-sm text-[#979797] text-right" medium>
+          {`${format(fullDate, 'MMM d, yyyy')}\n${format(fullDate, 'HH:mm')}`}
         </Text>
       )}
       {renderRight?.()}
