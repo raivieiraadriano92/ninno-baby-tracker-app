@@ -134,11 +134,10 @@ export const HomeScreen: TabScreen<'Home'> = ({ navigation }) => {
               <TouchableOpacity
                 key={record.id}
                 onPress={() =>
-                  !!selectedBabyProfile &&
                   navigation.navigate('RecordForm', {
                     record,
                     type: record.type,
-                    babyProfileId: selectedBabyProfile.id
+                    babyProfileId: record.baby_profile_id
                   })
                 }>
                 <RecordCard

@@ -1,40 +1,40 @@
 import { useLayoutEffect } from 'react'
 
 import { Feather } from '@expo/vector-icons'
+import { format, isToday, isYesterday } from 'date-fns'
 import { SectionList, TouchableOpacity, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { RecordCard, Text } from 'src/components'
+import { useBabyProfileStore } from 'src/store/baby-profile-store'
+import { useRecordStore } from 'src/store/record-store'
 import colors from 'src/theme/colors'
 
 import type { RootStackScreen } from 'src/navigation/types'
 
-const data = [
-  'weight',
-  'height',
-  'head',
-  'diaper',
-  'sleepDay',
-  'sleepNight',
-  'bottleBreast',
-  'bottleFormula',
-  'breastFeedingLeft',
-  'breastFeedingRight',
-  'pumpingLeft',
-  'pumpingRight'
-]
+const formatDateTitle = (date: string) => {
+  const dateObj = new Date(`${date}T00:00:00`)
 
-const DATA = [
-  {
-    title: 'Today',
-    data
-  },
-  {
-    title: 'Yesterday',
-    data
+  if (isToday(dateObj)) {
+    return 'Today'
+  } else if (isYesterday(dateObj)) {
+    return 'Yesterday'
   }
-]
+
+  return format(dateObj, 'dd MMMM yyyy')
+}
 
 export const RecordsScreen: RootStackScreen<'Records'> = ({ navigation }) => {
+  const selectedBabyProfile = useBabyProfileStore((state) => state.selectedBabyProfile)
+
+  const sections = useRecordStore((state) =>
+    Object.entries(
+      selectedBabyProfile ? state.getRecordsGroupedByDate(selectedBabyProfile.id) : {}
+    ).map((group) => ({
+      data: group[1],
+      title: formatDateTitle(group[0])
+    }))
+  )
+
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
@@ -52,18 +52,33 @@ export const RecordsScreen: RootStackScreen<'Records'> = ({ navigation }) => {
 
   return (
     <SectionList
-      keyExtractor={(item, index) => item + index}
+      keyExtractor={(item) => `${item.id}`}
       ItemSeparatorComponent={() => <View className="h-4" />}
       ListFooterComponent={<SafeAreaView className="pb-4" edges={['bottom']} />}
       renderItem={({ item }) => (
-        <RecordCard className="mx-4" date="1992-12-12" time="11:11:11" info="5.2kg" type={item} />
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate('RecordForm', {
+              record: item,
+              type: item.type,
+              babyProfileId: item.baby_profile_id
+            })
+          }>
+          <RecordCard
+            className="mx-4"
+            date={item.date}
+            time={item.time}
+            attributes={item.attributes}
+            type={item.type}
+          />
+        </TouchableOpacity>
       )}
       renderSectionHeader={({ section: { title } }) => (
         <Text className="pb-3 pt-6 text-center" medium>
           {title}
         </Text>
       )}
-      sections={DATA}
+      sections={sections}
       showsVerticalScrollIndicator={false}
       stickySectionHeadersEnabled={false}
     />

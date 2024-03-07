@@ -11,6 +11,7 @@ type RecordStoreState = {
   updateRecord: (_data: RecordRow) => void
   deleteRecord: (_id: RecordRow['id']) => void
   getLatestRecords: (_babyProfileId: BabyProfileRow['id']) => RecordRow[]
+  getRecordsGroupedByDate: (_babyProfileId: BabyProfileRow['id']) => Record<string, RecordRow[]>
   getLatestWeight: (_id: BabyProfileRow['id']) => RecordRow | undefined
   getLatestHeight: (_id: BabyProfileRow['id']) => RecordRow | undefined
 }
@@ -40,6 +41,18 @@ export const useRecordStore = create<RecordStoreState>()(
         get()
           .data.filter((record) => record.baby_profile_id === babyProfileId)
           .slice(-15),
+      getRecordsGroupedByDate: (babyProfileId) =>
+        get()
+          .data.filter((record) => record.baby_profile_id === babyProfileId)
+          .reduce<Record<string, RecordRow[]>>((groups, record) => {
+            if (groups[record.date]) {
+              groups[record.date].push(record)
+            } else {
+              groups[record.date] = [record]
+            }
+
+            return groups
+          }, {}),
       getLatestWeight: (babyProfileId) =>
         get().data.find(
           (record) => record.type === 'weight' && record.baby_profile_id === babyProfileId
