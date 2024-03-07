@@ -1,7 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import type { PropsWithChildren, FunctionComponent, Dispatch, SetStateAction } from 'react'
 
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import { format } from 'date-fns'
 import { Dimensions, Image, ScrollView, TextInput, View } from 'react-native'
 import DateTimePickerModal from 'react-native-modal-datetime-picker'
@@ -15,12 +14,11 @@ import Animated, {
 } from 'react-native-reanimated'
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Button, MeasuresPicker, RecordCard, Text } from 'src/components'
-import { useOnSaveBabyProfileEvent, usePagerViewScrollHandler } from 'src/hooks'
+import { usePagerViewScrollHandler } from 'src/hooks'
+import { useBabyProfileStore } from 'src/store/baby-profile-store'
+import { useRecordStore } from 'src/store/record-store'
 import colors from 'src/theme/colors'
-import { STORAGE_KEY_SELECTED_BABY_PROFILE_ID } from 'src/utils/baby-profiles'
-import { globalErrorBottomSheetRef } from 'src/utils/global-refs'
 import { DEFAULT_HEAD_CIRCUMFERENCE, DEFAULT_HEIGHT, DEFAULT_WEIGHT } from 'src/utils/records'
-import { supabase } from 'src/utils/supabase'
 import twColors from 'tailwindcss/colors'
 import { create } from 'zustand'
 
@@ -433,7 +431,7 @@ export const BabyProfileCreationScreen: RootStackScreen<'BabyProfileCreation'> =
 
   const { currentPage, setCurrentPage } = useCurrentPageStore()
 
-  const [isSaving, setIsSaving] = useState(false)
+  const [isSaving] = useState(false)
 
   const [babyProfileDraft, setBabyProfileDraft] = useState<BabyProfileDraft>({
     birthday: new Date(),
@@ -444,8 +442,6 @@ export const BabyProfileCreationScreen: RootStackScreen<'BabyProfileCreation'> =
     weight: DEFAULT_WEIGHT
   })
 
-  const { emit } = useOnSaveBabyProfileEvent()
-
   const cancel = () => {
     navigation.goBack()
   }
@@ -454,69 +450,43 @@ export const BabyProfileCreationScreen: RootStackScreen<'BabyProfileCreation'> =
     pagerViewRef.current?.setPage(index + 1)
   }
 
-  const save = async () => {
-    setIsSaving(true)
+  const babyProfileStore = useBabyProfileStore()
 
-    const responseBabyProfile = await supabase.from('baby_profiles').insert({
+  const recordStore = useRecordStore()
+
+  const save = async () => {
+    const babyProfile = babyProfileStore.addBabyProfile({
       birthday: format(babyProfileDraft.birthday, 'yyyy-MM-dd'),
       gender: babyProfileDraft.gender,
       name: babyProfileDraft.name!
     })
 
-    if (responseBabyProfile.error) {
-      globalErrorBottomSheetRef.current?.expand(
-        'An error occurred while saving the baby profile.\n Make sure you provided all the required information.'
-      )
+    recordStore.addRecord({
+      baby_profile_id: babyProfile.id,
+      type: 'weight',
+      attributes: babyProfileDraft.weight,
+      date: format(new Date(), 'yyyy-MM-dd'),
+      time: format(new Date(), 'HH:mm:ss'),
+      notes: null
+    })
 
-      setIsSaving(false)
+    recordStore.addRecord({
+      baby_profile_id: babyProfile.id,
+      type: 'height',
+      attributes: babyProfileDraft.height,
+      date: format(new Date(), 'yyyy-MM-dd'),
+      time: format(new Date(), 'HH:mm:ss'),
+      notes: null
+    })
 
-      return
-    }
-
-    const babyProfile = await supabase
-      .from('baby_profiles')
-      .select()
-      .order('id', { ascending: false })
-      .limit(1)
-      .single()
-
-    if (babyProfile.data?.id) {
-      const selectedBabyProfileId = await AsyncStorage.getItem(STORAGE_KEY_SELECTED_BABY_PROFILE_ID)
-
-      // it means that the user has no baby profile yet
-      if (!selectedBabyProfileId) {
-        await AsyncStorage.setItem(
-          STORAGE_KEY_SELECTED_BABY_PROFILE_ID,
-          babyProfile.data?.id.toString()
-        )
-      }
-
-      emit(babyProfile.data)
-
-      await supabase.from('records').insert([
-        {
-          baby_profile_id: babyProfile.data.id,
-          type: 'weight',
-          attributes: babyProfileDraft.weight,
-          date: format(new Date(), 'yyyy-MM-dd'),
-          time: format(new Date(), 'HH:mm:ss')
-        },
-        {
-          baby_profile_id: babyProfile.data.id,
-          type: 'height',
-          attributes: babyProfileDraft.height,
-          date: format(new Date(), 'yyyy-MM-dd'),
-          time: format(new Date(), 'HH:mm:ss')
-        },
-        {
-          baby_profile_id: babyProfile.data.id,
-          type: 'head',
-          attributes: babyProfileDraft.headCircumference,
-          date: format(new Date(), 'yyyy-MM-dd'),
-          time: format(new Date(), 'HH:mm:ss')
-        }
-      ])
-    }
+    recordStore.addRecord({
+      baby_profile_id: babyProfile.id,
+      type: 'head',
+      attributes: babyProfileDraft.headCircumference,
+      date: format(new Date(), 'yyyy-MM-dd'),
+      time: format(new Date(), 'HH:mm:ss'),
+      notes: null
+    })
 
     navigation.goBack()
   }

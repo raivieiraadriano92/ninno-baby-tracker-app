@@ -1,14 +1,11 @@
 import type { FunctionComponent } from 'react'
-import { useCallback, useState } from 'react'
 
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { useFocusEffect } from '@react-navigation/native'
 import Svg, { G, Path, Defs, ClipPath, Rect } from 'react-native-svg'
 import { FirstBabyProfile, PageLoader } from 'src/components'
 import { BabyProfilesScreen, HomeScreen, SettingsScreen } from 'src/screens'
+import { useBabyProfileStore } from 'src/store/baby-profile-store'
 import colors from 'src/theme/colors'
-import { STORAGE_KEY_SELECTED_BABY_PROFILE_ID } from 'src/utils/baby-profiles'
 
 import type { RootStackScreen, TabParamList } from './types'
 
@@ -182,19 +179,7 @@ const SettingsIcon: FunctionComponent<TabBatIconProps> = ({ color, size }) => (
 )
 
 export const TabNavigator: RootStackScreen<'Tabs'> = ({ navigation }) => {
-  const [hasBabyProfile, setHasBabyProfile] = useState<boolean>()
-
-  const verifyHasBabyProfiles = async () => {
-    const selectedBabyProfileId = await AsyncStorage.getItem(STORAGE_KEY_SELECTED_BABY_PROFILE_ID)
-
-    setHasBabyProfile(!!selectedBabyProfileId)
-  }
-
-  useFocusEffect(
-    useCallback(() => {
-      verifyHasBabyProfiles()
-    }, [])
-  )
+  const hasBabyProfile = useBabyProfileStore((state) => state.data.length > 0)
 
   if (hasBabyProfile === undefined) {
     return <PageLoader className="bg-white" />

@@ -2,13 +2,13 @@ import type { FunctionComponent } from 'react'
 
 import { format } from 'date-fns'
 import { View, type ViewProps } from 'react-native'
-import { getRecordTypeInfo } from 'src/utils/records'
+import { formatAttributes, getRecordTypeInfo } from 'src/utils/records'
 
 import { BaseCard } from './base-card'
 import { RecordIcon } from './record-icon'
 import { Text } from './text'
 
-import type { MeasureData, RecordRow, RecordType } from 'src/models/record'
+import type { RecordRow, RecordType } from 'src/models/record'
 
 type RecordCardProps = ViewProps & {
   attributes?: RecordRow['attributes']
@@ -16,16 +16,6 @@ type RecordCardProps = ViewProps & {
   renderRight?: () => JSX.Element
   time?: RecordRow['time']
   type: RecordType
-}
-
-const formatAttributes = (type: RecordType, attributes: RecordRow['attributes']) => {
-  if ((['head', 'height', 'weight'] as RecordType[]).includes(type)) {
-    const attr = attributes as MeasureData
-
-    return `${attr.value}${attr.unit}`
-  }
-
-  return '-'
 }
 
 export const RecordCard: FunctionComponent<RecordCardProps> = ({

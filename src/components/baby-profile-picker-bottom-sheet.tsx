@@ -14,6 +14,7 @@ import type { BottomSheetDefaultBackdropProps } from '@gorhom/bottom-sheet/lib/t
 import type { BabyProfileRow } from 'src/models/baby-profile'
 
 export type BabyProfilePickerBottomSheetElement = {
+  close(): void
   expand(_babyProfileList: BabyProfileRow[]): void
 }
 
@@ -42,6 +43,9 @@ export const BabyProfilePickerBottomSheet = forwardRef<
     useBottomSheetDynamicSnapPoints(initialSnapPoints)
 
   useImperativeHandle(ref, () => ({
+    close: () => {
+      bottomSheetRef.current?.close()
+    },
     expand: (babyProfileList) => {
       setBabyProfiles(babyProfileList)
 

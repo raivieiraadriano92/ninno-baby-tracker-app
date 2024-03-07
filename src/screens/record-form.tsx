@@ -14,11 +14,9 @@ import {
   RecordIcon,
   Text
 } from 'src/components'
-import { useOnOnDeleteRecordEvent, useOnSaveRecordEvent } from 'src/hooks'
+import { useRecordStore } from 'src/store/record-store'
 import colors from 'src/theme/colors'
-import { globalErrorBottomSheetRef } from 'src/utils/global-refs'
 import { getRecordTypeInfo } from 'src/utils/records'
-import { supabase } from 'src/utils/supabase'
 import defaultColors from 'tailwindcss/colors'
 
 import type { TextInputProps, TouchableOpacityProps, ViewProps } from 'react-native'
@@ -228,7 +226,7 @@ export const RecordFormScreen: RootStackScreen<'RecordForm'> = ({
 }) => {
   const recordTypeInfo = getRecordTypeInfo(type)
 
-  const [isSaving, setIsSaving] = useState(false)
+  const [isSaving] = useState(false)
 
   const [recordDraft, setRecordDraft] = useState<RecordDraft>(
     record
@@ -245,64 +243,23 @@ export const RecordFormScreen: RootStackScreen<'RecordForm'> = ({
 
   const deleteRecordBottomSheetRef = useRef<DeleteRecordBottomSheetElement>(null)
 
-  const { emit: emitOnOnDeleteRecordEvent } = useOnOnDeleteRecordEvent()
+  const { addRecord, deleteRecord, updateRecord } = useRecordStore()
 
   const onDelete = async () => {
     if (!record) {
       return
     }
 
-    deleteRecordBottomSheetRef.current?.setIsDeleting(true)
-
-    const response = await supabase.from('records').delete().eq('id', record.id)
-
-    deleteRecordBottomSheetRef.current?.setIsDeleting(false)
-
-    if (response.error) {
-      deleteRecordBottomSheetRef.current?.close()
-
-      globalErrorBottomSheetRef.current?.expand('An error occurred while deleting the record.')
-
-      return
-    }
-
-    emitOnOnDeleteRecordEvent(record)
+    deleteRecord(record.id)
 
     navigation.goBack()
   }
 
-  const { emit: emitOnSaveRecordEvent } = useOnSaveRecordEvent()
-
   const onSave = async () => {
-    console.log(recordDraft)
-
-    setIsSaving(true)
-
     if (record) {
-      const response = await supabase
-        .from('records')
-        .update(recordDraft)
-        .eq('id', record.id)
-        .select()
-        .single()
-
-      if (response.error) {
-        globalErrorBottomSheetRef.current?.expand('An error occurred while updating the record.')
-
-        return
-      }
-
-      emitOnSaveRecordEvent(response.data)
+      updateRecord({ ...record, ...recordDraft })
     } else {
-      const response = await supabase.from('records').insert(recordDraft).select().single()
-
-      if (response.error) {
-        globalErrorBottomSheetRef.current?.expand('An error occurred while creating the record.')
-
-        return
-      }
-
-      emitOnSaveRecordEvent(response.data)
+      addRecord(recordDraft)
     }
 
     navigation.goBack()

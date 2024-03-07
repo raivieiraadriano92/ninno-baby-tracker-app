@@ -25,5 +25,3 @@ export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey, {
     detectSessionInUrl: false
   }
 })
-
-export const fetchBabyProfiles = () => supabase.from('baby_profiles').select().order('name')

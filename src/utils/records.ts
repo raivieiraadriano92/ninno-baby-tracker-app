@@ -1,6 +1,6 @@
 import colors from 'src/theme/colors'
 
-import type { MeasureData, RecordType, RecordTypeGroup } from 'src/models/record'
+import type { MeasureData, RecordRow, RecordType, RecordTypeGroup } from 'src/models/record'
 
 export const recordTypeGroups: RecordTypeGroup[] = [
   [
@@ -18,6 +18,16 @@ export const recordTypeGroups: RecordTypeGroup[] = [
   ['diaper', ['diaper']],
   ['growth', ['weight', 'height', 'head']]
 ]
+
+export const formatAttributes = (type: RecordType, attributes?: RecordRow['attributes']) => {
+  if ((['head', 'height', 'weight'] as RecordType[]).includes(type)) {
+    const attr = attributes as MeasureData
+
+    return `${attr.value}${attr.unit}`
+  }
+
+  return '-'
+}
 
 export const getRecordTypeInfo = (type: RecordType) => {
   switch (type) {
