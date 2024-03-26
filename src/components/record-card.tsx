@@ -39,7 +39,7 @@ export const RecordCard: FunctionComponent<RecordCardProps> = ({
         </Text>
         {!!attributes && (
           <Text className="text-sm text-[#979797]" medium>
-            {formatAttributes(type, attributes)}
+            {formatAttributes(type, attributes, date, time)}
           </Text>
         )}
       </View>

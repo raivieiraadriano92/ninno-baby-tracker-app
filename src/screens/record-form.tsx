@@ -16,7 +16,7 @@ import {
 } from 'src/components'
 import { useRecordStore } from 'src/store/record-store'
 import colors from 'src/theme/colors'
-import { getRecordTypeInfo } from 'src/utils/records'
+import { getGroupByType, getRecordTypeInfo } from 'src/utils/records'
 import defaultColors from 'tailwindcss/colors'
 
 import type { TextInputProps, TouchableOpacityProps, ViewProps } from 'react-native'
@@ -24,7 +24,7 @@ import type {
   DeleteRecordBottomSheetElement,
   MeasuresPickerBottomSheetElement
 } from 'src/components'
-import type { MeasureData, RecordDraft } from 'src/models/record'
+import type { MeasureData, RecordDraft, SleepAttrData } from 'src/models/record'
 import type { RootStackScreen } from 'src/navigation/types'
 
 type FormItemProps = PropsWithChildren<
@@ -218,6 +218,133 @@ const GrowthForm: FunctionComponent<FormGroupsProps> = ({
   )
 }
 
+const SleepForm: FunctionComponent<FormGroupsProps> = ({
+  recordDraft,
+  setRecordDraft,
+  ...props
+}) => {
+  const attributes = recordDraft.attributes as SleepAttrData
+
+  const [isDatePickerVisibleFor, setIsDatePickerVisibleFor] = useState<
+    'start' | 'end' | undefined
+  >()
+
+  const [isTimePickerVisibleFor, setIsTimePickerVisibleFor] = useState<
+    'start' | 'end' | undefined
+  >()
+
+  const [startDate, setStartDate] = useState(new Date(`${recordDraft.date}T${recordDraft.time}`))
+
+  const [endDate, setEndDate] = useState(
+    attributes.endDate && attributes.endTime
+      ? new Date(`${attributes.endDate}T${attributes.endTime}`)
+      : new Date()
+  )
+
+  const showDatePicker = (forField: 'start' | 'end') => {
+    setIsDatePickerVisibleFor(forField)
+  }
+
+  const hideDatePicker = () => {
+    setIsDatePickerVisibleFor(undefined)
+  }
+
+  const showTimePicker = (forField: 'start' | 'end') => {
+    setIsTimePickerVisibleFor(forField)
+  }
+
+  const hideTimePicker = () => {
+    setIsTimePickerVisibleFor(undefined)
+  }
+
+  const onConfirmDateTimePicker = (date: Date) => {
+    if (isDatePickerVisibleFor === 'start' || isTimePickerVisibleFor === 'start') {
+      setStartDate(date)
+
+      setRecordDraft((prev) => ({
+        ...prev,
+        date: format(date, 'yyyy-MM-dd'),
+        time: format(date, 'HH:mm:ss')
+      }))
+    } else {
+      setEndDate(date)
+
+      setRecordDraft((prev) => ({
+        ...prev,
+        attributes: {
+          endDate: format(date, 'yyyy-MM-dd'),
+          endTime: format(date, 'HH:mm:ss')
+        }
+      }))
+    }
+
+    hideDatePicker()
+
+    hideTimePicker()
+  }
+
+  const timeoutRef = useRef<NodeJS.Timeout>()
+
+  const handleChangeNotes = (notes: string) => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current)
+    }
+
+    timeoutRef.current = setTimeout(() => {
+      setRecordDraft((prev) => ({ ...prev, notes }))
+    }, 500)
+  }
+
+  return (
+    <View {...props}>
+      <FormItem label="Start">
+        <View className="flex-row space-x-2">
+          <FormItemPill
+            onPress={() => showDatePicker('start')}
+            title={format(startDate, 'MMM d, yyyy')}
+          />
+          <FormItemPill
+            onPress={() => showTimePicker('start')}
+            title={format(startDate, 'HH:mm')}
+          />
+        </View>
+      </FormItem>
+      <FormItem label="End">
+        <View className="flex-row space-x-2">
+          <FormItemPill
+            onPress={() => showDatePicker('end')}
+            title={format(endDate, 'MMM d, yyyy')}
+          />
+          <FormItemPill onPress={() => showTimePicker('end')} title={format(endDate, 'HH:mm')} />
+        </View>
+      </FormItem>
+      <FormItem className="flex-col items-start" label="Notes">
+        <FormItemTextInput
+          className="h-24 mt-4"
+          multiline
+          onChangeText={handleChangeNotes}
+          placeholder="Add a note"
+          defaultValue={recordDraft.notes ?? ''}
+        />
+      </FormItem>
+      <DateTimePickerModal
+        date={isDatePickerVisibleFor === 'start' ? startDate : endDate}
+        isVisible={!!isDatePickerVisibleFor}
+        mode="date"
+        onConfirm={onConfirmDateTimePicker}
+        onCancel={hideDatePicker}
+      />
+      <DateTimePickerModal
+        date={isTimePickerVisibleFor === 'start' ? startDate : endDate}
+        isVisible={!!isTimePickerVisibleFor}
+        mode="time"
+        onConfirm={onConfirmDateTimePicker}
+        onCancel={hideTimePicker}
+      />
+    </View>
+  )
+}
+
 export const RecordFormScreen: RootStackScreen<'RecordForm'> = ({
   navigation,
   route: {
@@ -265,6 +392,18 @@ export const RecordFormScreen: RootStackScreen<'RecordForm'> = ({
     navigation.goBack()
   }
 
+  const renderFormByRecordType = () => {
+    const group = getGroupByType(type)
+
+    switch (group?.[0]) {
+      case 'growth':
+        return <GrowthForm recordDraft={recordDraft} setRecordDraft={setRecordDraft} />
+
+      case 'sleep':
+        return <SleepForm recordDraft={recordDraft} setRecordDraft={setRecordDraft} />
+    }
+  }
+
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () =>
@@ -289,7 +428,7 @@ export const RecordFormScreen: RootStackScreen<'RecordForm'> = ({
               </Text>
             </View>
           </BaseCard>
-          <GrowthForm recordDraft={recordDraft} setRecordDraft={setRecordDraft} />
+          {renderFormByRecordType()}
           <Button className="mx-4" isLoading={isSaving} onPress={onSave} title="Save" />
         </SafeAreaView>
       </ScrollView>

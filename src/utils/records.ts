@@ -1,6 +1,13 @@
+import { differenceInHours, differenceInMinutes } from 'date-fns'
 import colors from 'src/theme/colors'
 
-import type { MeasureData, RecordRow, RecordType, RecordTypeGroup } from 'src/models/record'
+import type {
+  MeasureData,
+  RecordRow,
+  RecordType,
+  RecordTypeGroup,
+  SleepAttrData
+} from 'src/models/record'
 
 export const recordTypeGroups: RecordTypeGroup[] = [
   [
@@ -19,11 +26,33 @@ export const recordTypeGroups: RecordTypeGroup[] = [
   ['growth', ['weight', 'height', 'head']]
 ]
 
-export const formatAttributes = (type: RecordType, attributes?: RecordRow['attributes']) => {
-  if ((['head', 'height', 'weight'] as RecordType[]).includes(type)) {
+export const getGroupByType = (type: RecordType) =>
+  recordTypeGroups.find((group) => group[1].includes(type))
+
+export const formatAttributes = (
+  type: RecordType,
+  attributes?: RecordRow['attributes'],
+  date?: string,
+  time?: string
+) => {
+  const group = getGroupByType(type)
+
+  if (group?.[0] === 'growth') {
     const attr = attributes as MeasureData
 
     return `${attr.value}${attr.unit}`
+  } else if (group?.[0] === 'sleep') {
+    const attr = attributes as SleepAttrData
+
+    const startDate = new Date(`${date}T${time}`)
+
+    const endDate = new Date(`${attr.endDate}T${attr.endTime}`)
+
+    const durationInHours = differenceInHours(endDate, startDate)
+
+    const durationInMinutes = differenceInMinutes(endDate, startDate)
+
+    return `Duration: ${durationInHours ? `${durationInHours} hour${durationInHours > 1 ? 's' : ''}` : `${durationInMinutes} minute${durationInMinutes > 1 ? 's' : ''}`}`
   }
 
   return '-'

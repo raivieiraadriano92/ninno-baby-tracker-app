@@ -12,3 +12,8 @@ export type MeasureData = {
   value: number
   unit: string
 }
+
+export type SleepAttrData = {
+  endDate: number
+  endTime: string
+}
