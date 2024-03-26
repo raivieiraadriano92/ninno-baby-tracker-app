@@ -1,10 +1,6 @@
-import { forwardRef, useCallback, useImperativeHandle, useMemo, useRef, useState } from 'react'
+import { forwardRef, useCallback, useImperativeHandle, useRef, useState } from 'react'
 
-import BottomSheet, {
-  BottomSheetBackdrop,
-  BottomSheetView,
-  useBottomSheetDynamicSnapPoints
-} from '@gorhom/bottom-sheet'
+import BottomSheet, { BottomSheetBackdrop, BottomSheetView } from '@gorhom/bottom-sheet'
 import { TouchableOpacity, View } from 'react-native'
 import colors from 'src/theme/colors'
 
@@ -37,11 +33,6 @@ export const BabyProfilePickerBottomSheet = forwardRef<
     []
   )
 
-  const initialSnapPoints = useMemo(() => ['CONTENT_HEIGHT'], [])
-
-  const { animatedHandleHeight, animatedSnapPoints, animatedContentHeight, handleContentLayout } =
-    useBottomSheetDynamicSnapPoints(initialSnapPoints)
-
   useImperativeHandle(ref, () => ({
     close: () => {
       bottomSheetRef.current?.close()
@@ -55,11 +46,10 @@ export const BabyProfilePickerBottomSheet = forwardRef<
 
   return (
     <BottomSheet
-      backgroundStyle={{ backgroundColor: colors.custom.background }}
       backdropComponent={renderBackdrop}
-      contentHeight={animatedContentHeight}
+      backgroundStyle={{ backgroundColor: colors.custom.background }}
+      enableDynamicSizing
       enablePanDownToClose
-      handleHeight={animatedHandleHeight}
       handleIndicatorStyle={{
         backgroundColor: colors.custom.iconOff,
         borderRadius: 6,
@@ -67,9 +57,8 @@ export const BabyProfilePickerBottomSheet = forwardRef<
         width: 80
       }}
       index={-1}
-      snapPoints={animatedSnapPoints}
       ref={bottomSheetRef}>
-      <BottomSheetView onLayout={handleContentLayout} style={{ padding: 16, paddingBottom: 16 }}>
+      <BottomSheetView style={{ flex: 0, minHeight: 100, padding: 16, paddingBottom: 16 }}>
         <View className="space-y-3">
           {babyProfiles.map((item) => (
             <TouchableOpacity key={item.id} onPress={() => onSelectBabyProfile(item)}>

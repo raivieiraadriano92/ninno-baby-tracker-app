@@ -1,10 +1,6 @@
-import { forwardRef, useCallback, useImperativeHandle, useMemo, useRef, useState } from 'react'
+import { forwardRef, useCallback, useImperativeHandle, useRef, useState } from 'react'
 
-import BottomSheet, {
-  BottomSheetBackdrop,
-  BottomSheetView,
-  useBottomSheetDynamicSnapPoints
-} from '@gorhom/bottom-sheet'
+import BottomSheet, { BottomSheetBackdrop, BottomSheetView } from '@gorhom/bottom-sheet'
 import { View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import colors from 'src/theme/colors'
@@ -39,11 +35,6 @@ export const GlobalErrorBottomSheet = forwardRef<
     []
   )
 
-  const initialSnapPoints = useMemo(() => ['CONTENT_HEIGHT'], [])
-
-  const { animatedHandleHeight, animatedSnapPoints, animatedContentHeight, handleContentLayout } =
-    useBottomSheetDynamicSnapPoints(initialSnapPoints)
-
   useImperativeHandle(ref, () => ({
     expand: (errorMessage) => {
       setError(errorMessage)
@@ -56,9 +47,7 @@ export const GlobalErrorBottomSheet = forwardRef<
     <BottomSheet
       backgroundStyle={{ backgroundColor: 'white' }}
       backdropComponent={renderBackdrop}
-      contentHeight={animatedContentHeight}
       enablePanDownToClose
-      handleHeight={animatedHandleHeight}
       handleIndicatorStyle={{
         backgroundColor: colors.custom.iconOff,
         borderRadius: 6,
@@ -66,11 +55,10 @@ export const GlobalErrorBottomSheet = forwardRef<
         width: 80
       }}
       index={-1}
-      snapPoints={animatedSnapPoints}
+      enableDynamicSizing
       ref={bottomSheetRef}>
       <BottomSheetView
-        onLayout={handleContentLayout}
-        style={{ padding: 16, paddingBottom: 16 + safeAreaInsets.bottom }}>
+        style={{ flex: 0, minHeight: 100, padding: 16, paddingBottom: 16 + safeAreaInsets.bottom }}>
         <View className="space-y-4">
           <View>
             <Text bold className="text-2xl text-center">
