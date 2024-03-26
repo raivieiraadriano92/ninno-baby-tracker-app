@@ -24,7 +24,7 @@ import type {
   DeleteRecordBottomSheetElement,
   MeasuresPickerBottomSheetElement
 } from 'src/components'
-import type { MeasureData, RecordDraft, SleepAttrData } from 'src/models/record'
+import type { FeedingAttrData, MeasureData, RecordDraft, SleepAttrData } from 'src/models/record'
 import type { RootStackScreen } from 'src/navigation/types'
 
 type FormItemProps = PropsWithChildren<
@@ -235,11 +235,7 @@ const SleepForm: FunctionComponent<FormGroupsProps> = ({
 
   const [startDate, setStartDate] = useState(new Date(`${recordDraft.date}T${recordDraft.time}`))
 
-  const [endDate, setEndDate] = useState(
-    attributes.endDate && attributes.endTime
-      ? new Date(`${attributes.endDate}T${attributes.endTime}`)
-      : new Date()
-  )
+  const [endDate, setEndDate] = useState(new Date(`${attributes.endDate}T${attributes.endTime}`))
 
   const showDatePicker = (forField: 'start' | 'end') => {
     setIsDatePickerVisibleFor(forField)
@@ -345,6 +341,157 @@ const SleepForm: FunctionComponent<FormGroupsProps> = ({
   )
 }
 
+const FeedingForm: FunctionComponent<FormGroupsProps> = ({
+  recordDraft,
+  setRecordDraft,
+  ...props
+}) => {
+  const attributes = recordDraft.attributes as FeedingAttrData
+
+  const [isDatePickerVisibleFor, setIsDatePickerVisibleFor] = useState<
+    'start' | 'end' | undefined
+  >()
+
+  const [isTimePickerVisibleFor, setIsTimePickerVisibleFor] = useState<
+    'start' | 'end' | undefined
+  >()
+
+  const [startDate, setStartDate] = useState(new Date(`${recordDraft.date}T${recordDraft.time}`))
+
+  const [endDate, setEndDate] = useState(
+    attributes.endDate && attributes.endTime
+      ? new Date(`${attributes.endDate}T${attributes.endTime}`)
+      : new Date()
+  )
+
+  const showDatePicker = (forField: 'start' | 'end') => {
+    setIsDatePickerVisibleFor(forField)
+  }
+
+  const hideDatePicker = () => {
+    setIsDatePickerVisibleFor(undefined)
+  }
+
+  const showTimePicker = (forField: 'start' | 'end') => {
+    setIsTimePickerVisibleFor(forField)
+  }
+
+  const hideTimePicker = () => {
+    setIsTimePickerVisibleFor(undefined)
+  }
+
+  const onConfirmDateTimePicker = (date: Date) => {
+    if (isDatePickerVisibleFor === 'start' || isTimePickerVisibleFor === 'start') {
+      setStartDate(date)
+
+      setRecordDraft((prev) => ({
+        ...prev,
+        date: format(date, 'yyyy-MM-dd'),
+        time: format(date, 'HH:mm:ss')
+      }))
+    } else {
+      setEndDate(date)
+
+      setRecordDraft((prev) => ({
+        ...prev,
+        attributes: {
+          ...(prev.attributes as FeedingAttrData),
+          endDate: format(date, 'yyyy-MM-dd'),
+          endTime: format(date, 'HH:mm:ss')
+        }
+      }))
+    }
+
+    hideDatePicker()
+
+    hideTimePicker()
+  }
+
+  const timeoutRef = useRef<NodeJS.Timeout>()
+
+  const measuresPickerBottomSheetRef = useRef<MeasuresPickerBottomSheetElement>(null)
+
+  const handleChangeNotes = (notes: string) => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current)
+    }
+
+    timeoutRef.current = setTimeout(() => {
+      setRecordDraft((prev) => ({ ...prev, notes }))
+    }, 500)
+  }
+
+  return (
+    <View {...props}>
+      {attributes.amount && (
+        <FormItem label="Amount">
+          <FormItemPill
+            onPress={() => measuresPickerBottomSheetRef.current?.expand()}
+            title={`${attributes.amount.value}${attributes.amount.unit}`}
+          />
+        </FormItem>
+      )}
+      <FormItem label="Start">
+        <View className="flex-row space-x-2">
+          <FormItemPill
+            onPress={() => showDatePicker('start')}
+            title={format(startDate, 'MMM d, yyyy')}
+          />
+          <FormItemPill
+            onPress={() => showTimePicker('start')}
+            title={format(startDate, 'HH:mm')}
+          />
+        </View>
+      </FormItem>
+      <FormItem label="End">
+        <View className="flex-row space-x-2">
+          <FormItemPill
+            onPress={() => showDatePicker('end')}
+            title={format(endDate, 'MMM d, yyyy')}
+          />
+          <FormItemPill onPress={() => showTimePicker('end')} title={format(endDate, 'HH:mm')} />
+        </View>
+      </FormItem>
+      <FormItem className="flex-col items-start" label="Notes">
+        <FormItemTextInput
+          className="h-24 mt-4"
+          multiline
+          onChangeText={handleChangeNotes}
+          placeholder="Add a note"
+          defaultValue={recordDraft.notes ?? ''}
+        />
+      </FormItem>
+      <DateTimePickerModal
+        date={isDatePickerVisibleFor === 'start' ? startDate : endDate}
+        isVisible={!!isDatePickerVisibleFor}
+        mode="date"
+        onConfirm={onConfirmDateTimePicker}
+        onCancel={hideDatePicker}
+      />
+      <DateTimePickerModal
+        date={isTimePickerVisibleFor === 'start' ? startDate : endDate}
+        isVisible={!!isTimePickerVisibleFor}
+        mode="time"
+        onConfirm={onConfirmDateTimePicker}
+        onCancel={hideTimePicker}
+      />
+      {attributes.amount && (
+        <MeasuresPickerBottomSheet
+          initialMeasuresPickerValue={attributes.amount}
+          onChange={(data) =>
+            setRecordDraft((prev) => ({
+              ...prev,
+              attributes: { ...(prev.attributes as FeedingAttrData), amount: data }
+            }))
+          }
+          recordType="feeding"
+          ref={measuresPickerBottomSheetRef}
+        />
+      )}
+    </View>
+  )
+}
+
 export const RecordFormScreen: RootStackScreen<'RecordForm'> = ({
   navigation,
   route: {
@@ -401,6 +548,9 @@ export const RecordFormScreen: RootStackScreen<'RecordForm'> = ({
 
       case 'sleep':
         return <SleepForm recordDraft={recordDraft} setRecordDraft={setRecordDraft} />
+
+      case 'feeding':
+        return <FeedingForm recordDraft={recordDraft} setRecordDraft={setRecordDraft} />
     }
   }
 

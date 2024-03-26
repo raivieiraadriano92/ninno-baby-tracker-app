@@ -27,6 +27,13 @@ const measures = {
     minDecimal: 0,
     maxDecimal: 99,
     units: ['kg', 'lb', 'st']
+  },
+  liquid: {
+    minInt: 1,
+    maxInt: 999,
+    minDecimal: 0,
+    maxDecimal: 99,
+    units: ['ml']
   }
 }
 

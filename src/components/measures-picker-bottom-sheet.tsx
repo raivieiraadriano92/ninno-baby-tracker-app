@@ -74,7 +74,9 @@ export const MeasuresPickerBottomSheet = forwardRef<
             <MeasuresPicker
               initialValue={initialMeasuresPickerValue}
               onChange={setMeasureData}
-              type={recordType === 'weight' ? 'weight' : 'length'}
+              type={
+                recordType === 'weight' ? 'weight' : recordType === 'feeding' ? 'liquid' : 'length'
+              }
             />
             <View className="flex-row justify-between space-x-5">
               <Button

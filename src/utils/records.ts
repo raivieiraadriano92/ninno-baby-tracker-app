@@ -1,7 +1,8 @@
-import { differenceInHours, differenceInMinutes } from 'date-fns'
+import { differenceInHours, differenceInMinutes, format } from 'date-fns'
 import colors from 'src/theme/colors'
 
 import type {
+  FeedingAttrData,
   MeasureData,
   RecordRow,
   RecordType,
@@ -52,7 +53,25 @@ export const formatAttributes = (
 
     const durationInMinutes = differenceInMinutes(endDate, startDate)
 
-    return `Duration: ${durationInHours ? `${durationInHours} hour${durationInHours > 1 ? 's' : ''}` : `${durationInMinutes} minute${durationInMinutes > 1 ? 's' : ''}`}`
+    return `${durationInHours ? `${durationInHours} hour${durationInHours > 1 ? 's' : ''}` : `${durationInMinutes} minute${durationInMinutes > 1 ? 's' : ''}`}`
+  } else if (group?.[0] === 'feeding') {
+    const attr = attributes as FeedingAttrData
+
+    const startDate = new Date(`${date}T${time}`)
+
+    const endDate = new Date(`${attr.endDate}T${attr.endTime}`)
+
+    const durationInHours = differenceInHours(endDate, startDate)
+
+    const durationInMinutes = differenceInMinutes(endDate, startDate)
+
+    let str = `${durationInHours ? `${durationInHours} hour${durationInHours > 1 ? 's' : ''}` : `${durationInMinutes} minute${durationInMinutes > 1 ? 's' : ''}`}`
+
+    if (attr.amount) {
+      str += `, ${attr.amount.value}${attr.amount.unit}`
+    }
+
+    return str
   }
 
   return '-'
@@ -118,7 +137,7 @@ export const getRecordTypeInfo = (type: RecordType) => {
 
     case 'sleepDay':
       return {
-        attributes: {},
+        attributes: DEFAULT_SLEEP_ATTRIBUTES,
         color: colors.custom.blue4,
         icon: require('assets/icon-day.png'),
         title: 'Sleep - Day'
@@ -126,7 +145,7 @@ export const getRecordTypeInfo = (type: RecordType) => {
 
     case 'sleepNight':
       return {
-        attributes: {},
+        attributes: DEFAULT_SLEEP_ATTRIBUTES,
         color: colors.custom.blue4,
         icon: require('assets/icon-night.png'),
         title: 'Sleep - Night'
@@ -142,7 +161,7 @@ export const getRecordTypeInfo = (type: RecordType) => {
 
     case 'bottleBreast':
       return {
-        attributes: {},
+        attributes: DEFAULT_FEEDING_ATTRIBUTES,
         color: colors.custom.pink1,
         icon: require('assets/icon-bottle.png'),
         title: 'Bottle - Breast'
@@ -150,7 +169,7 @@ export const getRecordTypeInfo = (type: RecordType) => {
 
     case 'bottleFormula':
       return {
-        attributes: {},
+        attributes: DEFAULT_FEEDING_ATTRIBUTES,
         color: colors.custom.pink1,
         icon: require('assets/icon-bottle.png'),
         title: 'Bottle - Formula'
@@ -158,7 +177,7 @@ export const getRecordTypeInfo = (type: RecordType) => {
 
     case 'breastFeedingLeft':
       return {
-        attributes: {},
+        attributes: DEFAULT_FEEDING_BREAST_ATTRIBUTES,
         color: colors.custom.pink1,
         icon: require('assets/icon-bra-left.png'),
         title: 'Breast Feeding - Left'
@@ -166,7 +185,7 @@ export const getRecordTypeInfo = (type: RecordType) => {
 
     case 'breastFeedingRight':
       return {
-        attributes: {},
+        attributes: DEFAULT_FEEDING_BREAST_ATTRIBUTES,
         color: colors.custom.pink1,
         icon: require('assets/icon-bra-right.png'),
         title: 'Breast Feeding - Right'
@@ -174,7 +193,7 @@ export const getRecordTypeInfo = (type: RecordType) => {
 
     case 'pumpingLeft':
       return {
-        attributes: {},
+        attributes: DEFAULT_FEEDING_ATTRIBUTES,
         color: colors.custom.pink1,
         icon: require('assets/icon-pumping-left.png'),
         title: 'Pumping - Left'
@@ -182,7 +201,7 @@ export const getRecordTypeInfo = (type: RecordType) => {
 
     case 'pumpingRight':
       return {
-        attributes: {},
+        attributes: DEFAULT_FEEDING_ATTRIBUTES,
         color: colors.custom.pink1,
         icon: require('assets/icon-pumping-right.png'),
         title: 'Pumping - Right'
@@ -203,4 +222,20 @@ export const DEFAULT_HEIGHT: MeasureData = {
 export const DEFAULT_WEIGHT: MeasureData = {
   unit: 'kg',
   value: 3.5
+}
+
+export const DEFAULT_SLEEP_ATTRIBUTES = {
+  endDate: format(new Date(), 'yyyy-MM-dd'),
+  endTime: format(new Date(), 'HH:mm')
+}
+
+export const DEFAULT_FEEDING_BREAST_ATTRIBUTES = {
+  endDate: format(new Date(), 'yyyy-MM-dd'),
+  endTime: format(new Date(), 'HH:mm')
+}
+
+export const DEFAULT_FEEDING_ATTRIBUTES = {
+  amount: { unit: 'ml', value: 130 },
+  endDate: format(new Date(), 'yyyy-MM-dd'),
+  endTime: format(new Date(), 'HH:mm')
 }

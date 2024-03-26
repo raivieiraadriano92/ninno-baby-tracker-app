@@ -17,3 +17,9 @@ export type SleepAttrData = {
   endDate: number
   endTime: string
 }
+
+export type FeedingAttrData = {
+  amount?: MeasureData
+  endDate: number
+  endTime: string
+}
