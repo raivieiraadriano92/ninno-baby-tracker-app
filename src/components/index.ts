@@ -30,10 +30,16 @@ export { PageLoader } from './page-loader'
 
 export { RecordCard } from './record-card'
 
+export { RecordFiltersBottomSheet } from './record-filters-bottom-sheet-copy'
+
+export type { RecordFiltersBottomSheetElement } from './record-filters-bottom-sheet-copy'
+
 export { RecordIcon } from './record-icon'
 
 export { RecordTypePickerBottomSheet } from './record-type-picker-bottom-sheet'
 
 export type { RecordTypePickerBottomSheetElement } from './record-type-picker-bottom-sheet'
+
+export { RecordTypePill } from './record-type-pill'
 
 export { Text } from './text'

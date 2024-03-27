@@ -9,10 +9,13 @@ create type babyProfileRecord as enum (
   'sleepDay',
   'sleepNight',
   'feeding',
+  'bottle',
   'bottleBreast',
   'bottleFormula',
+  'breast',
   'breastFeedingLeft',
   'breastFeedingRight',
+  'pumping',
   'pumpingLeft',
   'pumpingRight'
 );

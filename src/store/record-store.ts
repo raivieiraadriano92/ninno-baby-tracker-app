@@ -11,7 +11,10 @@ type RecordStoreState = {
   updateRecord: (_data: RecordRow) => void
   deleteRecord: (_id: RecordRow['id']) => void
   getLatestRecords: (_babyProfileId: BabyProfileRow['id']) => RecordRow[]
-  getRecordsGroupedByDate: (_babyProfileId: BabyProfileRow['id']) => Record<string, RecordRow[]>
+  getRecordsGroupedByDate: (_: {
+    babyProfileId: BabyProfileRow['id']
+    recordTypes?: RecordRow['type'][]
+  }) => Record<string, RecordRow[]>
   getLatestWeight: (_id: BabyProfileRow['id']) => RecordRow | undefined
   getLatestHeight: (_id: BabyProfileRow['id']) => RecordRow | undefined
 }
@@ -45,9 +48,13 @@ export const useRecordStore = create<RecordStoreState>()(
           .data.filter((record) => record.baby_profile_id === babyProfileId)
           .sort(sortByDate)
           .slice(-15),
-      getRecordsGroupedByDate: (babyProfileId) =>
+      getRecordsGroupedByDate: ({ babyProfileId, recordTypes }) =>
         get()
-          .data.filter((record) => record.baby_profile_id === babyProfileId)
+          .data.filter(
+            (record) =>
+              record.baby_profile_id === babyProfileId &&
+              (recordTypes?.length ? recordTypes.includes(record.type) : true)
+          )
           .sort(sortByDate)
           .reduce<Record<string, RecordRow[]>>((groups, record) => {
             if (groups[record.date]) {

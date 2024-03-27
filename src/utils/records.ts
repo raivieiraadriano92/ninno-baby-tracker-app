@@ -172,6 +172,14 @@ export const getRecordTypeInfo = (type: RecordType) => {
         title: 'Feeding'
       }
 
+    case 'bottle':
+      return {
+        attributes: {},
+        color: colors.custom.pink1,
+        icon: require('assets/icon-bottle.png'),
+        title: 'Bottle'
+      }
+
     case 'bottleBreast':
       return {
         attributes: DEFAULT_FEEDING_ATTRIBUTES,
@@ -188,6 +196,14 @@ export const getRecordTypeInfo = (type: RecordType) => {
         title: 'Bottle - Formula'
       }
 
+    case 'breast':
+      return {
+        attributes: {},
+        color: colors.custom.pink1,
+        icon: require('assets/icon-bra-left.png'),
+        title: 'Breast'
+      }
+
     case 'breastFeedingLeft':
       return {
         attributes: DEFAULT_FEEDING_BREAST_ATTRIBUTES,
@@ -202,6 +218,14 @@ export const getRecordTypeInfo = (type: RecordType) => {
         color: colors.custom.pink1,
         icon: require('assets/icon-bra-right.png'),
         title: 'Breast Feeding - Right'
+      }
+
+    case 'pumping':
+      return {
+        attributes: {},
+        color: colors.custom.pink1,
+        icon: require('assets/icon-pumping-left.png'),
+        title: 'Pumping'
       }
 
     case 'pumpingLeft':

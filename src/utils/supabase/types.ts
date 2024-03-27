@@ -112,10 +112,13 @@ export type Database = {
         | 'sleepDay'
         | 'sleepNight'
         | 'feeding'
+        | 'bottle'
         | 'bottleBreast'
         | 'bottleFormula'
+        | 'breast'
         | 'breastFeedingLeft'
         | 'breastFeedingRight'
+        | 'pumping'
         | 'pumpingLeft'
         | 'pumpingRight'
     }
