@@ -10,6 +10,10 @@ export { BaseCard } from './base-card'
 
 export { Button } from './button'
 
+export { DeleteBabyProfileBottomSheet } from './delete-baby-profile-bottom-sheet'
+
+export type { DeleteBabyProfileBottomSheetElement } from './delete-baby-profile-bottom-sheet'
+
 export { DeleteRecordBottomSheet } from './delete-record-bottom-sheet'
 
 export type { DeleteRecordBottomSheetElement } from './delete-record-bottom-sheet'

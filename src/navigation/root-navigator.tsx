@@ -7,6 +7,7 @@ import * as SplashScreen from 'expo-splash-screen'
 import { usePreloadApp } from 'src/hooks'
 import {
   BabyProfileCreationScreen,
+  BabyProfileEditionScreen,
   RecordFormScreen,
   RecordsScreen,
   WelcomeScreen
@@ -76,6 +77,7 @@ export const RootNavigator: FunctionComponent = () => {
                 headerTransparent: true
               }}
             />
+            <NativeStack.Screen component={BabyProfileEditionScreen} name="BabyProfileEdition" />
             <NativeStack.Screen component={RecordFormScreen} name="RecordForm" />
             <NativeStack.Screen component={RecordsScreen} name="Records" />
           </>

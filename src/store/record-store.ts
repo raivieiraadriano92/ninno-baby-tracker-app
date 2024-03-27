@@ -10,6 +10,7 @@ type RecordStoreState = {
   addRecord: (_data: RecordDraft) => RecordRow
   updateRecord: (_data: RecordRow) => void
   deleteRecord: (_id: RecordRow['id']) => void
+  deleteRecordsForBabyProfile: (_babyProfileId: BabyProfileRow['id']) => void
   getLatestRecords: (_babyProfileId: BabyProfileRow['id']) => RecordRow[]
   getRecordsGroupedByDate: (_: {
     babyProfileId: BabyProfileRow['id']
@@ -17,6 +18,7 @@ type RecordStoreState = {
   }) => Record<string, RecordRow[]>
   getLatestWeight: (_id: BabyProfileRow['id']) => RecordRow | undefined
   getLatestHeight: (_id: BabyProfileRow['id']) => RecordRow | undefined
+  getLatestHeadCircumference: (_id: BabyProfileRow['id']) => RecordRow | undefined
 }
 
 const STORAGE_KEY = 'records-storage'
@@ -43,6 +45,11 @@ export const useRecordStore = create<RecordStoreState>()(
         })),
       deleteRecord: (id) =>
         set((state) => ({ ...state, data: state.data.filter((record) => record.id !== id) })),
+      deleteRecordsForBabyProfile: (babyProfileId) =>
+        set((state) => ({
+          ...state,
+          data: state.data.filter((record) => record.baby_profile_id !== babyProfileId)
+        })),
       getLatestRecords: (babyProfileId) =>
         get()
           .data.filter((record) => record.baby_profile_id === babyProfileId)
@@ -72,6 +79,10 @@ export const useRecordStore = create<RecordStoreState>()(
       getLatestHeight: (babyProfileId) =>
         get().data.find(
           (record) => record.type === 'height' && record.baby_profile_id === babyProfileId
+        ),
+      getLatestHeadCircumference: (babyProfileId) =>
+        get().data.find(
+          (record) => record.type === 'head' && record.baby_profile_id === babyProfileId
         )
     }),
     {

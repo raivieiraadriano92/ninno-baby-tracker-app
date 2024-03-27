@@ -8,6 +8,8 @@ type BabyProfileStoreState = {
   data: BabyProfileRow[]
   selectedBabyProfile: BabyProfileRow | null
   addBabyProfile: (_data: BabyProfileDraft) => BabyProfileRow
+  editBabyProfile: (_data: BabyProfileRow) => BabyProfileRow
+  deleteBabyProfile: (_id: BabyProfileRow['id']) => void
   setSelectedBabyProfile: (_data: BabyProfileRow) => void
 }
 
@@ -29,6 +31,27 @@ export const useBabyProfileStore = create<BabyProfileStoreState>()(
 
         return newBabyProfile
       },
+      editBabyProfile: (data) => {
+        set((state) => ({
+          ...state,
+          selectedBabyProfile:
+            state.selectedBabyProfile?.id === data.id ? data : state.selectedBabyProfile,
+          data: state.data.map((babyProfile) => (babyProfile.id === data.id ? data : babyProfile))
+        }))
+
+        return data
+      },
+      deleteBabyProfile: (id) =>
+        set((state) => {
+          const newData = state.data.filter((babyProfile) => babyProfile.id !== id)
+
+          return {
+            ...state,
+            selectedBabyProfile:
+              state.selectedBabyProfile?.id === id && newData.length ? newData[0] : null,
+            data: newData
+          }
+        }),
       setSelectedBabyProfile: (data) => set((state) => ({ ...state, selectedBabyProfile: data }))
     }),
     {

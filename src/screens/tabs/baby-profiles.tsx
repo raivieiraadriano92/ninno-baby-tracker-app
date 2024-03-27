@@ -31,12 +31,15 @@ export const BabyProfilesScreen: TabScreen<'BabyProfiles'> = ({ navigation }) =>
       ListFooterComponent={<View className="pb-4" />}
       ListHeaderComponent={<View className="pt-4" />}
       renderItem={({ item }) => (
-        <BabyProfileCard
-          className="mx-4"
-          birthday={item.birthday}
-          gender={item.gender}
-          name={item.name}
-        />
+        <TouchableOpacity
+          onPress={() => navigation.navigate('BabyProfileEdition', { babyProfile: item })}>
+          <BabyProfileCard
+            className="mx-4"
+            birthday={item.birthday}
+            gender={item.gender}
+            name={item.name}
+          />
+        </TouchableOpacity>
       )}
       showsVerticalScrollIndicator={false}
     />

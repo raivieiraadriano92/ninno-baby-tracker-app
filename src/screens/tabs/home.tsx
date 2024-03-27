@@ -177,9 +177,9 @@ export const HomeScreen: TabScreen<'Home'> = ({ navigation }) => {
             </View>
             <View className="flex-row space-x-4">
               {[
-                formatAttributes('weight', latestWeight?.attributes),
-                formatBirthday(selectedBabyProfile!.birthday),
-                formatAttributes('height', latestHeight?.attributes)
+                ...(latestWeight ? [formatAttributes('weight', latestWeight.attributes)] : []),
+                ...(selectedBabyProfile ? [formatBirthday(selectedBabyProfile!.birthday)] : []),
+                ...(latestHeight ? [formatAttributes('height', latestHeight.attributes)] : [])
               ].map((item) => (
                 <View className="bg-custom-yellow1 px-4 py-0.5 rounded-full" key={item}>
                   <Text medium>{item}</Text>
