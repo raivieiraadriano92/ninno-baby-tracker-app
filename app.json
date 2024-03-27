@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "ninno-baby-tracker-app",
+    "name": "Ninno",
     "slug": "ninno-baby-tracker-app",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -13,7 +13,11 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "app.ninno",
+      "config": {
+        "usesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -27,6 +31,11 @@
     "experiments": {
       "tsconfigPaths": true
     },
-    "plugins": ["expo-secure-store"]
+    "plugins": ["expo-secure-store"],
+    "extra": {
+      "eas": {
+        "projectId": "1aa0a0c8-48d3-4f27-af8d-4f38a3306f98"
+      }
+    }
   }
 }
