@@ -1,7 +1,10 @@
 import { differenceInHours, differenceInMinutes, format } from 'date-fns'
 import colors from 'src/theme/colors'
 
+import { capitalizeFirstLetter } from './general'
+
 import type {
+  DiaperAttrData,
   FeedingAttrData,
   MeasureData,
   RecordRow,
@@ -72,6 +75,16 @@ export const formatAttributes = (
     }
 
     return str
+  } else if (group?.[0] === 'diaper') {
+    const attr = attributes as DiaperAttrData
+
+    let str = capitalizeFirstLetter(attr.consistency)
+
+    if (attr.skinRash != 'none') {
+      str += `, ${capitalizeFirstLetter(attr.skinRash)}`
+    }
+
+    return str
   }
 
   return '-'
@@ -121,7 +134,7 @@ export const getRecordTypeInfo = (type: RecordType) => {
 
     case 'diaper':
       return {
-        attributes: {},
+        attributes: DEFAULT_DIAPER_ATTRIBUTES,
         color: colors.custom.green4,
         icon: require('assets/icon-diaper.png'),
         title: 'Diaper'
@@ -224,18 +237,30 @@ export const DEFAULT_WEIGHT: MeasureData = {
   value: 3.5
 }
 
+const now = new Date()
+
+const nowDate = format(now, 'yyyy-MM-dd')
+
+const nowTime = format(now, 'HH:mm:ss')
+
 export const DEFAULT_SLEEP_ATTRIBUTES = {
-  endDate: format(new Date(), 'yyyy-MM-dd'),
-  endTime: format(new Date(), 'HH:mm')
+  endDate: nowDate,
+  endTime: nowTime
 }
 
 export const DEFAULT_FEEDING_BREAST_ATTRIBUTES = {
-  endDate: format(new Date(), 'yyyy-MM-dd'),
-  endTime: format(new Date(), 'HH:mm')
+  endDate: nowDate,
+  endTime: nowTime
 }
 
 export const DEFAULT_FEEDING_ATTRIBUTES = {
   amount: { unit: 'ml', value: 130 },
-  endDate: format(new Date(), 'yyyy-MM-dd'),
-  endTime: format(new Date(), 'HH:mm')
+  endDate: nowDate,
+  endTime: nowTime
+}
+
+export const DEFAULT_DIAPER_ATTRIBUTES = {
+  color: '',
+  consistency: 'soft',
+  skinRash: 'none'
 }

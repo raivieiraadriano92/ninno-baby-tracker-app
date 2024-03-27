@@ -40,6 +40,10 @@ export const useRecordStore = create<RecordStoreState>()(
       getLatestRecords: (babyProfileId) =>
         get()
           .data.filter((record) => record.baby_profile_id === babyProfileId)
+          .sort(
+            (a, b) =>
+              new Date(`${b.date}T${b.time}`).getTime() - new Date(`${a.date}T${a.time}`).getTime()
+          )
           .slice(-15),
       getRecordsGroupedByDate: (babyProfileId) =>
         get()

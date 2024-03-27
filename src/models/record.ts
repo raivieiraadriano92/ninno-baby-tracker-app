@@ -14,12 +14,18 @@ export type MeasureData = {
 }
 
 export type SleepAttrData = {
-  endDate: number
+  endDate: string
   endTime: string
 }
 
 export type FeedingAttrData = {
   amount?: MeasureData
-  endDate: number
+  endDate: string
   endTime: string
+}
+
+export type DiaperAttrData = {
+  color: string
+  consistency: 'loose' | 'soft' | 'hard'
+  skinRash: 'none' | 'mild' | 'severe'
 }

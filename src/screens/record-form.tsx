@@ -16,6 +16,7 @@ import {
 } from 'src/components'
 import { useRecordStore } from 'src/store/record-store'
 import colors from 'src/theme/colors'
+import { capitalizeFirstLetter } from 'src/utils/general'
 import { getGroupByType, getRecordTypeInfo } from 'src/utils/records'
 import defaultColors from 'tailwindcss/colors'
 
@@ -24,7 +25,13 @@ import type {
   DeleteRecordBottomSheetElement,
   MeasuresPickerBottomSheetElement
 } from 'src/components'
-import type { FeedingAttrData, MeasureData, RecordDraft, SleepAttrData } from 'src/models/record'
+import type {
+  DiaperAttrData,
+  FeedingAttrData,
+  MeasureData,
+  RecordDraft,
+  SleepAttrData
+} from 'src/models/record'
 import type { RootStackScreen } from 'src/navigation/types'
 
 type FormItemProps = PropsWithChildren<
@@ -34,6 +41,7 @@ type FormItemProps = PropsWithChildren<
 >
 
 type FormItemPillProps = TouchableOpacityProps & {
+  textClassName?: string
   title?: string
 }
 
@@ -57,12 +65,17 @@ const FormItemPill: FunctionComponent<FormItemPillProps> = ({
   children,
   className,
   title,
+  textClassName,
   ...props
 }) => (
   <TouchableOpacity
     className={`bg-white h-10 justify-center px-4 rounded-lg ${className}`}
     {...props}>
-    {!!title && <Text bold>{title}</Text>}
+    {!!title && (
+      <Text bold className={textClassName}>
+        {title}
+      </Text>
+    )}
     {children}
   </TouchableOpacity>
 )
@@ -79,40 +92,6 @@ const FormItemTextInput: FunctionComponent<FormItemTextInputProps> = ({
     {...props}
   />
 )
-
-{
-  /* <View>
-    <FormItem label="Amount, ml">
-        <FormItemPill onPress={() => {}} title="130ml" />
-    </FormItem>
-    <FormItem label="Start">
-        <View className="flex-row space-x-2">
-        <FormItemPill onPress={showDatePicker} title="Today" />
-        <FormItemPill onPress={() => {}} title="10:20" />
-        </View>
-    </FormItem>
-    <FormItem label="Finish">
-        <View className="flex-row space-x-2">
-        <FormItemPill onPress={showDatePicker} title="Today" />
-        <FormItemPill onPress={() => {}} title="10:20" />
-        </View>
-    </FormItem>
-    <FormItem label="Duration">
-        <FormItemPill onPress={() => {}} title="20 min" />
-    </FormItem>
-    <FormItem className="flex-col items-start" label="Notes">
-        <FormItemPill className="h-24 justify-start mt-4 p-4 w-full" onPress={() => {}}>
-        <TextInput
-            className="text-base"
-            multiline
-            placeholder="Add a note"
-            placeholderTextColor={colors.custom.iconOff}
-            style={{ fontFamily: 'Nunito_700Bold' }}
-        />
-        </FormItemPill>
-    </FormItem>
-    </View> */
-}
 
 const GrowthForm: FunctionComponent<FormGroupsProps> = ({
   recordDraft,
@@ -492,6 +471,138 @@ const FeedingForm: FunctionComponent<FormGroupsProps> = ({
   )
 }
 
+const DiaperForm: FunctionComponent<FormGroupsProps> = ({
+  recordDraft,
+  setRecordDraft,
+  ...props
+}) => {
+  const attributes = recordDraft.attributes as DiaperAttrData
+
+  const [isDatePickerVisible, setIsDatePickerVisible] = useState(false)
+
+  const [isTimePickerVisible, setIsTimePickerVisible] = useState(false)
+
+  const [startDate, setStartDate] = useState(new Date(`${recordDraft.date}T${recordDraft.time}`))
+
+  const showDatePicker = () => {
+    setIsDatePickerVisible(true)
+  }
+
+  const hideDatePicker = () => {
+    setIsDatePickerVisible(false)
+  }
+
+  const showTimePicker = () => {
+    setIsTimePickerVisible(true)
+  }
+
+  const hideTimePicker = () => {
+    setIsTimePickerVisible(false)
+  }
+
+  const onConfirmDateTimePicker = (date: Date) => {
+    setStartDate(date)
+
+    setRecordDraft((prev) => ({
+      ...prev,
+      date: format(date, 'yyyy-MM-dd'),
+      time: format(date, 'HH:mm:ss')
+    }))
+
+    hideDatePicker()
+
+    hideTimePicker()
+  }
+
+  const timeoutRef = useRef<NodeJS.Timeout>()
+
+  const handleChangeNotes = (notes: string) => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current)
+    }
+
+    timeoutRef.current = setTimeout(() => {
+      setRecordDraft((prev) => ({ ...prev, notes }))
+    }, 500)
+  }
+
+  return (
+    <View {...props}>
+      <FormItem label="Consistency">
+        <View className="flex-row space-x-2">
+          {['loose', 'soft', 'hard'].map((value) => (
+            <FormItemPill
+              className={attributes.consistency === value ? 'bg-custom-primary' : ''}
+              key={value}
+              onPress={() =>
+                setRecordDraft((prev) => ({
+                  ...prev,
+                  attributes: {
+                    ...(prev.attributes as DiaperAttrData),
+                    consistency: value
+                  }
+                }))
+              }
+              textClassName={attributes.consistency === value ? 'text-white' : ''}
+              title={capitalizeFirstLetter(value)}
+            />
+          ))}
+        </View>
+      </FormItem>
+      <FormItem label="Skin rash">
+        <View className="flex-row space-x-2">
+          {['none', 'mild', 'severe '].map((value) => (
+            <FormItemPill
+              className={attributes.skinRash === value ? 'bg-custom-primary' : ''}
+              key={value}
+              onPress={() =>
+                setRecordDraft((prev) => ({
+                  ...prev,
+                  attributes: {
+                    ...(prev.attributes as DiaperAttrData),
+                    skinRash: value
+                  }
+                }))
+              }
+              textClassName={attributes.skinRash === value ? 'text-white' : ''}
+              title={capitalizeFirstLetter(value)}
+            />
+          ))}
+        </View>
+      </FormItem>
+      <FormItem label="Date">
+        <View className="flex-row space-x-2">
+          <FormItemPill onPress={showDatePicker} title={format(startDate, 'MMM d, yyyy')} />
+          <FormItemPill onPress={showTimePicker} title={format(startDate, 'HH:mm')} />
+        </View>
+      </FormItem>
+      <FormItem className="flex-col items-start" label="Notes">
+        <FormItemTextInput
+          className="h-24 mt-4"
+          multiline
+          onChangeText={handleChangeNotes}
+          placeholder="Add a note"
+          defaultValue={recordDraft.notes ?? ''}
+        />
+      </FormItem>
+      <DateTimePickerModal
+        date={startDate}
+        isVisible={isDatePickerVisible}
+        mode="date"
+        onConfirm={onConfirmDateTimePicker}
+        onCancel={hideDatePicker}
+      />
+      <DateTimePickerModal
+        date={startDate}
+        isVisible={isTimePickerVisible}
+        mode="time"
+        onConfirm={onConfirmDateTimePicker}
+        onCancel={hideTimePicker}
+      />
+    </View>
+  )
+}
+
 export const RecordFormScreen: RootStackScreen<'RecordForm'> = ({
   navigation,
   route: {
@@ -551,6 +662,9 @@ export const RecordFormScreen: RootStackScreen<'RecordForm'> = ({
 
       case 'feeding':
         return <FeedingForm recordDraft={recordDraft} setRecordDraft={setRecordDraft} />
+
+      case 'diaper':
+        return <DiaperForm recordDraft={recordDraft} setRecordDraft={setRecordDraft} />
     }
   }
 
