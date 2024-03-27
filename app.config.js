@@ -39,7 +39,7 @@ export default {
         foregroundImage: './assets/adaptive-icon.png',
         backgroundColor: '#B5E1FF'
       },
-      package: bundleID
+      package: bundleIdentifier
     },
     web: {
       favicon: './assets/favicon.png'
