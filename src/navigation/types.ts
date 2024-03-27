@@ -10,7 +10,6 @@ export type RootStackParamList = {
   BabyProfileCreation: undefined
   BabyProfileEdition: { babyProfile: BabyProfileRow }
   RecordForm: { record?: RecordRow; type: RecordType; babyProfileId: number }
-  Records: undefined
   Tabs: undefined | NavigatorScreenParams<TabParamList>
   Welcome: undefined
 }
@@ -27,6 +26,7 @@ export type RootStackScreen<RouteName extends keyof RootStackParamList> = Functi
 export type TabParamList = {
   BabyProfiles: undefined
   Home: undefined
+  Records: undefined
   Settings: undefined
 }
 

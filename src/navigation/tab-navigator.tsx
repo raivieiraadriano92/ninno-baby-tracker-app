@@ -3,7 +3,7 @@ import type { FunctionComponent } from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import Svg, { G, Path, Defs, ClipPath, Rect } from 'react-native-svg'
 import { FirstBabyProfile, PageLoader } from 'src/components'
-import { BabyProfilesScreen, HomeScreen, SettingsScreen } from 'src/screens'
+import { BabyProfilesScreen, HomeScreen, RecordsScreen } from 'src/screens'
 import { useBabyProfileStore } from 'src/store/baby-profile-store'
 import colors from 'src/theme/colors'
 
@@ -103,67 +103,18 @@ const BabyIcon: FunctionComponent<TabBatIconProps> = ({ color, size }) => (
   </Svg>
 )
 
-const SettingsIcon: FunctionComponent<TabBatIconProps> = ({ color, size }) => (
+const RecordsIcon: FunctionComponent<TabBatIconProps> = ({ color, size }) => (
   <Svg viewBox="0 0 34 34" height={size} width={size} fill="none">
-    <G clipPath="url(#clip0_16_2333)">
+    <G clipPath="url(#clip0_2652_2877)">
       <Path
-        d="M17 8.50001C17 9.25145 17.2985 9.97212 17.8299 10.5035C18.3612 11.0348 19.0819 11.3333 19.8333 11.3333C20.5848 11.3333 21.3054 11.0348 21.8368 10.5035C22.3682 9.97212 22.6667 9.25145 22.6667 8.50001C22.6667 7.74856 22.3682 7.02789 21.8368 6.49654C21.3054 5.96518 20.5848 5.66667 19.8333 5.66667C19.0819 5.66667 18.3612 5.96518 17.8299 6.49654C17.2985 7.02789 17 7.74856 17 8.50001Z"
+        d="M23.333 4.25V9.91667M11.9997 4.25V9.91667M6.33301 15.5833H28.9997M14.8401 19.8333H14.8543M20.5068 19.8333H20.5209M6.33301 9.91667C6.33301 9.16522 6.63152 8.44455 7.16287 7.9132C7.69422 7.38184 8.41489 7.08333 9.16634 7.08333H26.1663C26.9178 7.08333 27.6385 7.38184 28.1698 7.9132C28.7012 8.44455 28.9997 9.16522 28.9997 9.91667V26.9167C28.9997 27.6681 28.7012 28.3888 28.1698 28.9201C27.6385 29.4515 26.9178 29.75 26.1663 29.75H9.16634C8.41489 29.75 7.69422 29.4515 7.16287 28.9201C6.63152 28.3888 6.33301 27.6681 6.33301 26.9167V9.91667Z"
         stroke={color}
         strokeWidth={2}
         strokeLinecap="round"
         strokeLinejoin="round"
       />
       <Path
-        d="M5.66669 8.5H17"
-        stroke={color}
-        strokeWidth={2}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <Path
-        d="M22.6667 8.5H28.3334"
-        stroke={color}
-        strokeWidth={2}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <Path
-        d="M8.5 17C8.5 17.7515 8.79851 18.4721 9.32986 19.0035C9.86122 19.5348 10.5819 19.8333 11.3333 19.8333C12.0848 19.8333 12.8054 19.5348 13.3368 19.0035C13.8682 18.4721 14.1667 17.7515 14.1667 17C14.1667 16.2486 13.8682 15.5279 13.3368 14.9965C12.8054 14.4652 12.0848 14.1667 11.3333 14.1667C10.5819 14.1667 9.86122 14.4652 9.32986 14.9965C8.79851 15.5279 8.5 16.2486 8.5 17Z"
-        stroke={color}
-        strokeWidth={2}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <Path
-        d="M5.66669 17H8.50002"
-        stroke={color}
-        strokeWidth={2}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <Path
-        d="M14.1667 17H28.3334"
-        stroke={color}
-        strokeWidth={2}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <Path
-        d="M21.25 25.5C21.25 26.2515 21.5485 26.9721 22.0799 27.5035C22.6112 28.0348 23.3319 28.3333 24.0833 28.3333C24.8348 28.3333 25.5554 28.0348 26.0868 27.5035C26.6182 26.9721 26.9167 26.2515 26.9167 25.5C26.9167 24.7486 26.6182 24.0279 26.0868 23.4965C25.5554 22.9652 24.8348 22.6667 24.0833 22.6667C23.3319 22.6667 22.6112 22.9652 22.0799 23.4965C21.5485 24.0279 21.25 24.7486 21.25 25.5Z"
-        stroke={color}
-        strokeWidth={2}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <Path
-        d="M5.66669 25.5H21.25"
-        stroke={color}
-        strokeWidth={2}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <Path
-        d="M26.9166 25.5H28.3333"
+        d="M14.8403 24.0835C15.6717 24.6624 16.6605 24.9728 17.6737 24.9728C18.6868 24.9728 19.6756 24.6624 20.507 24.0835"
         stroke={color}
         strokeWidth={2}
         strokeLinecap="round"
@@ -171,12 +122,87 @@ const SettingsIcon: FunctionComponent<TabBatIconProps> = ({ color, size }) => (
       />
     </G>
     <Defs>
-      <ClipPath id="clip0_16_2333">
-        <Rect width={34} height={34} fill="white" />
+      <ClipPath id="clip0_2652_2877">
+        <Rect width={34} height={34} fill="white" transform="translate(0.666504)" />
       </ClipPath>
     </Defs>
   </Svg>
 )
+
+// const SettingsIcon: FunctionComponent<TabBatIconProps> = ({ color, size }) => (
+//   <Svg viewBox="0 0 34 34" height={size} width={size} fill="none">
+//     <G clipPath="url(#clip0_16_2333)">
+//       <Path
+//         d="M17 8.50001C17 9.25145 17.2985 9.97212 17.8299 10.5035C18.3612 11.0348 19.0819 11.3333 19.8333 11.3333C20.5848 11.3333 21.3054 11.0348 21.8368 10.5035C22.3682 9.97212 22.6667 9.25145 22.6667 8.50001C22.6667 7.74856 22.3682 7.02789 21.8368 6.49654C21.3054 5.96518 20.5848 5.66667 19.8333 5.66667C19.0819 5.66667 18.3612 5.96518 17.8299 6.49654C17.2985 7.02789 17 7.74856 17 8.50001Z"
+//         stroke={color}
+//         strokeWidth={2}
+//         strokeLinecap="round"
+//         strokeLinejoin="round"
+//       />
+//       <Path
+//         d="M5.66669 8.5H17"
+//         stroke={color}
+//         strokeWidth={2}
+//         strokeLinecap="round"
+//         strokeLinejoin="round"
+//       />
+//       <Path
+//         d="M22.6667 8.5H28.3334"
+//         stroke={color}
+//         strokeWidth={2}
+//         strokeLinecap="round"
+//         strokeLinejoin="round"
+//       />
+//       <Path
+//         d="M8.5 17C8.5 17.7515 8.79851 18.4721 9.32986 19.0035C9.86122 19.5348 10.5819 19.8333 11.3333 19.8333C12.0848 19.8333 12.8054 19.5348 13.3368 19.0035C13.8682 18.4721 14.1667 17.7515 14.1667 17C14.1667 16.2486 13.8682 15.5279 13.3368 14.9965C12.8054 14.4652 12.0848 14.1667 11.3333 14.1667C10.5819 14.1667 9.86122 14.4652 9.32986 14.9965C8.79851 15.5279 8.5 16.2486 8.5 17Z"
+//         stroke={color}
+//         strokeWidth={2}
+//         strokeLinecap="round"
+//         strokeLinejoin="round"
+//       />
+//       <Path
+//         d="M5.66669 17H8.50002"
+//         stroke={color}
+//         strokeWidth={2}
+//         strokeLinecap="round"
+//         strokeLinejoin="round"
+//       />
+//       <Path
+//         d="M14.1667 17H28.3334"
+//         stroke={color}
+//         strokeWidth={2}
+//         strokeLinecap="round"
+//         strokeLinejoin="round"
+//       />
+//       <Path
+//         d="M21.25 25.5C21.25 26.2515 21.5485 26.9721 22.0799 27.5035C22.6112 28.0348 23.3319 28.3333 24.0833 28.3333C24.8348 28.3333 25.5554 28.0348 26.0868 27.5035C26.6182 26.9721 26.9167 26.2515 26.9167 25.5C26.9167 24.7486 26.6182 24.0279 26.0868 23.4965C25.5554 22.9652 24.8348 22.6667 24.0833 22.6667C23.3319 22.6667 22.6112 22.9652 22.0799 23.4965C21.5485 24.0279 21.25 24.7486 21.25 25.5Z"
+//         stroke={color}
+//         strokeWidth={2}
+//         strokeLinecap="round"
+//         strokeLinejoin="round"
+//       />
+//       <Path
+//         d="M5.66669 25.5H21.25"
+//         stroke={color}
+//         strokeWidth={2}
+//         strokeLinecap="round"
+//         strokeLinejoin="round"
+//       />
+//       <Path
+//         d="M26.9166 25.5H28.3333"
+//         stroke={color}
+//         strokeWidth={2}
+//         strokeLinecap="round"
+//         strokeLinejoin="round"
+//       />
+//     </G>
+//     <Defs>
+//       <ClipPath id="clip0_16_2333">
+//         <Rect width={34} height={34} fill="white" />
+//       </ClipPath>
+//     </Defs>
+//   </Svg>
+// )
 
 export const TabNavigator: RootStackScreen<'Tabs'> = ({ navigation }) => {
   const hasBabyProfile = useBabyProfileStore((state) => state.data.length > 0)
@@ -208,6 +234,15 @@ export const TabNavigator: RootStackScreen<'Tabs'> = ({ navigation }) => {
         }}
       />
       <BottomTab.Screen
+        component={RecordsScreen}
+        name="Records"
+        options={{
+          headerTitle: 'Records',
+          tabBarShowLabel: false,
+          tabBarIcon: ({ color, size }) => <RecordsIcon size={size} color={color} />
+        }}
+      />
+      <BottomTab.Screen
         component={BabyProfilesScreen}
         name="BabyProfiles"
         options={{
@@ -216,14 +251,14 @@ export const TabNavigator: RootStackScreen<'Tabs'> = ({ navigation }) => {
           tabBarIcon: ({ color, size }) => <BabyIcon size={size} color={color} />
         }}
       />
-      <BottomTab.Screen
+      {/* <BottomTab.Screen
         component={SettingsScreen}
         name="Settings"
         options={{
           tabBarShowLabel: false,
           tabBarIcon: ({ color, size }) => <SettingsIcon size={size} color={color} />
         }}
-      />
+      /> */}
     </BottomTab.Navigator>
   )
 }

@@ -11,7 +11,7 @@ import colors from 'src/theme/colors'
 
 import type { RecordFiltersBottomSheetElement } from 'src/components'
 import type { RecordType } from 'src/models/record'
-import type { RootStackScreen } from 'src/navigation/types'
+import type { TabScreen } from 'src/navigation/types'
 
 const formatDateTitle = (date: string) => {
   const dateObj = new Date(`${date}T00:00:00`)
@@ -25,7 +25,7 @@ const formatDateTitle = (date: string) => {
   return format(dateObj, 'dd MMMM yyyy')
 }
 
-export const RecordsScreen: RootStackScreen<'Records'> = ({ navigation }) => {
+export const RecordsScreen: TabScreen<'Records'> = ({ navigation }) => {
   const selectedBabyProfile = useBabyProfileStore((state) => state.selectedBabyProfile)
 
   const bottomSheetRecordFiltersRef = useRef<RecordFiltersBottomSheetElement>(null)
@@ -49,17 +49,21 @@ export const RecordsScreen: RootStackScreen<'Records'> = ({ navigation }) => {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <TouchableOpacity onPress={() => bottomSheetRecordFiltersRef.current?.expand()}>
+        <TouchableOpacity
+          className="mr-4"
+          onPress={() => bottomSheetRecordFiltersRef.current?.expand()}>
           <Feather name="filter" size={24} color={colors.custom.primary} />
-          {/* <View className="absolute bg-custom-primary h-4 items-center justify-center -right-1 rounded-full -top-1 w-4">
-            <Text className="text-white text-xs" semibold>
-              1
-            </Text>
-          </View> */}
+          {!!recordTypesFilter.length && (
+            <View className="absolute bg-custom-primary h-4 items-center justify-center -right-1 rounded-full -top-1 w-4">
+              <Text className="text-white text-xs" semibold>
+                {recordTypesFilter.length}
+              </Text>
+            </View>
+          )}
         </TouchableOpacity>
       )
     })
-  }, [navigation])
+  }, [navigation, recordTypesFilter.length])
 
   return (
     <>

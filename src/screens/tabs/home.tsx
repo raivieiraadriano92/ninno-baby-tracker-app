@@ -10,7 +10,6 @@ import Animated, {
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import {
   BabyProfilePickerBottomSheet,
-  Button,
   RecordCard,
   RecordIcon,
   RecordTypePickerBottomSheet,
@@ -120,15 +119,15 @@ export const HomeScreen: TabScreen<'Home'> = ({ navigation }) => {
             </View>
           </ScrollView>
           <View className="pt-6 px-4 space-y-3">
-            <View className="flex-row justify-between">
+            <View>
               <Text bold className="text-center">
                 Latest records
               </Text>
-              <Button
+              {/* <Button
                 onPress={() => navigation.navigate('Records')}
                 title="See all"
                 variant="link"
-              />
+              /> */}
             </View>
             {records.map((record) => (
               <TouchableOpacity
