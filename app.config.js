@@ -28,7 +28,7 @@ export default {
     },
     assetBundlePatterns: ['**/*'],
     ios: {
-      supportsTablet: true,
+      supportsTablet: false,
       bundleIdentifier,
       config: {
         usesNonExemptEncryption: false
