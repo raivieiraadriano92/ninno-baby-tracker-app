@@ -10,7 +10,8 @@
     "lint": "npm-run-all test-types prettier-check lint-eslint",
     "test-types": "tsc",
     "prettier-check": "prettier --check .",
-    "lint-eslint": "eslint . --ext js,jsx,ts,tsx --max-warnings=0 --config .eslintrc.js"
+    "lint-eslint": "eslint . --ext js,jsx,ts,tsx --max-warnings=0 --config .eslintrc.js",
+    "build": "APP_VARIANT=production eas build --auto-submit"
   },
   "dependencies": {
     "@expo-google-fonts/nunito": "^0.2.3",

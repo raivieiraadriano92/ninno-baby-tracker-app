@@ -13,4 +13,8 @@
 
   - use the height record type
 
-- enable edit profiles
+- set up github actions to build and submit the app always a merge is made to `main`
+
+  - set up "APP_VARIANT": "production"
+
+[DONE] - enable edit profiles
