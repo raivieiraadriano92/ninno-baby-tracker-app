@@ -8,6 +8,10 @@ export type { BabyProfilePickerBottomSheetElement } from './baby-profile-picker-
 
 export { BaseCard } from './base-card'
 
+export { HappyBirthdayModal } from './happy-birthday-modal'
+
+export type { HappyBirthdayModalElement } from './happy-birthday-modal'
+
 export { Button } from './button'
 
 export { DeleteBabyProfileBottomSheet } from './delete-baby-profile-bottom-sheet'
