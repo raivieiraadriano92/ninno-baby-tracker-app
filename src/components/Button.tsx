@@ -12,9 +12,25 @@ import colors from "tailwindcss/colors";
 
 import { Text } from "./Text";
 
-type ButtonProps = PressableProps & { title: string };
+type ButtonProps = PressableProps & {
+  title: string;
+  variant?: ButtonVariant;
+};
+
+type ButtonVariant = "link" | "solid";
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
+
+const variants: Record<ButtonVariant, { container: string; text: string }> = {
+  link: {
+    container: "",
+    text: "text-black"
+  },
+  solid: {
+    container: "h-16 ",
+    text: "text-white"
+  }
+};
 
 export const Button: FunctionComponent<ButtonProps> = ({
   className,
@@ -22,16 +38,20 @@ export const Button: FunctionComponent<ButtonProps> = ({
   onPressOut,
   style,
   title,
+  variant = "solid",
   ...props
 }) => {
   const progress = useSharedValue(0);
 
   const animatedStyle = useAnimatedStyle(() => ({
-    backgroundColor: interpolateColor(
-      progress.value,
-      [0, 1],
-      [colors.black, colors.neutral[800]]
-    ),
+    backgroundColor:
+      variant === "link"
+        ? "transparent"
+        : interpolateColor(
+            progress.value,
+            [0, 1],
+            [colors.black, colors.neutral[800]]
+          ),
     transform: [{ scale: interpolate(progress.value, [0, 1], [1, 0.98]) }]
   }));
 
@@ -49,13 +69,13 @@ export const Button: FunctionComponent<ButtonProps> = ({
 
   return (
     <AnimatedPressable
-      className={`bg-black h-16 items-center justify-center rounded-2xl ${className}`}
+      className={`bg-black items-center justify-center rounded-2xl ${variants[variant].container} ${className}`}
       onPressIn={handleOnPressIn}
       onPressOut={handleOnPressOut}
       style={[animatedStyle, style]}
       {...props}
     >
-      <Text className="font-bold text-white">{title}</Text>
+      <Text className={`font-bold ${variants[variant].text}`}>{title}</Text>
     </AnimatedPressable>
   );
 };

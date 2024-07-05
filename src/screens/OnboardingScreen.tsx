@@ -7,7 +7,9 @@ import { Button } from "src/components/Button";
 import { Text } from "src/components/Text";
 import { RootStackScreen } from "src/navigation/types";
 
-export const OnboardingScreen: RootStackScreen<"Onboarding"> = () => (
+export const OnboardingScreen: RootStackScreen<"Onboarding"> = ({
+  navigation
+}) => (
   <SafeAreaView className="flex-1 p-6">
     <View className="flex-1 justify-center space-y-4">
       <LottieView
@@ -28,6 +30,9 @@ export const OnboardingScreen: RootStackScreen<"Onboarding"> = () => (
         on top of your baby's growth journey effortlessly.
       </Text>
     </View>
-    <Button title="Let's get started" />
+    <Button
+      onPress={() => navigation.navigate("Upgrade")}
+      title="Let's get started"
+    />
   </SafeAreaView>
 );
