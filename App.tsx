@@ -1,13 +1,7 @@
 import { FunctionComponent } from "react";
 
-import { StatusBar } from "expo-status-bar";
-import { Text, View } from "react-native";
+import { RootNavigator } from "src/navigation/RootNavigator";
 
-const App: FunctionComponent = () => (
-  <View className="bg-white flex-1 items-center justify-center">
-    <Text>Open up App.tsx to start working on your app!</Text>
-    <StatusBar style="auto" />
-  </View>
-);
+const App: FunctionComponent = () => <RootNavigator />;
 
 export default App;
