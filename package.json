@@ -10,6 +10,7 @@
     "lint": "tsc && eslint ."
   },
   "dependencies": {
+    "@expo/vector-icons": "^14.0.2",
     "@react-navigation/native": "^6.1.17",
     "@react-navigation/native-stack": "^6.10.0",
     "expo": "~51.0.18",

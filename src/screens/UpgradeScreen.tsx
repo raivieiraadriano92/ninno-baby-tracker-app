@@ -1,5 +1,6 @@
 import { FunctionComponent, useEffect, useState } from "react";
 
+import Ionicons from "@expo/vector-icons/Ionicons";
 import LottieView from "lottie-react-native";
 import { Dimensions, Pressable, View, ViewProps } from "react-native";
 import Animated, {
@@ -91,10 +92,24 @@ export const UpgradeScreen: RootStackScreen<"Upgrade"> = ({ navigation }) => {
           />
         </View>
         <View className="bg-neutral-100 p-4 rounded-2xl space-y-2">
-          <Text className="font-medium">- Ad free experience</Text>
-          <Text className="font-medium">
-            - Your data secured saved in the cloud
-          </Text>
+          <View className="flex-row items-center space-x-2">
+            <Ionicons
+              name="checkmark-circle-sharp"
+              size={24}
+              color={colors.green[500]}
+            />
+            <Text className="font-medium">Ad free experience</Text>
+          </View>
+          <View className="flex-row items-center space-x-2">
+            <Ionicons
+              name="checkmark-circle-sharp"
+              size={24}
+              color={colors.green[500]}
+            />
+            <Text className="font-medium">
+              Your data secured saved in the cloud
+            </Text>
+          </View>
         </View>
         <View className="flex-row space-x-4">
           <Pressable onPress={() => setSelectedPlan("yearly")}>
