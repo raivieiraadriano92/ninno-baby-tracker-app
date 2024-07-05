@@ -17,6 +17,7 @@ import PremiumGold from "assets/lottiefiles/premium-gold.json";
 import { Button } from "src/components/Button";
 import { Text } from "src/components/Text";
 import { RootStackScreen } from "src/navigation/types";
+import { useSessionStore } from "src/store/sessionStore";
 
 type PlanCardProps = ViewProps & {
   discount?: string;
@@ -77,6 +78,29 @@ export const UpgradeScreen: RootStackScreen<"Upgrade"> = ({ navigation }) => {
     "yearly"
   );
 
+  const { setIsFirstAccess, setIsPremium } = useSessionStore(
+    ({ setIsFirstAccess, setIsPremium }) => ({
+      setIsFirstAccess,
+      setIsPremium
+    })
+  );
+
+  const handleUpgradeToPremium = () => {
+    setIsFirstAccess(false);
+
+    setIsPremium(true);
+
+    navigation.reset({ index: 0, routes: [{ name: "Home" }] });
+  };
+
+  const handleMaybeLater = () => {
+    setIsFirstAccess(false);
+
+    setIsPremium(false);
+
+    navigation.reset({ index: 0, routes: [{ name: "Home" }] });
+  };
+
   return (
     <SafeAreaView className="flex-1 p-6" edges={["bottom"]}>
       <View className="flex-1 space-y-4">
@@ -127,24 +151,11 @@ export const UpgradeScreen: RootStackScreen<"Upgrade"> = ({ navigation }) => {
               title="Pay Monthly"
             />
           </Pressable>
-          {/* <View
-          className="border-2 border-neutral-200 items-center py-6 rounded-2xl space-y-2"
-          style={{ width: CARD_WIDTH }}
-        >
-          <Text className="text-sm">Pay Monthly</Text>
-          <Text className="font-bold text-4xl">$1.99</Text>
-        </View> */}
         </View>
       </View>
       <View className="space-y-4">
-        <Button title="Upgrade now" />
-        <Button
-          onPress={() =>
-            navigation.reset({ index: 0, routes: [{ name: "Home" }] })
-          }
-          title="Maybe later"
-          variant="link"
-        />
+        <Button onPress={handleUpgradeToPremium} title="Upgrade now" />
+        <Button onPress={handleMaybeLater} title="Maybe later" variant="link" />
       </View>
     </SafeAreaView>
   );
