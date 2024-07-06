@@ -72,7 +72,7 @@ const PlanCard: FunctionComponent<PlanCardProps> = ({
   );
 };
 
-export const UpgradeScreen: RootStackScreen<"Upgrade"> = ({}) => {
+export const UpgradeScreen: RootStackScreen<"Upgrade"> = ({ navigation }) => {
   const [selectedPlan, setSelectedPlan] = useState<"monthly" | "yearly">(
     "yearly"
   );
@@ -80,7 +80,12 @@ export const UpgradeScreen: RootStackScreen<"Upgrade"> = ({}) => {
   return (
     <SafeAreaView className="flex-1 p-6" edges={["bottom"]}>
       <View className="flex-1 space-y-4">
-        <Text className="font-bold text-xl">Get Premium Access</Text>
+        <View className="flex-row justify-between">
+          <Text className="font-bold text-xl">Get Premium Access</Text>
+          <Pressable onPress={navigation.goBack}>
+            <Ionicons name="close" size={24} color={colors.black} />
+          </Pressable>
+        </View>
         <View className="items-center">
           <LottieView
             autoPlay
@@ -131,7 +136,11 @@ export const UpgradeScreen: RootStackScreen<"Upgrade"> = ({}) => {
       </View>
       <View className="space-y-4">
         <Button title="Upgrade now" />
-        <Button title="Maybe later" variant="link" />
+        <Button
+          onPress={navigation.goBack}
+          title="Maybe later"
+          variant="link"
+        />
       </View>
     </SafeAreaView>
   );

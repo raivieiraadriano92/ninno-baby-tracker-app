@@ -6,10 +6,11 @@ import colors from "tailwindcss/colors";
 
 import { Button } from "src/components/Button";
 import { Text } from "src/components/Text";
+import { UpgradeButton } from "src/components/UpgradeButton";
 import { RootStackScreen } from "src/navigation/types";
 import { supabase } from "src/services/supabase";
 
-export const HomeScreen: RootStackScreen<"Home"> = () => (
+export const HomeScreen: RootStackScreen<"Home"> = ({ navigation }) => (
   <>
     <SafeAreaView
       className="bg-sky-200 flex-row items-center justify-between rounded-b-2xl p-6"
@@ -28,7 +29,9 @@ export const HomeScreen: RootStackScreen<"Home"> = () => (
       </View>
       <Ionicons name="menu" size={24} color={colors.black} />
     </SafeAreaView>
-    <View className="flex-1 justify-center p-6">
+    <View className="flex-1 p-6">
+      <UpgradeButton onPress={() => navigation.navigate("Upgrade")} />
+      <View className="flex-1" />
       <Button onPress={() => supabase.auth.signOut()} title="Logout" />
     </View>
   </>
