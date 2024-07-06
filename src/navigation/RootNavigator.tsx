@@ -1,7 +1,14 @@
-import { type FunctionComponent } from "react";
+import {
+  useCallback,
+  useEffect,
+  useState,
+  type FunctionComponent
+} from "react";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { Session } from "@supabase/supabase-js";
+import * as SplashScreen from "expo-splash-screen";
 import colors from "tailwindcss/colors";
 
 import type { RootStackParamList } from "./types";
@@ -9,42 +16,84 @@ import type { RootStackParamList } from "./types";
 import { HomeScreen } from "src/screens/HomeScreen";
 import { OnboardingScreen } from "src/screens/OnboardingScreen";
 import { UpgradeScreen } from "src/screens/UpgradeScreen";
-import { useSessionStore } from "src/store/sessionStore";
+import { supabase } from "src/services/supabase";
 
 const NativeStack = createNativeStackNavigator<RootStackParamList>();
 
 export const RootNavigator: FunctionComponent = () => {
-  const isFirstAccess = useSessionStore((state) => state.isFirstAccess);
+  const [appIsReady] = useState(true);
 
-  const initialRouteName = isFirstAccess ? "Onboarding" : "Home";
+  const [session, setSession] = useState<Session | null | undefined>(undefined);
+
+  const onLayoutRootView = useCallback(async () => {
+    if (appIsReady && session !== undefined) {
+      // This tells the splash screen to hide immediately! If we call this after
+      // `setAppIsReady`, then we may see a blank screen while the app is
+      // loading its initial state and rendering its first pixels. So instead,
+      // we hide the splash screen once we know the root view has already
+      // performed layout.
+      await SplashScreen.hideAsync();
+    }
+  }, [appIsReady, session]);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => {
+      setSession(data.session);
+    });
+  }, []);
+
+  useEffect(() => {
+    // avoid re-rendering the component when the session changes
+    if (session !== undefined) {
+      const {
+        data: { subscription }
+      } = supabase.auth.onAuthStateChange((_event, authSession) => {
+        if (authSession?.access_token !== session?.access_token) {
+          setSession(authSession);
+        }
+      });
+
+      return () => {
+        subscription.unsubscribe();
+      };
+    }
+  }, [session]);
+
+  if (!appIsReady || session === undefined) {
+    return null;
+  }
 
   return (
-    <NavigationContainer>
+    <NavigationContainer onReady={onLayoutRootView}>
       <NativeStack.Navigator
-        initialRouteName={initialRouteName}
         screenOptions={{ contentStyle: { backgroundColor: colors.white } }}
       >
-        <NativeStack.Screen
-          component={HomeScreen}
-          name="Home"
-          options={{ headerShown: false }}
-        />
-        <NativeStack.Screen
-          component={OnboardingScreen}
-          name="Onboarding"
-          options={{
-            contentStyle: { backgroundColor: colors.sky[200] },
-            headerShown: false
-          }}
-        />
-        <NativeStack.Screen
-          component={UpgradeScreen}
-          name="Upgrade"
-          options={{
-            headerShown: false,
-            presentation: "modal"
-          }}
-        />
+        {session ? (
+          <>
+            <NativeStack.Screen
+              component={HomeScreen}
+              name="Home"
+              options={{ headerShown: false }}
+            />
+            <NativeStack.Screen
+              component={UpgradeScreen}
+              name="Upgrade"
+              options={{
+                headerShown: false,
+                presentation: "modal"
+              }}
+            />
+          </>
+        ) : (
+          <NativeStack.Screen
+            component={OnboardingScreen}
+            name="Onboarding"
+            options={{
+              contentStyle: { backgroundColor: colors.sky[200] },
+              headerShown: false
+            }}
+          />
+        )}
       </NativeStack.Navigator>
     </NavigationContainer>
   );

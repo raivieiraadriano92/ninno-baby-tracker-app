@@ -17,7 +17,6 @@ import PremiumGold from "assets/lottiefiles/premium-gold.json";
 import { Button } from "src/components/Button";
 import { Text } from "src/components/Text";
 import { RootStackScreen } from "src/navigation/types";
-import { useSessionStore } from "src/store/sessionStore";
 
 type PlanCardProps = ViewProps & {
   discount?: string;
@@ -73,25 +72,10 @@ const PlanCard: FunctionComponent<PlanCardProps> = ({
   );
 };
 
-export const UpgradeScreen: RootStackScreen<"Upgrade"> = ({ navigation }) => {
+export const UpgradeScreen: RootStackScreen<"Upgrade"> = ({}) => {
   const [selectedPlan, setSelectedPlan] = useState<"monthly" | "yearly">(
     "yearly"
   );
-
-  const { setIsFirstAccess, setIsPremium } = useSessionStore(
-    ({ setIsFirstAccess, setIsPremium }) => ({
-      setIsFirstAccess,
-      setIsPremium
-    })
-  );
-
-  const handleMaybeLater = () => {
-    setIsFirstAccess(false);
-
-    setIsPremium(false);
-
-    navigation.reset({ index: 0, routes: [{ name: "Home" }] });
-  };
 
   return (
     <SafeAreaView className="flex-1 p-6" edges={["bottom"]}>
@@ -146,11 +130,8 @@ export const UpgradeScreen: RootStackScreen<"Upgrade"> = ({ navigation }) => {
         </View>
       </View>
       <View className="space-y-4">
-        <Button
-          onPress={() => navigation.navigate("Auth")}
-          title="Upgrade now"
-        />
-        <Button onPress={handleMaybeLater} title="Maybe later" variant="link" />
+        <Button title="Upgrade now" />
+        <Button title="Maybe later" variant="link" />
       </View>
     </SafeAreaView>
   );
