@@ -24,7 +24,11 @@ export const RootNavigator: FunctionComponent = () => {
         initialRouteName={initialRouteName}
         screenOptions={{ contentStyle: { backgroundColor: colors.white } }}
       >
-        <NativeStack.Screen component={HomeScreen} name="Home" />
+        <NativeStack.Screen
+          component={HomeScreen}
+          name="Home"
+          options={{ headerShown: false }}
+        />
         <NativeStack.Screen
           component={OnboardingScreen}
           name="Onboarding"
