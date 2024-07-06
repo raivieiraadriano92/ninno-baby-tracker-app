@@ -32,7 +32,8 @@ export default {
       bundleIdentifier,
       config: {
         usesNonExemptEncryption: false
-      }
+      },
+      usesAppleSignIn: true
     },
     android: {
       adaptiveIcon: {
@@ -47,7 +48,7 @@ export default {
     experiments: {
       tsconfigPaths: true
     },
-    plugins: [],
+    plugins: ["expo-apple-authentication"],
     extra: {
       eas: {
         projectId: "1aa0a0c8-48d3-4f27-af8d-4f38a3306f98"

@@ -1148,6 +1148,23 @@
     base64-js "^1.2.3"
     xmlbuilder "^14.0.0"
 
+"@expo/prebuild-config@7.0.6":
+  version "7.0.6"
+  resolved "https://registry.yarnpkg.com/@expo/prebuild-config/-/prebuild-config-7.0.6.tgz#b9c2c36ee564244da8073ce7bea22ebe57743615"
+  integrity sha512-Hts+iGBaG6OQ+N8IEMMgwQElzJeSTb7iUJ26xADEHkaexsucAK+V52dM8M4ceicvbZR9q8M+ebJEGj0MCNA3dQ==
+  dependencies:
+    "@expo/config" "~9.0.0-beta.0"
+    "@expo/config-plugins" "~8.0.0-beta.0"
+    "@expo/config-types" "^51.0.0-unreleased"
+    "@expo/image-utils" "^0.5.0"
+    "@expo/json-file" "^8.3.0"
+    "@react-native/normalize-colors" "0.74.84"
+    debug "^4.3.1"
+    fs-extra "^9.0.0"
+    resolve-from "^5.0.0"
+    semver "^7.6.0"
+    xml2js "0.6.0"
+
 "@expo/prebuild-config@7.0.7":
   version "7.0.7"
   resolved "https://registry.yarnpkg.com/@expo/prebuild-config/-/prebuild-config-7.0.7.tgz#5ba088c7166a721ca16c7a0ad524110c0512a003"
@@ -1703,6 +1720,11 @@
     "@react-native/babel-preset" "0.74.85"
     hermes-parser "0.19.1"
     nullthrows "^1.1.1"
+
+"@react-native/normalize-colors@0.74.84":
+  version "0.74.84"
+  resolved "https://registry.yarnpkg.com/@react-native/normalize-colors/-/normalize-colors-0.74.84.tgz#4764d59775c17a6ed193509cb01ae2f42dd5c045"
+  integrity sha512-Y5W6x8cC5RuakUcTVUFNAIhUZ/tYpuqHZlRBoAuakrTwVuoNHXfQki8lj1KsYU7rW6e3VWgdEx33AfOQpdNp6A==
 
 "@react-native/normalize-colors@0.74.85":
   version "0.74.85"
@@ -3708,6 +3730,11 @@ execa@^5.0.0, execa@^5.1.1:
     signal-exit "^3.0.3"
     strip-final-newline "^2.0.0"
 
+expo-apple-authentication@~6.4.1:
+  version "6.4.1"
+  resolved "https://registry.yarnpkg.com/expo-apple-authentication/-/expo-apple-authentication-6.4.1.tgz#3992abd1497abfe9163cc0f66245edd4161e39b3"
+  integrity sha512-tYpCx/cLHruOAPnU5K8UpAycWJWPgdPQra7qz6FGl53Agt8UJ4ev/qEkijbL959x46Ke9+6WSMOhLqt8JoypqA==
+
 expo-asset@~10.0.10:
   version "10.0.10"
   resolved "https://registry.yarnpkg.com/expo-asset/-/expo-asset-10.0.10.tgz#9e6e02c1a6ec3d19b50d5e615e4dd8e5cc30e857"
@@ -3764,6 +3791,13 @@ expo-modules-core@1.12.18:
   integrity sha512-YhIOJsMNjPvP0tmTbC1MRlxl5q7l21uQQDr1rlXEWHNmI2AEMW0gfr2wXrlB2Tz/oOIx8YqREsj3i0VsYXEaCA==
   dependencies:
     invariant "^2.2.4"
+
+expo-splash-screen@~0.27.5:
+  version "0.27.5"
+  resolved "https://registry.yarnpkg.com/expo-splash-screen/-/expo-splash-screen-0.27.5.tgz#bcc1ebb4e761e19a1f2112469f3d424a36fb1e2c"
+  integrity sha512-9rdZuLkFCfgJBxrheUsOEOIW6Rp+9NVlpSE0hgXQwbTCLTncf00IHSE8/L2NbFyeDLNjof1yZBppaV7tXHRUzA==
+  dependencies:
+    "@expo/prebuild-config" "7.0.6"
 
 expo-status-bar@~1.12.1:
   version "1.12.1"

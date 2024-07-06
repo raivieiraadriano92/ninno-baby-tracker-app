@@ -5,16 +5,18 @@ import { createClient } from "@supabase/supabase-js";
 
 import type { Database } from "./types";
 
+console.log(process.env);
+
 const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL;
 
 if (!supabaseUrl) {
   throw new Error("Missing env.EXPO_PUBLIC_SUPABASE_URL");
 }
 
-const supabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_KEY;
+const supabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY;
 
 if (!supabaseAnonKey) {
-  throw new Error("Missing env.EXPO_PUBLIC_SUPABASE_KEY");
+  throw new Error("Missing env.EXPO_PUBLIC_SUPABASE_ANON_KEY");
 }
 
 export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey, {

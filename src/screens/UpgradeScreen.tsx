@@ -85,14 +85,6 @@ export const UpgradeScreen: RootStackScreen<"Upgrade"> = ({ navigation }) => {
     })
   );
 
-  const handleUpgradeToPremium = () => {
-    setIsFirstAccess(false);
-
-    setIsPremium(true);
-
-    navigation.reset({ index: 0, routes: [{ name: "Home" }] });
-  };
-
   const handleMaybeLater = () => {
     setIsFirstAccess(false);
 
@@ -154,7 +146,10 @@ export const UpgradeScreen: RootStackScreen<"Upgrade"> = ({ navigation }) => {
         </View>
       </View>
       <View className="space-y-4">
-        <Button onPress={handleUpgradeToPremium} title="Upgrade now" />
+        <Button
+          onPress={() => navigation.navigate("Auth")}
+          title="Upgrade now"
+        />
         <Button onPress={handleMaybeLater} title="Maybe later" variant="link" />
       </View>
     </SafeAreaView>

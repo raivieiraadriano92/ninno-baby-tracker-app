@@ -4,13 +4,11 @@ import Animated, { FadeIn, FadeInUp } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import BabyWaitingForGettingOut from "assets/lottiefiles/baby-waiting-for-getting-out.json";
-import { Button } from "src/components/Button";
+import { AuthButton } from "src/components/AuthButton";
 import { Text } from "src/components/Text";
 import { RootStackScreen } from "src/navigation/types";
 
-export const OnboardingScreen: RootStackScreen<"Onboarding"> = ({
-  navigation
-}) => (
+export const OnboardingScreen: RootStackScreen<"Onboarding"> = ({}) => (
   <SafeAreaView className="flex-1 p-6">
     <View className="flex-1 justify-center space-y-4">
       <View>
@@ -45,10 +43,11 @@ export const OnboardingScreen: RootStackScreen<"Onboarding"> = ({
     </View>
     <View>
       <Animated.View entering={FadeIn.delay(150)}>
-        <Button
+        <AuthButton />
+        {/* <Button
           onPress={() => navigation.navigate("Upgrade")}
           title="Let's get started"
-        />
+        /> */}
       </Animated.View>
     </View>
   </SafeAreaView>
