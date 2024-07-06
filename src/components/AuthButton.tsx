@@ -1,12 +1,26 @@
-import { FunctionComponent } from "react";
+import { FunctionComponent, useEffect } from "react";
 
+import {
+  GoogleSignin,
+  GoogleSigninButton,
+  statusCodes
+} from "@react-native-google-signin/google-signin";
 import * as AppleAuthentication from "expo-apple-authentication";
-import { Platform } from "react-native";
+import { Platform, View } from "react-native";
 
 import { supabase } from "src/services/supabase";
 
 export const AuthButton: FunctionComponent = () => {
-  if (Platform.OS === "ios")
+  useEffect(() => {
+    if (Platform.OS === "android") {
+      GoogleSignin.configure({
+        scopes: ["https://www.googleapis.com/auth/drive.readonly"],
+        webClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID
+      });
+    }
+  }, []);
+
+  if (Platform.OS === "ios") {
     return (
       <AppleAuthentication.AppleAuthenticationButton
         buttonType={AppleAuthentication.AppleAuthenticationButtonType.CONTINUE}
@@ -50,6 +64,42 @@ export const AuthButton: FunctionComponent = () => {
         }}
       />
     );
+  }
 
-  return <>{/* Implement Android Auth options. */}</>;
+  return (
+    <View className="items-center">
+      <GoogleSigninButton
+        size={GoogleSigninButton.Size.Wide}
+        color={GoogleSigninButton.Color.Light}
+        onPress={async () => {
+          try {
+            await GoogleSignin.hasPlayServices();
+
+            const userInfo = await GoogleSignin.signIn();
+
+            if (userInfo.idToken) {
+              const { data, error } = await supabase.auth.signInWithIdToken({
+                provider: "google",
+                token: userInfo.idToken
+              });
+
+              console.log(error, data);
+            } else {
+              throw new Error("no ID token present!");
+            }
+          } catch (error: any) {
+            if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+              // user cancelled the login flow
+            } else if (error.code === statusCodes.IN_PROGRESS) {
+              // operation (e.g. sign in) is in progress already
+            } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+              // play services not available or outdated
+            } else {
+              // some other error happened
+            }
+          }
+        }}
+      />
+    </View>
+  );
 };

@@ -48,7 +48,10 @@ export default {
     experiments: {
       tsconfigPaths: true
     },
-    plugins: ["expo-apple-authentication"],
+    plugins: [
+      "expo-apple-authentication",
+      "@react-native-google-signin/google-signin"
+    ],
     extra: {
       eas: {
         projectId: "1aa0a0c8-48d3-4f27-af8d-4f38a3306f98"
