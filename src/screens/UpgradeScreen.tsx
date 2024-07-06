@@ -2,7 +2,7 @@ import { FunctionComponent, useEffect, useState } from "react";
 
 import Ionicons from "@expo/vector-icons/Ionicons";
 import LottieView from "lottie-react-native";
-import { Dimensions, Pressable, View, ViewProps } from "react-native";
+import { Dimensions, Platform, Pressable, View, ViewProps } from "react-native";
 import Animated, {
   interpolate,
   interpolateColor,
@@ -10,7 +10,7 @@ import Animated, {
   useSharedValue,
   withTiming
 } from "react-native-reanimated";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { Edge, SafeAreaView } from "react-native-safe-area-context";
 import colors from "tailwindcss/colors";
 
 import PremiumGold from "assets/lottiefiles/premium-gold.json";
@@ -78,7 +78,10 @@ export const UpgradeScreen: RootStackScreen<"Upgrade"> = ({ navigation }) => {
   );
 
   return (
-    <SafeAreaView className="flex-1 p-6" edges={["bottom"]}>
+    <SafeAreaView
+      className="flex-1 p-6"
+      edges={["bottom", ...(Platform.OS === "android" ? ["top" as Edge] : [])]}
+    >
       <View className="flex-1 space-y-4">
         <View className="flex-row justify-between">
           <Text className="font-bold text-xl">Get Premium Access</Text>

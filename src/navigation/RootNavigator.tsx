@@ -9,6 +9,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Session } from "@supabase/supabase-js";
 import * as SplashScreen from "expo-splash-screen";
+import { Platform } from "react-native";
 import colors from "tailwindcss/colors";
 
 import type { RootStackParamList } from "./types";
@@ -80,7 +81,10 @@ export const RootNavigator: FunctionComponent = () => {
               name="Upgrade"
               options={{
                 headerShown: false,
-                presentation: "modal"
+                presentation: "modal",
+                ...(Platform.OS === "android" && {
+                  animation: "slide_from_bottom"
+                })
               }}
             />
           </>

@@ -31,15 +31,7 @@ export const UpgradeButton: FunctionComponent<PressableProps> = ({
       [0, 1],
       [colors.amber[100], colors.amber[200]]
     ),
-    transform: [{ scale: interpolate(progress.value, [0, 1], [1, 0.98]) }],
-    shadowColor: colors.amber[500],
-    shadowOffset: {
-      width: 0,
-      height: 5
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 6,
-    elevation: 10
+    transform: [{ scale: interpolate(progress.value, [0, 1], [1, 0.98]) }]
   }));
 
   const handleOnPressIn: typeof onPressIn = (e) => {
@@ -61,6 +53,16 @@ export const UpgradeButton: FunctionComponent<PressableProps> = ({
       onPressOut={handleOnPressOut}
       style={[
         animatedStyle,
+        {
+          shadowColor: colors.amber[500],
+          shadowOffset: {
+            width: 0,
+            height: 5
+          },
+          shadowOpacity: 0.2,
+          shadowRadius: 6,
+          elevation: 10
+        },
         // @ts-ignore
         style
       ]}
