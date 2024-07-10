@@ -4,13 +4,11 @@ import { View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import colors from "tailwindcss/colors";
 
-import { Button } from "src/components/Button";
 import { Text } from "src/components/Text";
 import { UpgradeButton } from "src/components/UpgradeButton";
-import { RootStackScreen } from "src/navigation/types";
-import { supabase } from "src/services/supabase";
+import { TabScreen } from "src/navigation/types";
 
-export const HomeScreen: RootStackScreen<"Home"> = ({ navigation }) => (
+export const HomeTab: TabScreen<"Home"> = ({ navigation }) => (
   <>
     <SafeAreaView
       className="bg-sky-200 flex-row items-center justify-between rounded-b-2xl p-6"
@@ -31,8 +29,6 @@ export const HomeScreen: RootStackScreen<"Home"> = ({ navigation }) => (
     </SafeAreaView>
     <View className="flex-1 p-6">
       <UpgradeButton onPress={() => navigation.navigate("Upgrade")} />
-      <View className="flex-1" />
-      <Button onPress={() => supabase.auth.signOut()} title="Logout" />
     </View>
   </>
 );

@@ -12,9 +12,10 @@ import * as SplashScreen from "expo-splash-screen";
 import { Platform } from "react-native";
 import colors from "tailwindcss/colors";
 
+import { TabNavigator } from "./TabNavigator";
+
 import type { RootStackParamList } from "./types";
 
-import { HomeScreen } from "src/screens/HomeScreen";
 import { OnboardingScreen } from "src/screens/OnboardingScreen";
 import { UpgradeScreen } from "src/screens/UpgradeScreen";
 import { supabase } from "src/services/supabase";
@@ -72,8 +73,8 @@ export const RootNavigator: FunctionComponent = () => {
         {session ? (
           <>
             <NativeStack.Screen
-              component={HomeScreen}
-              name="Home"
+              component={TabNavigator}
+              name="Tabs"
               options={{ headerShown: false }}
             />
             <NativeStack.Screen

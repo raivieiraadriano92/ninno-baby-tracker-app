@@ -1,3 +1,5 @@
 - show Upgrade screen once a week
 - set up eas to build and submit the base based on github branches
-- set upgrade screen animation to slide up and fix the safearea (all on android)
+- set up ads
+- set up revenue cat
+- enable prod mode on google sign in
