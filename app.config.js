@@ -50,7 +50,19 @@ export default {
     },
     plugins: [
       "expo-apple-authentication",
-      "@react-native-google-signin/google-signin"
+      "@react-native-google-signin/google-signin",
+      ["@morrowdigital/watermelondb-expo-plugin"],
+      [
+        "expo-build-properties",
+        {
+          android: {
+            kotlinVersion: "1.6.10",
+            packagingOptions: {
+              pickFirst: ["**/libc++_shared.so"]
+            }
+          }
+        }
+      ]
     ],
     extra: {
       eas: {
