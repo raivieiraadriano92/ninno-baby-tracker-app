@@ -3,12 +3,11 @@ import { FunctionComponent } from "react";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { withObservables } from "@nozbe/watermelondb/react";
 import { ScrollView, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import colors from "tailwindcss/colors";
 
 import { BabyCard } from "src/components/BabyCard";
 import { Button } from "src/components/Button";
-import { Text } from "src/components/Text";
+import { Header } from "src/components/Header";
 import { TabScreen } from "src/navigation/types";
 import { database } from "src/services/database";
 import { BabyModel } from "src/services/database/models/BabyModel";
@@ -49,12 +48,7 @@ export const EnhancedList = enhance(List);
 
 export const BabiesTab: TabScreen<"Babies"> = ({ navigation }) => (
   <>
-    <SafeAreaView
-      className="border-b-neutral-100 border-b-[1px] flex-row items-center p-6"
-      edges={["top"]}
-    >
-      <Text className="font-bold text-xl">My Babies</Text>
-    </SafeAreaView>
+    <Header title="My Babies" />
     <ScrollView showsVerticalScrollIndicator={false}>
       <EnhancedList babies={babiesQuery} />
     </ScrollView>
