@@ -13,7 +13,7 @@ import colors from "tailwindcss/colors";
 import { Text } from "./Text";
 
 type ButtonProps = PressableProps & {
-  title: string;
+  title?: string;
   variant?: ButtonVariant;
 };
 
@@ -27,12 +27,13 @@ const variants: Record<ButtonVariant, { container: string; text: string }> = {
     text: "text-black"
   },
   solid: {
-    container: "h-16 ",
+    container: "h-16 px-4",
     text: "text-white"
   }
 };
 
 export const Button: FunctionComponent<ButtonProps> = ({
+  children,
   className,
   onPressIn,
   onPressOut,
@@ -75,7 +76,10 @@ export const Button: FunctionComponent<ButtonProps> = ({
       style={[animatedStyle, style]}
       {...props}
     >
-      <Text className={`font-bold ${variants[variant].text}`}>{title}</Text>
+      {!!title && (
+        <Text className={`font-bold ${variants[variant].text}`}>{title}</Text>
+      )}
+      {children}
     </AnimatedPressable>
   );
 };

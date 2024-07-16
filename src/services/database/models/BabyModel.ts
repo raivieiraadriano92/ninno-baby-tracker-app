@@ -16,7 +16,7 @@ export class BabyModel extends Model {
   // @ts-ignore
   @text("name") name: string;
   // @ts-ignore
-  @text("gender") gender: string;
+  @text("gender") gender: "F" | "M";
   // @ts-ignore
   @text("birthday") birthday: string;
 }

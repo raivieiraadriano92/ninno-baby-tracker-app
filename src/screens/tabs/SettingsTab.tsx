@@ -9,7 +9,7 @@ import { supabase } from "src/services/supabase";
 export const SettingsTab: TabScreen<"Settings"> = ({}) => (
   <>
     <SafeAreaView
-      className="border-b-neutral-200 border-b-[1px] flex-row items-center p-6"
+      className="border-b-neutral-100 border-b-[1px] flex-row items-center p-6"
       edges={["top"]}
     >
       <Text className="font-bold text-xl">Settings</Text>

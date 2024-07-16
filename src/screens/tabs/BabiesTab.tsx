@@ -1,69 +1,68 @@
 import { FunctionComponent } from "react";
 
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { withObservables } from "@nozbe/watermelondb/react";
-import { View } from "react-native";
+import { ScrollView, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import colors from "tailwindcss/colors";
 
+import { BabyCard } from "src/components/BabyCard";
 import { Button } from "src/components/Button";
 import { Text } from "src/components/Text";
 import { TabScreen } from "src/navigation/types";
 import { database } from "src/services/database";
 import { BabyModel } from "src/services/database/models/BabyModel";
-import { sync } from "src/services/database/sync";
 
-database
-  .get("babies")
-  //   .find("16dba95b-2021-46e8-9e3d-d44f9e7ab088")
-  .query()
-  .fetch()
-  .then((babies) => {
-    babies.forEach((baby) => {
-      console.log(baby.name);
-    });
-  });
+type ListProps = {
+  babies: BabyModel[];
+};
 
-const List: FunctionComponent<{ babies: BabyModel[] }> = ({ babies }) => (
-  <View>
+const babiesQuery = database.get<BabyModel>("babies").query();
+
+const List: FunctionComponent<ListProps> = ({ babies }) => (
+  <View className="flex-1 p-6 space-y-5">
     {babies.map((baby) => (
-      <Text key={baby.id}>{baby.name}</Text>
+      <BabyCard
+        baby={baby}
+        key={baby.id}
+        onPress={async () => {
+          try {
+            await database.write(async () => {
+              try {
+                await baby.markAsDeleted();
+              } catch (e) {
+                console.error(e);
+              }
+            });
+          } catch (e) {
+            console.error(e);
+          }
+        }}
+      />
     ))}
   </View>
 );
 
-const enhance = withObservables(["babies"], ({ babies }) => ({
-  babies: babies.observe()
-}));
+const enhance = withObservables(["babies"], ({ babies }) => ({ babies }));
 
 export const EnhancedList = enhance(List);
 
-export const BabiesTab: TabScreen<"Babies"> = ({}) => (
-  <View className="flex-1 justify-center p-6 space-y-6">
-    {/* <EnhancedList /> */}
-    <Button
-      title={"New Baby"}
-      onPress={async () => {
-        // const { data, error } = await supabase
-        //   .from("babies")
-        //   .insert({ name: "test", gender: "F", birthday: "2024-01-01" });
-
-        // console.log(data, error);
-
-        // return;
-
-        database.write(() =>
-          database
-            .get<BabyModel>("babies")
-            .create((baby) => {
-              baby.name = "New Baby";
-
-              baby.gender = "F";
-
-              baby.birthday = "2024-01-01";
-            })
-            .then((baby) => console.log(baby))
-            .catch((e) => console.error(e))
-        );
-      }}
-    />
-    <Button title={"Sync"} onPress={sync} />
-  </View>
+export const BabiesTab: TabScreen<"Babies"> = ({ navigation }) => (
+  <>
+    <SafeAreaView
+      className="border-b-neutral-100 border-b-[1px] flex-row items-center p-6"
+      edges={["top"]}
+    >
+      <Text className="font-bold text-xl">My Babies</Text>
+    </SafeAreaView>
+    <ScrollView showsVerticalScrollIndicator={false}>
+      <EnhancedList babies={babiesQuery} />
+    </ScrollView>
+    <View className="absolute bottom-6 right-6">
+      <Button onPress={async () => navigation.navigate("BabyForm")}>
+        <Ionicons name="add" size={24} color={colors.white} />
+      </Button>
+    </View>
+    {/* <Button title={"Sync"} onPress={sync} /> */}
+  </>
 );

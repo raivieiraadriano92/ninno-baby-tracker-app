@@ -9,6 +9,7 @@ import type { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 export type RootStackParamList = {
+  BabyForm: undefined;
   Onboarding: undefined;
   Tabs: undefined | NavigatorScreenParams<TabParamList>;
   Upgrade: undefined;

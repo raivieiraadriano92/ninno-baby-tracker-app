@@ -16,6 +16,7 @@ import { TabNavigator } from "./TabNavigator";
 
 import type { RootStackParamList } from "./types";
 
+import { BabyFormScreen } from "src/screens/BabyFormScreen";
 import { OnboardingScreen } from "src/screens/OnboardingScreen";
 import { UpgradeScreen } from "src/screens/UpgradeScreen";
 import { supabase } from "src/services/supabase";
@@ -76,6 +77,17 @@ export const RootNavigator: FunctionComponent = () => {
               component={TabNavigator}
               name="Tabs"
               options={{ headerShown: false }}
+            />
+            <NativeStack.Screen
+              component={BabyFormScreen}
+              name="BabyForm"
+              options={{
+                headerShown: false,
+                presentation: "modal",
+                ...(Platform.OS === "android" && {
+                  animation: "slide_from_bottom"
+                })
+              }}
             />
             <NativeStack.Screen
               component={UpgradeScreen}
