@@ -1,5 +1,6 @@
 import { FunctionComponent } from "react";
 
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { Image } from "expo-image";
 import { Pressable, PressableProps, View } from "react-native";
 import Animated, {
@@ -83,7 +84,7 @@ export const BabyCard: FunctionComponent<BabyCardPropd> = ({
           source="https://picsum.photos/seed/696/3000/2000"
           contentFit="cover"
         />
-        <View>
+        <View className="flex-1">
           <Text className="font-bold text-lg">{baby.name}</Text>
           {/* <View className="flex-row space-x-1">
             <View className="bg-sky-400 px-2 py-1 rounded-full">
@@ -97,6 +98,7 @@ export const BabyCard: FunctionComponent<BabyCardPropd> = ({
             </View>
           </View> */}
         </View>
+        <Ionicons name="arrow-forward" size={24} color={colors.black} />
       </View>
     </AnimatedPressable>
   );
