@@ -1,6 +1,7 @@
 import { Image } from "expo-image";
 import { ScrollView, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import colors from "tailwindcss/colors";
 
 import { Text } from "src/components/Text";
 import { TabScreen } from "src/navigation/types";
@@ -19,7 +20,35 @@ export const HomeTab: TabScreen<"Home"> = ({}) => (
       <Text className="font-medium text-sky-500 text-sm text-center">
         5 months 15 days
       </Text>
-      <Text className="font-bold mt-6 text-lg">Today's Activities</Text>
+      <Text className="font-bold my-6 text-lg">Today's Activities</Text>
+      <View className="space-y-3">
+        {[
+          ["Feeding", colors.orange, "🍼"],
+          ["Sleep", colors.blue, "😴"],
+          ["Diaper", colors.green, "💩"],
+          ["Growth", colors.yellow, "🪴"]
+        ].map((item) => (
+          <View
+            className="bg-white flex-row items-center p-3 rounded-2xl space-x-3"
+            key={item[0]}
+            style={{ backgroundColor: item[1][50] }}
+          >
+            <View
+              className="h-14 items-center justify-center rounded-lg w-14"
+              style={{ backgroundColor: item[1][200] }}
+            >
+              <Text className="text-xl">{item[2]}</Text>
+            </View>
+            <View className="flex-1">
+              <Text className="font-medium">{item[0]}</Text>
+              <Text className="font-light text-neutral-500 text-xs">5.8kg</Text>
+            </View>
+            <Text className="font-light text-neutral-500 text-xs">
+              10:00 AM
+            </Text>
+          </View>
+        ))}
+      </View>
     </SafeAreaView>
   </ScrollView>
 );
