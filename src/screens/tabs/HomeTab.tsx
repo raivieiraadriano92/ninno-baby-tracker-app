@@ -1,42 +1,25 @@
 import { Image } from "expo-image";
-import { View } from "react-native";
+import { ScrollView, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Text } from "src/components/Text";
-import { UpgradeButton } from "src/components/UpgradeButton";
 import { TabScreen } from "src/navigation/types";
 
-export const HomeTab: TabScreen<"Home"> = ({ navigation }) => (
-  <>
-    <SafeAreaView
-      className="bg-sky-200 flex-row items-center justify-between rounded-b-2xl p-6"
-      edges={["top"]}
-    >
-      <View className="flex-row items-center space-x-2">
+export const HomeTab: TabScreen<"Home"> = ({}) => (
+  <ScrollView>
+    <SafeAreaView className="p-6" edges={["top"]}>
+      <View className="bg-sky-300 h-40 items-center rounded-2xl">
         <Image
-          className="border-2 border-sky-400 h-14 rounded-xl w-14"
-          source="https://picsum.photos/seed/696/3000/2000"
+          className="absolute bg-white border-4 -bottom-6 border-sky-500 h-40 items-center justify-center rounded-xl w-40"
+          source="https://img.freepik.com/free-photo/portrait-newborn-baby-sleeping-peacefully_23-2150797330.jpg"
           contentFit="cover"
         />
-        <View>
-          <Text className="font-bold text-lg">Jimmy</Text>
-          <View className="flex-row space-x-1">
-            <View className="bg-sky-400 px-2 py-1 rounded-full">
-              <Text className="text-sky-100 text-xs">5 months 15 days</Text>
-            </View>
-            <View className="bg-sky-400 px-2 py-1 rounded-full">
-              <Text className="text-sky-100 text-xs">5kg</Text>
-            </View>
-            <View className="bg-sky-400 px-2 py-1 rounded-full">
-              <Text className="text-sky-100 text-xs">50cm</Text>
-            </View>
-          </View>
-        </View>
       </View>
-      {/* <Ionicons name="people" size={24} color={colors.black} /> */}
+      <Text className="font-bold mt-9 text-2xl text-center">Jimmy</Text>
+      <Text className="font-medium text-sky-500 text-sm text-center">
+        5 months 15 days
+      </Text>
+      <Text className="font-bold mt-6 text-lg">Today's Activities</Text>
     </SafeAreaView>
-    <View className="flex-1 p-6">
-      <UpgradeButton onPress={() => navigation.navigate("Upgrade")} />
-    </View>
-  </>
+  </ScrollView>
 );
