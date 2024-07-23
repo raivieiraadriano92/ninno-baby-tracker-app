@@ -16,6 +16,9 @@ import { TabNavigator } from "./TabNavigator";
 
 import type { RootStackParamList } from "./types";
 
+import { ActivityFormScreen } from "src/screens/ActivityFormScreen";
+import { ActivityListScreen } from "src/screens/ActivityListScreen";
+import { ActivityReportScreen } from "src/screens/ActivityReportScreen";
 import { BabyFormScreen } from "src/screens/BabyFormScreen";
 import { OnboardingScreen } from "src/screens/OnboardingScreen";
 import { UpgradeScreen } from "src/screens/UpgradeScreen";
@@ -77,6 +80,25 @@ export const RootNavigator: FunctionComponent = () => {
               component={TabNavigator}
               name="Tabs"
               options={{ headerShown: false }}
+            />
+            <NativeStack.Screen
+              component={ActivityFormScreen}
+              name="ActivityForm"
+              options={{
+                headerShown: false,
+                presentation: "modal",
+                ...(Platform.OS === "android" && {
+                  animation: "slide_from_bottom"
+                })
+              }}
+            />
+            <NativeStack.Screen
+              component={ActivityListScreen}
+              name="ActivityList"
+            />
+            <NativeStack.Screen
+              component={ActivityReportScreen}
+              name="ActivityReport"
             />
             <NativeStack.Screen
               component={BabyFormScreen}
