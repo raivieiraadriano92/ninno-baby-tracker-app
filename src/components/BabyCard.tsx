@@ -1,8 +1,8 @@
 import { FunctionComponent } from "react";
 
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { Image } from "expo-image";
-import { Pressable, PressableProps, View } from "react-native";
+import { format, parseISO } from "date-fns";
+import { Pressable, PressableProps } from "react-native";
 import Animated, {
   interpolate,
   useAnimatedStyle,
@@ -11,24 +11,16 @@ import Animated, {
 } from "react-native-reanimated";
 import colors from "tailwindcss/colors";
 
-import { Text } from "./Text";
+import { ColorfulCard } from "./ColorfulCard";
 
 import { BabyModel } from "src/services/database/models/BabyModel";
+import { genderColor } from "src/utils/global";
 
 type BabyCardPropd = PressableProps & {
   baby: BabyModel;
 };
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
-
-const genderStyles = {
-  F: {
-    borderColor: "border-pink-400"
-  },
-  M: {
-    borderColor: "border-blue-400"
-  }
-};
 
 export const BabyCard: FunctionComponent<BabyCardPropd> = ({
   baby,
@@ -58,48 +50,28 @@ export const BabyCard: FunctionComponent<BabyCardPropd> = ({
 
   return (
     <AnimatedPressable
-      className={`bg-white flex-row items-center p-4 space-x-2 rounded-2xl ${className}`}
       onPressIn={handleOnPressIn}
       onPressOut={handleOnPressOut}
       style={[
         animatedStyle,
-        {
-          shadowColor: colors.neutral[200],
-          shadowOffset: {
-            width: 0,
-            height: 5
-          },
-          shadowOpacity: 0.2,
-          shadowRadius: 6,
-          elevation: 10
-        },
         // @ts-ignore
         style
       ]}
       {...props}
     >
-      <View className="flex-row items-center space-x-2">
-        <Image
-          className={`border-2 h-14 rounded-xl w-14 ${genderStyles[baby.gender].borderColor}`}
-          source="https://picsum.photos/seed/696/3000/2000"
-          contentFit="cover"
-        />
-        <View className="flex-1">
-          <Text className="font-bold text-lg">{baby.name}</Text>
-          {/* <View className="flex-row space-x-1">
-            <View className="bg-sky-400 px-2 py-1 rounded-full">
-              <Text className="text-sky-100 text-xs">5 months 15 days</Text>
-            </View>
-            <View className="bg-sky-400 px-2 py-1 rounded-full">
-              <Text className="text-sky-100 text-xs">5kg</Text>
-            </View>
-            <View className="bg-sky-400 px-2 py-1 rounded-full">
-              <Text className="text-sky-100 text-xs">50cm</Text>
-            </View>
-          </View> */}
-        </View>
-        <Ionicons name="arrow-forward" size={24} color={colors.black} />
-      </View>
+      <ColorfulCard
+        color={genderColor[baby.gender]}
+        imageUrl="https://img.freepik.com/free-photo/portrait-newborn-baby-sleeping-peacefully_23-2150797330.jpg"
+        renderRight={
+          <Ionicons
+            name="arrow-forward"
+            size={24}
+            color={colors[genderColor[baby.gender]][500]}
+          />
+        }
+        subtitle={format(parseISO(baby.birthday), "MMM d, yyyy")}
+        title={baby.name}
+      />
     </AnimatedPressable>
   );
 };

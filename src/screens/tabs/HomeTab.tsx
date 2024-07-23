@@ -6,24 +6,28 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import colors from "tailwindcss/colors";
 
 import { Button } from "src/components/Button";
+import { ColorfulCard } from "src/components/ColorfulCard";
 import { Text } from "src/components/Text";
 import activities from "src/data/activities.json";
 import { TabScreen } from "src/navigation/types";
 
-const activityType = {
-  nursing: { color: colors.rose, emoji: "🤱" },
-  expressed: { color: colors.rose, emoji: "🍼" },
-  formula: { color: colors.rose, emoji: "🍼" },
-  supplement: { color: colors.rose, emoji: "🥣" },
-  diaper: { color: colors.amber, emoji: "💩" },
-  sleep: { color: colors.sky, emoji: "😴" },
-  growth: { color: colors.lime, emoji: "🌱" },
-  milestone: { color: colors.lime, emoji: "🎯" },
-  other: { color: colors.lime, emoji: "🧸" },
-  joy: { color: colors.lime, emoji: "😃" },
-  temperature: { color: colors.lime, emoji: "🌡️" },
-  medication: { color: colors.lime, emoji: "💊" },
-  vaccine: { color: colors.lime, emoji: "💉" }
+const activityType: Record<
+  string,
+  { color: keyof typeof colors; emoji: string }
+> = {
+  nursing: { color: "rose", emoji: "🤱" },
+  expressed: { color: "rose", emoji: "🍼" },
+  formula: { color: "rose", emoji: "🍼" },
+  supplement: { color: "rose", emoji: "🥣" },
+  diaper: { color: "amber", emoji: "💩" },
+  sleep: { color: "sky", emoji: "😴" },
+  growth: { color: "lime", emoji: "🌱" },
+  milestone: { color: "lime", emoji: "🎯" },
+  other: { color: "lime", emoji: "🧸" },
+  joy: { color: "lime", emoji: "😃" },
+  temperature: { color: "lime", emoji: "🌡️" },
+  medication: { color: "lime", emoji: "💊" },
+  vaccine: { color: "lime", emoji: "💉" }
 };
 
 const todaysActivities = activities.filter((item) => isToday(item.date)) as {
@@ -60,27 +64,14 @@ export const HomeTab: TabScreen<"Home"> = ({ navigation }) => (
         </View>
         <View className="space-y-3">
           {todaysActivities.map((item, index) => (
-            <View
-              className="bg-white flex-row items-center p-3 rounded-2xl space-x-3"
+            <ColorfulCard
+              color={activityType[item.type].color}
+              leftText={activityType[item.type].emoji}
+              rightText={format(new Date(item.date), "h:mm a")}
+              subtitle={item.notes}
+              title={item.type}
               key={index}
-              style={{ backgroundColor: activityType[item.type].color[50] }}
-            >
-              <View
-                className="h-14 items-center justify-center rounded-lg w-14"
-                style={{ backgroundColor: activityType[item.type].color[200] }}
-              >
-                <Text className="text-xl">{activityType[item.type].emoji}</Text>
-              </View>
-              <View className="flex-1">
-                <Text className="capitalize font-medium">{item.type}</Text>
-                <Text className="font-light text-neutral-500 text-xs">
-                  {item.notes}
-                </Text>
-              </View>
-              <Text className="font-light text-neutral-500 text-xs">
-                {format(new Date(item.date), "h:mm a")}
-              </Text>
-            </View>
+            />
           ))}
         </View>
       </SafeAreaView>
