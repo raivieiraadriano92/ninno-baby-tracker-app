@@ -1,15 +1,16 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { format, isToday } from "date-fns";
-import { Image } from "expo-image";
 import { Pressable, ScrollView, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import colors from "tailwindcss/colors";
 
+import { BabyProfileHeader } from "src/components/BabyProfileHeader";
 import { Button } from "src/components/Button";
 import { ColorfulCard } from "src/components/ColorfulCard";
 import { Text } from "src/components/Text";
 import activities from "src/data/activities.json";
 import { TabScreen } from "src/navigation/types";
+import { GENDER } from "src/services/database/models/BabyModel";
 
 const activityType: Record<
   string,
@@ -40,17 +41,13 @@ export const HomeTab: TabScreen<"Home"> = ({ navigation }) => (
   <>
     <ScrollView showsVerticalScrollIndicator={false}>
       <SafeAreaView className="p-6" edges={["top"]}>
-        <View className="bg-sky-300 h-40 items-center rounded-2xl">
-          <Image
-            className="absolute bg-white border-4 -bottom-6 border-sky-500 h-40 items-center justify-center rounded-xl w-40"
-            source="https://img.freepik.com/free-photo/portrait-newborn-baby-sleeping-peacefully_23-2150797330.jpg"
-            contentFit="cover"
-          />
-        </View>
-        <Text className="font-bold mt-9 text-2xl text-center">Jimmy</Text>
-        <Text className="font-medium text-sky-500 text-sm text-center">
-          5 months 15 days
-        </Text>
+        <BabyProfileHeader
+          className="rounded-2xl"
+          gender={GENDER.M}
+          imageUrl="https://img.freepik.com/free-photo/portrait-newborn-baby-sleeping-peacefully_23-2150797330.jpg"
+          subtitle="5 months 15 days"
+          title="Jimmy"
+        />
         <View className="flex-row items-center justify-between">
           <Text className="font-bold my-6 text-lg">Today's Activities</Text>
           <View className="flex-row items-center space-x-4">

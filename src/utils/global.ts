@@ -1,6 +1,8 @@
 import colors from "tailwindcss/colors";
 
-export const genderColor: Record<"F" | "M", keyof typeof colors> = {
-  F: "rose",
-  M: "sky"
+import { GENDER } from "src/services/database/models/BabyModel";
+
+export const genderColor: Record<GENDER, keyof typeof colors> = {
+  [GENDER.F]: "rose",
+  [GENDER.M]: "sky"
 };

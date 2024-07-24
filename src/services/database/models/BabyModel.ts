@@ -1,6 +1,13 @@
 import { Model } from "@nozbe/watermelondb";
 import { date, readonly, text } from "@nozbe/watermelondb/decorators";
 
+export enum GENDER {
+  // eslint-disable-next-line autofix/no-unused-vars
+  F = "F",
+  // eslint-disable-next-line autofix/no-unused-vars
+  M = "M"
+}
+
 export class BabyModel extends Model {
   static table = "babies";
 
@@ -16,7 +23,7 @@ export class BabyModel extends Model {
   // @ts-ignore
   @text("name") name: string;
   // @ts-ignore
-  @text("gender") gender: "F" | "M";
+  @text("gender") gender: GENDER;
   // @ts-ignore
   @text("birthday") birthday: string;
 }
