@@ -26,7 +26,7 @@ export const TextInput: FunctionComponent<TextInputProps> = ({
     style={style}
   >
     <RNTextInput
-      className="flex-1 h-13 px-4"
+      className="flex-1 h-13 px-4 text-black text-sm leading-4"
       placeholderTextColor={colors.neutral[300]}
       {...props}
     />

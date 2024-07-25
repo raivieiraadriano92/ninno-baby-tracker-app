@@ -5,6 +5,7 @@ import { Edge, SafeAreaView } from "react-native-safe-area-context";
 
 import { BabyProfileHeader } from "src/components/BabyProfileHeader";
 import { Button } from "src/components/Button";
+import { DatePickerInput } from "src/components/DatePickerInput";
 import { GenderPicker } from "src/components/GenderPicker";
 import { TextInput } from "src/components/TextInput";
 import { RootStackScreen } from "src/navigation/types";
@@ -13,6 +14,8 @@ import { BabyModel, GENDER } from "src/services/database/models/BabyModel";
 
 export const BabyFormScreen: RootStackScreen<"BabyForm"> = ({ navigation }) => {
   const [gender, setGender] = useState(GENDER.M);
+
+  const [birthDate, setBirthDate] = useState();
 
   const handleSave = () => {
     database.write(() =>
@@ -45,10 +48,10 @@ export const BabyFormScreen: RootStackScreen<"BabyForm"> = ({ navigation }) => {
           <GenderPicker onChange={setGender} value={gender} />
           <View className="space-y-4">
             <TextInput placeholder="Enter the name" />
-            <TextInput
+            <DatePickerInput
+              onChange={setBirthDate}
               placeholder="Enter the birth date"
-              iconRight="calendar"
-              keyboardType="number-pad"
+              value={birthDate}
             />
           </View>
         </View>
