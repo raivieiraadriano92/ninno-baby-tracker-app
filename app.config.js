@@ -66,16 +66,24 @@ export default {
       [
         "expo-image-picker",
         {
-          photosPermission: "Allow $(PRODUCT_NAME) to access your photos"
+          photosPermission: "Allow $(PRODUCT_NAME) to access your photos."
         }
       ],
       [
         "expo-camera",
         {
-          cameraPermission: "Allow $(PRODUCT_NAME) to access your camera",
+          cameraPermission: "Allow $(PRODUCT_NAME) to access your camera.",
           microphonePermission:
-            "Allow $(PRODUCT_NAME) to access your microphone",
+            "Allow $(PRODUCT_NAME) to access your microphone.",
           recordAudioAndroid: true
+        }
+      ],
+      [
+        "expo-media-library",
+        {
+          photosPermission: "Allow $(PRODUCT_NAME) to access your photos.",
+          savePhotosPermission: "Allow $(PRODUCT_NAME) to save photos.",
+          isAccessMediaLocationEnabled: true
         }
       ]
     ],
