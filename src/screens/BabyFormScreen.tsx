@@ -1,5 +1,7 @@
 import { useState } from "react";
 
+import { format } from "date-fns";
+import * as ImagePicker from "expo-image-picker";
 import { Platform, View } from "react-native";
 import { Edge, SafeAreaView } from "react-native-safe-area-context";
 
@@ -13,20 +15,26 @@ import { database } from "src/services/database";
 import { BabyModel, GENDER } from "src/services/database/models/BabyModel";
 
 export const BabyFormScreen: RootStackScreen<"BabyForm"> = ({ navigation }) => {
+  const [name, setName] = useState<string>();
+
   const [gender, setGender] = useState(GENDER.M);
 
-  const [birthDate, setBirthDate] = useState();
+  const [birthDate, setBirthDate] = useState<Date>();
+
+  const [imageUrl, setImageUrl] = useState<string>();
 
   const handleSave = () => {
     database.write(() =>
       database
         .get<BabyModel>("babies")
         .create((baby) => {
-          baby.name = "Kelly";
+          baby.name = name;
 
-          baby.gender = "F";
+          baby.gender = gender;
 
-          baby.birthday = "2024-01-01";
+          baby.birthday = format(birthDate, "yyyy-MM-dd");
+
+          baby.pictureUrl = imageUrl;
         })
         .then((baby) => {
           navigation.goBack();
@@ -37,17 +45,35 @@ export const BabyFormScreen: RootStackScreen<"BabyForm"> = ({ navigation }) => {
     );
   };
 
+  const pickImage = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      // aspect: [4, 3],
+      quality: 1
+    });
+
+    console.log(result);
+
+    if (!result.canceled) {
+      setImageUrl(result.assets[0].uri);
+    }
+  };
+
   return (
     <>
       <BabyProfileHeader
         edges={Platform.OS === "android" ? ["top" as Edge] : []}
         gender={gender}
+        imageUrl={imageUrl}
+        onPressImage={pickImage}
       />
       <SafeAreaView className="flex-1 p-6" edges={["bottom"]}>
         <View className="flex-1 pt-6 space-y-6">
           <GenderPicker onChange={setGender} value={gender} />
           <View className="space-y-4">
-            <TextInput placeholder="Enter the name" />
+            <TextInput onChangeText={setName} placeholder="Enter the name" />
             <DatePickerInput
               onChange={setBirthDate}
               placeholder="Enter the birth date"

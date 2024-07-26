@@ -3,11 +3,13 @@ import SQLiteAdapter from "@nozbe/watermelondb/adapters/sqlite";
 import { setGenerator } from "@nozbe/watermelondb/utils/common/randomId";
 import * as Crypto from "expo-crypto";
 
+import { migrations } from "./migrations";
 import { BabyModel } from "./models/BabyModel";
 import { schema } from "./schema";
 
 const adapter = new SQLiteAdapter({
   schema,
+  migrations,
   dbName: "ninno-baby-tracker-app",
   jsi: false /* Platform.OS === 'ios' */,
   onSetUpError: (error: any) => {

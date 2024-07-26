@@ -61,7 +61,7 @@ export const BabyCard: FunctionComponent<BabyCardPropd> = ({
     >
       <ColorfulCard
         color={genderColor[baby.gender]}
-        imageUrl="https://img.freepik.com/free-photo/portrait-newborn-baby-sleeping-peacefully_23-2150797330.jpg"
+        imageUrl={baby.pictureUrl}
         renderRight={
           <Ionicons
             name="arrow-forward"

@@ -25,6 +25,7 @@ import { genderColor } from "src/utils/global";
 type BabyProfileHeaderProps = SafeAreaViewProps & {
   gender: GENDER;
   imageUrl?: string;
+  onPressImage?: () => void;
   subtitle?: string;
   title?: string;
 };
@@ -39,6 +40,7 @@ export const BabyProfileHeader: FunctionComponent<BabyProfileHeaderProps> = ({
   className,
   gender,
   imageUrl,
+  onPressImage,
   style,
   subtitle,
   title,
@@ -99,6 +101,7 @@ export const BabyProfileHeader: FunctionComponent<BabyProfileHeaderProps> = ({
       >
         <AnimatedPressable
           className="absolute bg-white border-4 -bottom-6 h-40 items-center justify-center rounded-xl w-40 overflow-hidden"
+          onPress={onPressImage}
           onPressIn={handleOnPressIn}
           onPressOut={handleOnPressOut}
           style={[animatedGenderBorderColorStyle, animatedPictureScaleStyle]}

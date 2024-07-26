@@ -21,9 +21,11 @@ export class BabyModel extends Model {
   // @ts-ignore
   @date("deleted_at") deletedAt;
   // @ts-ignore
-  @text("name") name: string;
+  @text("name") name!: string;
   // @ts-ignore
-  @text("gender") gender: GENDER;
+  @text("gender") gender!: GENDER;
   // @ts-ignore
-  @text("birthday") birthday: string;
+  @text("birth_date") birthDate!: string;
+  // @ts-ignore
+  @text("picture_url") pictureUrl: string;
 }
