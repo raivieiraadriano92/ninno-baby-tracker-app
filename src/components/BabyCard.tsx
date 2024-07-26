@@ -69,7 +69,7 @@ export const BabyCard: FunctionComponent<BabyCardPropd> = ({
             color={colors[genderColor[baby.gender]][500]}
           />
         }
-        subtitle={format(parseISO(baby.birthday), "MMM d, yyyy")}
+        subtitle={format(parseISO(baby.birthDate), "MMM d, yyyy")}
         title={baby.name}
       />
     </AnimatedPressable>

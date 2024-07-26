@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
-import { format } from "date-fns";
+import { format, parseISO } from "date-fns";
 import * as ImagePicker from "expo-image-picker";
 import { Platform, View } from "react-native";
 import { Edge, SafeAreaView } from "react-native-safe-area-context";
@@ -14,7 +14,12 @@ import { RootStackScreen } from "src/navigation/types";
 import { database } from "src/services/database";
 import { BabyModel, GENDER } from "src/services/database/models/BabyModel";
 
-export const BabyFormScreen: RootStackScreen<"BabyForm"> = ({ navigation }) => {
+export const BabyFormScreen: RootStackScreen<"BabyForm"> = ({
+  navigation,
+  route: { params }
+}) => {
+  const refBaby = useRef<BabyModel>();
+
   const [name, setName] = useState<string>();
 
   const [gender, setGender] = useState(GENDER.M);
@@ -23,19 +28,31 @@ export const BabyFormScreen: RootStackScreen<"BabyForm"> = ({ navigation }) => {
 
   const [imageUrl, setImageUrl] = useState<string>();
 
+  const createBaby = () =>
+    database.get<BabyModel>("babies").create((baby) => {
+      baby.name = name;
+
+      baby.gender = gender;
+
+      baby.birthDate = format(birthDate, "yyyy-MM-dd");
+
+      baby.pictureUrl = imageUrl;
+    });
+
+  const updateBaby = () =>
+    refBaby.current?.update((baby) => {
+      baby.name = name;
+
+      baby.gender = gender;
+
+      baby.birthDate = format(birthDate, "yyyy-MM-dd");
+
+      baby.pictureUrl = imageUrl;
+    });
+
   const handleSave = () => {
     database.write(() =>
-      database
-        .get<BabyModel>("babies")
-        .create((baby) => {
-          baby.name = name;
-
-          baby.gender = gender;
-
-          baby.birthday = format(birthDate, "yyyy-MM-dd");
-
-          baby.pictureUrl = imageUrl;
-        })
+      (params?.babyId ? updateBaby() : createBaby())
         .then((baby) => {
           navigation.goBack();
 
@@ -61,6 +78,26 @@ export const BabyFormScreen: RootStackScreen<"BabyForm"> = ({ navigation }) => {
     }
   };
 
+  useEffect(() => {
+    if (params?.babyId) {
+      const fetchBabyById = async () => {
+        refBaby.current = await database
+          .get<BabyModel>("babies")
+          .find(params.babyId);
+
+        setName(refBaby.current.name);
+
+        setGender(refBaby.current.gender);
+
+        setBirthDate(parseISO(refBaby.current.birthDate));
+
+        setImageUrl(refBaby.current.pictureUrl);
+      };
+
+      fetchBabyById();
+    }
+  }, [params]);
+
   return (
     <>
       <BabyProfileHeader
@@ -73,7 +110,11 @@ export const BabyFormScreen: RootStackScreen<"BabyForm"> = ({ navigation }) => {
         <View className="flex-1 pt-6 space-y-6">
           <GenderPicker onChange={setGender} value={gender} />
           <View className="space-y-4">
-            <TextInput onChangeText={setName} placeholder="Enter the name" />
+            <TextInput
+              onChangeText={setName}
+              placeholder="Enter the name"
+              value={name}
+            />
             <DatePickerInput
               onChange={setBirthDate}
               placeholder="Enter the birth date"

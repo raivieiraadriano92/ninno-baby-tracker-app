@@ -1,5 +1,5 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { format, isToday } from "date-fns";
+import { format, isToday, parseISO } from "date-fns";
 import { Pressable, ScrollView, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import colors from "tailwindcss/colors";
@@ -64,7 +64,7 @@ export const HomeTab: TabScreen<"Home"> = ({ navigation }) => (
             <ColorfulCard
               color={activityType[item.type].color}
               leftText={activityType[item.type].emoji}
-              rightText={format(new Date(item.date), "h:mm a")}
+              rightText={format(parseISO(item.date), "h:mm a")}
               subtitle={item.notes}
               title={item.type}
               key={index}
