@@ -2,7 +2,8 @@ import { FunctionComponent } from "react";
 
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { format, parseISO } from "date-fns";
-import { Pressable, PressableProps } from "react-native";
+import { Image } from "expo-image";
+import { Pressable, PressableProps, View } from "react-native";
 import Animated, {
   interpolate,
   useAnimatedStyle,
@@ -11,8 +12,9 @@ import Animated, {
 } from "react-native-reanimated";
 import colors from "tailwindcss/colors";
 
-import { ColorfulCard } from "./ColorfulCard";
+import { Card } from "./Card";
 
+import NinnoFace from "assets/ninno-face.png";
 import { BabyModel } from "src/services/database/models/BabyModel";
 import { genderColor } from "src/utils/global";
 
@@ -59,19 +61,35 @@ export const BabyCard: FunctionComponent<BabyCardPropd> = ({
       ]}
       {...props}
     >
-      <ColorfulCard
-        color={genderColor[baby.gender]}
-        imageUrl={baby.pictureUrl}
-        renderRight={
-          <Ionicons
-            name="arrow-forward"
-            size={24}
-            color={colors[genderColor[baby.gender]][500]}
-          />
-        }
-        subtitle={format(parseISO(baby.birthDate), "MMM d, yyyy")}
-        title={baby.name}
-      />
+      <Card.Container color={genderColor[baby.gender]}>
+        <Card.RoundedSquare
+          style={{
+            padding: baby.pictureUrl ? 0 : 8
+          }}
+          withBorder
+        >
+          {baby.pictureUrl ? (
+            <Image className="h-full w-full" source={baby.pictureUrl} />
+          ) : (
+            <Image
+              className="h-full w-full"
+              contentFit="contain"
+              source={NinnoFace}
+            />
+          )}
+        </Card.RoundedSquare>
+        <View className="flex-1">
+          <Card.Title>{baby.name}</Card.Title>
+          <Card.Caption>
+            {format(parseISO(baby.birthDate), "MMM d, yyyy")}
+          </Card.Caption>
+        </View>
+        <Ionicons
+          name="arrow-forward"
+          size={24}
+          color={colors[genderColor[baby.gender]][400]}
+        />
+      </Card.Container>
     </AnimatedPressable>
   );
 };

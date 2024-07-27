@@ -2,7 +2,7 @@ import { FunctionComponent } from "react";
 
 import { Text as RNText, TextProps as RNTextProps } from "react-native";
 
-type TextProps = RNTextProps;
+export type TextProps = RNTextProps;
 
 export const Text: FunctionComponent<TextProps> = ({
   children,

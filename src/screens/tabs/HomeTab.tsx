@@ -6,7 +6,7 @@ import colors from "tailwindcss/colors";
 
 import { BabyProfileHeader } from "src/components/BabyProfileHeader";
 import { Button } from "src/components/Button";
-import { ColorfulCard } from "src/components/ColorfulCard";
+import { Card } from "src/components/Card";
 import { Text } from "src/components/Text";
 import activities from "src/data/activities.json";
 import { TabScreen } from "src/navigation/types";
@@ -61,19 +61,22 @@ export const HomeTab: TabScreen<"Home"> = ({ navigation }) => (
         </View>
         <View className="space-y-3">
           {todaysActivities.map((item, index) => (
-            <ColorfulCard
-              color={activityType[item.type].color}
-              leftText={activityType[item.type].emoji}
-              rightText={format(parseISO(item.date), "h:mm a")}
-              subtitle={item.notes}
-              title={item.type}
-              key={index}
-            />
+            <Card.Container color={activityType[item.type].color} key={index}>
+              <Card.RoundedSquare withBorder>
+                <Card.Title>{activityType[item.type].emoji}</Card.Title>
+              </Card.RoundedSquare>
+              <View className="flex-1">
+                <Card.Title>{item.type}</Card.Title>
+                <Card.Caption>{item.notes}</Card.Caption>
+              </View>
+              <Card.Caption>
+                {format(parseISO(item.date), "h:mm a")}
+              </Card.Caption>
+            </Card.Container>
           ))}
         </View>
       </SafeAreaView>
     </ScrollView>
-
     <View className="absolute bottom-6 right-6">
       <Button
         className="w-16"
