@@ -13,6 +13,7 @@ import { TextInput } from "src/components/TextInput";
 import { RootStackScreen } from "src/navigation/types";
 import { database } from "src/services/database";
 import { BabyModel, GENDER } from "src/services/database/models/BabyModel";
+import { createBaby, updateBaby } from "src/services/database/utils/babies";
 
 export const BabyFormScreen: RootStackScreen<"BabyForm"> = ({
   navigation,
@@ -28,38 +29,27 @@ export const BabyFormScreen: RootStackScreen<"BabyForm"> = ({
 
   const [imageUrl, setImageUrl] = useState<string>();
 
-  const createBaby = () =>
-    database.get<BabyModel>("babies").create((baby) => {
-      baby.name = name;
-
-      baby.gender = gender;
-
-      baby.birthDate = format(birthDate, "yyyy-MM-dd");
-
-      baby.pictureUrl = imageUrl;
-    });
-
-  const updateBaby = () =>
-    refBaby.current?.update((baby) => {
-      baby.name = name;
-
-      baby.gender = gender;
-
-      baby.birthDate = format(birthDate, "yyyy-MM-dd");
-
-      baby.pictureUrl = imageUrl;
-    });
-
   const handleSave = () => {
-    database.write(() =>
-      (params?.babyId ? updateBaby() : createBaby())
-        .then((baby) => {
-          navigation.goBack();
+    if (!name || !gender || !birthDate) {
+      return;
+    }
 
-          console.log(baby);
-        })
-        .catch((e) => console.error(e))
-    );
+    const payload = {
+      name,
+      gender,
+      birthDate: format(birthDate, "yyyy-MM-dd"),
+      pictureUrl: imageUrl
+    };
+
+    const onSuccess = () => navigation.goBack();
+
+    if (refBaby.current) {
+      updateBaby(refBaby.current, payload, onSuccess);
+
+      return;
+    }
+
+    createBaby(payload, onSuccess);
   };
 
   const pickImage = async () => {
@@ -67,11 +57,8 @@ export const BabyFormScreen: RootStackScreen<"BabyForm"> = ({
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
-      // aspect: [4, 3],
       quality: 1
     });
-
-    console.log(result);
 
     if (!result.canceled) {
       setImageUrl(result.assets[0].uri);

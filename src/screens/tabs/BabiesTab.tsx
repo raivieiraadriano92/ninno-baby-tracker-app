@@ -1,7 +1,7 @@
 import { FunctionComponent } from "react";
 
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { Query } from "@nozbe/watermelondb";
+import { Q, Query } from "@nozbe/watermelondb";
 import { withObservables } from "@nozbe/watermelondb/react";
 import { ScrollView, View } from "react-native";
 import colors from "tailwindcss/colors";
@@ -22,7 +22,9 @@ type ObservableListProps = Pick<ListProps, "onPressBabyCard"> & {
   babiesQuery: Query<BabyModel>;
 };
 
-const babiesQuery = database.get<BabyModel>("babies").query();
+const babiesQuery = database
+  .get<BabyModel>("babies")
+  .query(Q.sortBy("name", Q.asc));
 
 const List: FunctionComponent<ListProps> = ({ babies, onPressBabyCard }) => (
   <View className="flex-1 p-6 space-y-5">
@@ -39,7 +41,12 @@ const List: FunctionComponent<ListProps> = ({ babies, onPressBabyCard }) => (
 const ObservableList: FunctionComponent<ObservableListProps> = withObservables(
   ["babiesQuery"],
   ({ babiesQuery }) => ({
-    babies: babiesQuery.observe()
+    babies: babiesQuery.observeWithColumns([
+      "birth_date",
+      "gender",
+      "picture_url",
+      "name"
+    ])
   })
 )(List);
 

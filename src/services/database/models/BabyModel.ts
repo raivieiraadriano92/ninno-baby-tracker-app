@@ -27,5 +27,5 @@ export class BabyModel extends Model {
   // @ts-ignore
   @text("birth_date") birthDate!: string;
   // @ts-ignore
-  @text("picture_url") pictureUrl: string;
+  @text("picture_url") pictureUrl?: string;
 }

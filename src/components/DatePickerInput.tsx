@@ -54,6 +54,7 @@ export const DatePickerInput: FunctionComponent<DatePickerInputProps> = ({
         <Ionicons name="calendar" size={20} color={colors.neutral[300]} />
       </Pressable>
       <DateTimePickerModal
+        date={value || new Date()}
         isVisible={isDatePickerVisible}
         mode="date"
         onConfirm={handleConfirm}
