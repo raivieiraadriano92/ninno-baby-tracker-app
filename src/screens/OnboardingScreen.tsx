@@ -29,7 +29,7 @@ export const OnboardingScreen: RootStackScreen<"Onboarding"> = ({}) => (
           <Text className="font-medium text-lg">Welcome to</Text>
         </Animated.View>
         <Animated.View entering={FadeInUp.delay(50)}>
-          <Text className="font-bold text-6xl">Ninno</Text>
+          <Text className="font-bold text-4xl">Ninno</Text>
         </Animated.View>
       </View>
       <View>
@@ -44,10 +44,6 @@ export const OnboardingScreen: RootStackScreen<"Onboarding"> = ({}) => (
     <View>
       <Animated.View entering={FadeIn.delay(150)}>
         <AuthButton />
-        {/* <Button
-          onPress={() => navigation.navigate("Upgrade")}
-          title="Let's get started"
-        /> */}
       </Animated.View>
     </View>
   </SafeAreaView>

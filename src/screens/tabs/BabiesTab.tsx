@@ -1,65 +1,32 @@
-import { FunctionComponent } from "react";
-
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { Q, Query } from "@nozbe/watermelondb";
-import { withObservables } from "@nozbe/watermelondb/react";
 import { ScrollView, View } from "react-native";
 import colors from "tailwindcss/colors";
 
 import { BabyCard } from "src/components/BabyCard";
 import { Button } from "src/components/Button";
 import { Header } from "src/components/Header";
+import { ObserveBabiesWrapper } from "src/components/ObserveBabiesWrapper";
 import { TabScreen } from "src/navigation/types";
-import { database } from "src/services/database";
-import { BabyModel } from "src/services/database/models/BabyModel";
-
-type ListProps = {
-  babies: BabyModel[];
-  onPressBabyCard: (_babyId: BabyModel["id"]) => void;
-};
-
-type ObservableListProps = Pick<ListProps, "onPressBabyCard"> & {
-  babiesQuery: Query<BabyModel>;
-};
-
-const babiesQuery = database
-  .get<BabyModel>("babies")
-  .query(Q.sortBy("name", Q.asc));
-
-const List: FunctionComponent<ListProps> = ({ babies, onPressBabyCard }) => (
-  <View className="flex-1 p-6 space-y-5">
-    {babies.map((baby) => (
-      <BabyCard
-        baby={baby}
-        key={baby.id}
-        onPress={() => onPressBabyCard(baby.id)}
-      />
-    ))}
-  </View>
-);
-
-const ObservableList: FunctionComponent<ObservableListProps> = withObservables(
-  ["babiesQuery"],
-  ({ babiesQuery }) => ({
-    babies: babiesQuery.observeWithColumns([
-      "birth_date",
-      "gender",
-      "picture_url",
-      "name"
-    ])
-  })
-)(List);
 
 export const BabiesTab: TabScreen<"Babies"> = ({ navigation }) => (
   <>
     <Header title="My Babies" />
     <ScrollView showsVerticalScrollIndicator={false}>
-      <ObservableList
-        babiesQuery={babiesQuery}
-        onPressBabyCard={(babyId) =>
-          navigation.navigate("BabyForm", { babyId })
-        }
-      />
+      <ObserveBabiesWrapper>
+        {({ babies }) => (
+          <View className="flex-1 p-6 space-y-5">
+            {babies.map((baby) => (
+              <BabyCard
+                baby={baby}
+                key={baby.id}
+                onPress={() =>
+                  navigation.navigate("BabyForm", { babyId: baby.id })
+                }
+              />
+            ))}
+          </View>
+        )}
+      </ObserveBabiesWrapper>
     </ScrollView>
     <View className="absolute bottom-6 right-6">
       <Button

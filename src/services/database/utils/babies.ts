@@ -20,7 +20,13 @@ export const createBaby = (
 
         baby.pictureUrl = payload.pictureUrl;
       })
-      .then(onSuccess)
+      .then((baby) => {
+        if (onSuccess) {
+          onSuccess(baby);
+        }
+
+        baby.markAsSelected();
+      })
       .catch(onError)
   );
 

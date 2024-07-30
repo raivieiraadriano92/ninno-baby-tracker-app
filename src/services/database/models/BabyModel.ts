@@ -1,5 +1,11 @@
 import { Model } from "@nozbe/watermelondb";
-import { date, readonly, text } from "@nozbe/watermelondb/decorators";
+import {
+  date,
+  field,
+  readonly,
+  text,
+  writer
+} from "@nozbe/watermelondb/decorators";
 
 export enum GENDER {
   // eslint-disable-next-line autofix/no-unused-vars
@@ -28,4 +34,22 @@ export class BabyModel extends Model {
   @text("birth_date") birthDate!: string;
   // @ts-ignore
   @text("picture_url") pictureUrl?: string;
+  // @ts-ignore
+  @field("is_selected") isSelected?: boolean;
+
+  // @ts-ignore
+  @writer async markAsSelected() {
+    await this.update((baby) => {
+      baby.isSelected = true;
+    });
+
+    (await this.collection.query()).forEach((baby) => {
+      if (baby.id !== this.id) {
+        baby.update((_baby) => {
+          // @ts-ignore
+          _baby.isSelected = false;
+        });
+      }
+    });
+  }
 }
