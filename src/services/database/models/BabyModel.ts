@@ -52,8 +52,6 @@ export class BabyModel extends Model {
 
     const years = differenceInYears(new Date(), birthdayDate);
 
-    console.log({ days, months, years });
-
     if (years > 0) {
       return `${years} year${years > 1 ? "s" : ""}${months > years * 12 ? ` and ${months - years * 12} month${months - years * 12 > 1 ? "s" : ""}` : ""}`;
     } else if (months > 0) {

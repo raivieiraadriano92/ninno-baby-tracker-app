@@ -49,6 +49,7 @@ export const HomeTab: TabScreen<"Home"> = ({ navigation }) => (
               imageUrl={selectedBaby.pictureUrl}
               subtitle={selectedBaby.formattedBirthDate}
               title={selectedBaby.name}
+              useImagePlaceholder
             />
             <View className="flex-row items-center justify-between">
               <Text className="font-bold my-6 text-lg">Today's Activities</Text>

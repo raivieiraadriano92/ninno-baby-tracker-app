@@ -19,6 +19,7 @@ import colors from "tailwindcss/colors";
 
 import { Text } from "./Text";
 
+import NinnoFace from "assets/ninno-face.png";
 import { GENDER } from "src/services/database/models/BabyModel";
 import { genderColor } from "src/utils/global";
 
@@ -28,6 +29,7 @@ type BabyProfileHeaderProps = SafeAreaViewProps & {
   onPressImage?: () => void;
   subtitle?: string;
   title?: string;
+  useImagePlaceholder?: boolean;
 };
 
 const AnimatedIonicons = Animated.createAnimatedComponent(Ionicons);
@@ -44,6 +46,7 @@ export const BabyProfileHeader: FunctionComponent<BabyProfileHeaderProps> = ({
   style,
   subtitle,
   title,
+  useImagePlaceholder,
   ...props
 }) => {
   const genderSharedValue = useSharedValue(gender === GENDER.M ? 1 : 0);
@@ -65,11 +68,20 @@ export const BabyProfileHeader: FunctionComponent<BabyProfileHeaderProps> = ({
   }));
 
   const animatedGenderBorderColorStyle = useAnimatedStyle(() => ({
+    backgroundColor:
+      !imageUrl && useImagePlaceholder
+        ? interpolateColor(
+            genderSharedValue.value,
+            [0, 1],
+            [colors[genderColor.F][200], colors[genderColor.M][200]]
+          )
+        : colors.white,
     borderColor: interpolateColor(
       genderSharedValue.value,
       [0, 1],
       [colors[genderColor.F][500], colors[genderColor.M][500]]
-    )
+    ),
+    padding: imageUrl ? 0 : 16
   }));
 
   const animatedGenderIconColor = useAnimatedProps(() => ({
@@ -108,6 +120,12 @@ export const BabyProfileHeader: FunctionComponent<BabyProfileHeaderProps> = ({
         >
           {imageUrl ? (
             <Image className="h-40 w-40" source={imageUrl} contentFit="cover" />
+          ) : useImagePlaceholder ? (
+            <Image
+              className="h-full w-full"
+              contentFit="contain"
+              source={NinnoFace}
+            />
           ) : (
             <AnimatedIonicons
               animatedProps={animatedGenderIconColor}
