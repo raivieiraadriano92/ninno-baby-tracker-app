@@ -8,19 +8,19 @@ import { BabyModel } from "src/services/database/models/BabyModel";
 
 type WrapperProps = {
   babies: BabyModel[];
-  children: (_props: { babies: BabyModel[] }) => JSX.Element;
+  children: (_props: { selectedBaby: BabyModel }) => JSX.Element;
 };
 
-type ObserveBabiesWrapperProps = Pick<WrapperProps, "children">;
+type ObserveSelectedBabyWrapperProps = Pick<WrapperProps, "children">;
 
 const babiesQuery = database
   .get<BabyModel>("babies")
-  .query(Q.sortBy("name", Q.asc));
+  .query(Q.where("is_selected", Q.eq(true)));
 
 const Wrapper: FunctionComponent<WrapperProps> = ({ babies, children }) =>
-  children({ babies });
+  children({ selectedBaby: babies[0] });
 
-export const ObserveBabiesWrapper: FunctionComponent<ObserveBabiesWrapperProps> =
+export const ObserveSelectedBabyWrapper: FunctionComponent<ObserveSelectedBabyWrapperProps> =
   withObservables([], () => ({
     babies: babiesQuery.observeWithColumns([
       "birth_date",

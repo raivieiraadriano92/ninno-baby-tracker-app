@@ -123,7 +123,10 @@ export const BabyProfileHeader: FunctionComponent<BabyProfileHeaderProps> = ({
             <Text className="font-bold text-2xl text-center">{title}</Text>
           )}
           {!!subtitle && (
-            <Text className="font-medium text-sky-500 text-sm text-center">
+            <Text
+              className="font-medium text-sm text-center"
+              style={{ color: colors[genderColor[gender]][500] }}
+            >
               {subtitle}
             </Text>
           )}

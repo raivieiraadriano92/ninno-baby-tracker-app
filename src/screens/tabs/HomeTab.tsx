@@ -7,10 +7,10 @@ import colors from "tailwindcss/colors";
 import { BabyProfileHeader } from "src/components/BabyProfileHeader";
 import { Button } from "src/components/Button";
 import { Card } from "src/components/Card";
+import { ObserveSelectedBabyWrapper } from "src/components/ObserveSelectedBabyWrapper";
 import { Text } from "src/components/Text";
 import activities from "src/data/activities.json";
 import { TabScreen } from "src/navigation/types";
-import { GENDER } from "src/services/database/models/BabyModel";
 
 const activityType: Record<
   string,
@@ -38,52 +38,65 @@ const todaysActivities = activities.filter((item) => isToday(item.date)) as {
 }[];
 
 export const HomeTab: TabScreen<"Home"> = ({ navigation }) => (
-  <>
-    <ScrollView showsVerticalScrollIndicator={false}>
-      <SafeAreaView className="p-6" edges={["top"]}>
-        <BabyProfileHeader
-          className="rounded-2xl"
-          gender={GENDER.M}
-          imageUrl="https://img.freepik.com/free-photo/portrait-newborn-baby-sleeping-peacefully_23-2150797330.jpg"
-          subtitle="5 months 15 days"
-          title="Jimmy"
-        />
-        <View className="flex-row items-center justify-between">
-          <Text className="font-bold my-6 text-lg">Today's Activities</Text>
-          <View className="flex-row items-center space-x-4">
-            <Pressable onPress={() => navigation.navigate("ActivityList")}>
-              <Ionicons name="list" size={24} color={colors.sky[500]} />
-            </Pressable>
-            <Pressable onPress={() => navigation.navigate("ActivityReport")}>
-              <Ionicons name="stats-chart" size={24} color={colors.sky[500]} />
-            </Pressable>
-          </View>
-        </View>
-        <View className="space-y-3">
-          {todaysActivities.map((item, index) => (
-            <Card.Container color={activityType[item.type].color} key={index}>
-              <Card.RoundedSquare withBorder>
-                <Card.Title>{activityType[item.type].emoji}</Card.Title>
-              </Card.RoundedSquare>
-              <View className="flex-1">
-                <Card.Title>{item.type}</Card.Title>
-                <Card.Caption>{item.notes}</Card.Caption>
+  <ObserveSelectedBabyWrapper>
+    {({ selectedBaby }) => (
+      <>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <SafeAreaView className="p-6" edges={["top"]}>
+            <BabyProfileHeader
+              className="rounded-2xl"
+              gender={selectedBaby.gender}
+              imageUrl={selectedBaby.pictureUrl}
+              subtitle="5 months 15 days"
+              title={selectedBaby.name}
+            />
+            <View className="flex-row items-center justify-between">
+              <Text className="font-bold my-6 text-lg">Today's Activities</Text>
+              <View className="flex-row items-center space-x-4">
+                <Pressable onPress={() => navigation.navigate("ActivityList")}>
+                  <Ionicons name="list" size={24} color={colors.sky[500]} />
+                </Pressable>
+                <Pressable
+                  onPress={() => navigation.navigate("ActivityReport")}
+                >
+                  <Ionicons
+                    name="stats-chart"
+                    size={24}
+                    color={colors.sky[500]}
+                  />
+                </Pressable>
               </View>
-              <Card.Caption>
-                {format(parseISO(item.date), "h:mm a")}
-              </Card.Caption>
-            </Card.Container>
-          ))}
+            </View>
+            <View className="space-y-3">
+              {todaysActivities.map((item, index) => (
+                <Card.Container
+                  color={activityType[item.type].color}
+                  key={index}
+                >
+                  <Card.RoundedSquare withBorder>
+                    <Card.Title>{activityType[item.type].emoji}</Card.Title>
+                  </Card.RoundedSquare>
+                  <View className="flex-1">
+                    <Card.Title>{item.type}</Card.Title>
+                    <Card.Caption>{item.notes}</Card.Caption>
+                  </View>
+                  <Card.Caption>
+                    {format(parseISO(item.date), "h:mm a")}
+                  </Card.Caption>
+                </Card.Container>
+              ))}
+            </View>
+          </SafeAreaView>
+        </ScrollView>
+        <View className="absolute bottom-6 right-6">
+          <Button
+            className="w-16"
+            onPress={async () => navigation.navigate("ActivityForm")}
+          >
+            <Ionicons name="add" size={24} color={colors.white} />
+          </Button>
         </View>
-      </SafeAreaView>
-    </ScrollView>
-    <View className="absolute bottom-6 right-6">
-      <Button
-        className="w-16"
-        onPress={async () => navigation.navigate("ActivityForm")}
-      >
-        <Ionicons name="add" size={24} color={colors.white} />
-      </Button>
-    </View>
-  </>
+      </>
+    )}
+  </ObserveSelectedBabyWrapper>
 );

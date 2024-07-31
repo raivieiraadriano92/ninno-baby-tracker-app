@@ -50,3 +50,17 @@ export const updateBaby = (
       .then(onSuccess)
       .catch(onError)
   );
+
+export const markBabyAsSelected = (
+  baby: BabyModel,
+  onSuccess?: (_baby: BabyModel) => void,
+  onError?: (_error: any) => void
+) =>
+  database.write(() =>
+    baby
+      .update((baby) => {
+        baby.markAsSelected();
+      })
+      .then(onSuccess)
+      .catch(onError)
+  );
