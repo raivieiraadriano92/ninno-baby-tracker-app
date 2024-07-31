@@ -1,3 +1,4 @@
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import LottieView from "lottie-react-native";
 import { View } from "react-native";
@@ -10,10 +11,12 @@ import type { RootStackScreen, TabParamList } from "./types";
 import BabyCloud from "assets/lottiefiles/baby-cloud.json";
 import { Button } from "src/components/Button";
 import { ObserveBabyCountWrapper } from "src/components/ObserveBabyCountWrapper";
+import { ObserveSelectedBabyWrapper } from "src/components/ObserveSelectedBabyWrapper";
 import { Text } from "src/components/Text";
 import { BabiesTab } from "src/screens/tabs/BabiesTab";
 import { HomeTab } from "src/screens/tabs/HomeTab";
 import { SettingsTab } from "src/screens/tabs/SettingsTab";
+import { genderColor } from "src/utils/global";
 
 const BottomTab = createBottomTabNavigator<TabParamList>();
 
@@ -21,14 +24,48 @@ export const TabNavigator: RootStackScreen<"Tabs"> = ({ navigation }) => (
   <ObserveBabyCountWrapper>
     {({ babyCount }) =>
       babyCount ? (
-        <BottomTab.Navigator
-          sceneContainerStyle={{ backgroundColor: colors.white }}
-          screenOptions={{ headerShown: false }}
-        >
-          <BottomTab.Screen component={HomeTab} name="Home" />
-          <BottomTab.Screen component={BabiesTab} name="Babies" />
-          <BottomTab.Screen component={SettingsTab} name="Settings" />
-        </BottomTab.Navigator>
+        <ObserveSelectedBabyWrapper>
+          {({ selectedBaby }) => (
+            <BottomTab.Navigator
+              sceneContainerStyle={{ backgroundColor: colors.white }}
+              screenOptions={{
+                headerShown: false,
+                tabBarShowLabel: false,
+                tabBarActiveTintColor:
+                  colors[genderColor[selectedBaby.gender]][500],
+                tabBarInactiveTintColor: colors.neutral[400]
+              }}
+            >
+              <BottomTab.Screen
+                component={HomeTab}
+                name="Home"
+                options={{
+                  tabBarIcon: ({ color, size }) => (
+                    <Ionicons color={color} name="list" size={size} />
+                  )
+                }}
+              />
+              <BottomTab.Screen
+                component={BabiesTab}
+                name="Babies"
+                options={{
+                  tabBarIcon: ({ color, size }) => (
+                    <Ionicons color={color} name="people" size={size} />
+                  )
+                }}
+              />
+              <BottomTab.Screen
+                component={SettingsTab}
+                name="Settings"
+                options={{
+                  tabBarIcon: ({ color, size }) => (
+                    <Ionicons color={color} name="settings" size={size} />
+                  )
+                }}
+              />
+            </BottomTab.Navigator>
+          )}
+        </ObserveSelectedBabyWrapper>
       ) : (
         <SafeAreaView className="flex-1 p-6">
           <View className="flex-1 justify-center space-y-4">

@@ -11,6 +11,7 @@ import { ObserveSelectedBabyWrapper } from "src/components/ObserveSelectedBabyWr
 import { Text } from "src/components/Text";
 import activities from "src/data/activities.json";
 import { TabScreen } from "src/navigation/types";
+import { genderColor } from "src/utils/global";
 
 const activityType: Record<
   string,
@@ -47,6 +48,9 @@ export const HomeTab: TabScreen<"Home"> = ({ navigation }) => (
               className="rounded-2xl"
               gender={selectedBaby.gender}
               imageUrl={selectedBaby.pictureUrl}
+              onPressImage={() =>
+                navigation.navigate("BabyForm", { babyId: selectedBaby.id })
+              }
               subtitle={selectedBaby.formattedBirthDate}
               title={selectedBaby.name}
               useImagePlaceholder
@@ -55,7 +59,11 @@ export const HomeTab: TabScreen<"Home"> = ({ navigation }) => (
               <Text className="font-bold my-6 text-lg">Today's Activities</Text>
               <View className="flex-row items-center space-x-4">
                 <Pressable onPress={() => navigation.navigate("ActivityList")}>
-                  <Ionicons name="list" size={24} color={colors.sky[500]} />
+                  <Ionicons
+                    name="list"
+                    size={24}
+                    color={colors[genderColor[selectedBaby.gender]][500]}
+                  />
                 </Pressable>
                 <Pressable
                   onPress={() => navigation.navigate("ActivityReport")}
@@ -63,7 +71,7 @@ export const HomeTab: TabScreen<"Home"> = ({ navigation }) => (
                   <Ionicons
                     name="stats-chart"
                     size={24}
-                    color={colors.sky[500]}
+                    color={colors[genderColor[selectedBaby.gender]][500]}
                   />
                 </Pressable>
               </View>
