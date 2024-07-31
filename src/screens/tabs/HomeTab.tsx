@@ -47,7 +47,7 @@ export const HomeTab: TabScreen<"Home"> = ({ navigation }) => (
               className="rounded-2xl"
               gender={selectedBaby.gender}
               imageUrl={selectedBaby.pictureUrl}
-              subtitle="5 months 15 days"
+              subtitle={selectedBaby.formattedBirthDate}
               title={selectedBaby.name}
             />
             <View className="flex-row items-center justify-between">

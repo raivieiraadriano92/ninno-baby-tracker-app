@@ -6,6 +6,12 @@ import {
   text,
   writer
 } from "@nozbe/watermelondb/decorators";
+import {
+  differenceInDays,
+  differenceInMonths,
+  differenceInYears,
+  parseISO
+} from "date-fns";
 
 export enum GENDER {
   // eslint-disable-next-line autofix/no-unused-vars
@@ -36,6 +42,26 @@ export class BabyModel extends Model {
   @text("picture_url") pictureUrl?: string;
   // @ts-ignore
   @field("is_selected") isSelected?: boolean;
+
+  get formattedBirthDate() {
+    const birthdayDate = parseISO(this.birthDate);
+
+    const days = differenceInDays(new Date(), birthdayDate);
+
+    const months = differenceInMonths(new Date(), birthdayDate);
+
+    const years = differenceInYears(new Date(), birthdayDate);
+
+    console.log({ days, months, years });
+
+    if (years > 0) {
+      return `${years} year${years > 1 ? "s" : ""}${months > years * 12 ? ` and ${months - years * 12} month${months - years * 12 > 1 ? "s" : ""}` : ""}`;
+    } else if (months > 0) {
+      return `${months} month${months > 1 ? "s" : ""}`;
+    }
+
+    return `${days} day${days > 1 ? "s" : ""}`;
+  }
 
   // @ts-ignore
   @writer async markAsSelected() {
