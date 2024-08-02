@@ -14,33 +14,25 @@ import {
 } from "date-fns";
 
 export enum GENDER {
-  // eslint-disable-next-line autofix/no-unused-vars
   F = "F",
-  // eslint-disable-next-line autofix/no-unused-vars
   M = "M"
 }
 
 export class BabyModel extends Model {
   static table = "babies";
+  static associations = {
+    activities: { type: "has_many", foreignKey: "baby_id" }
+  };
 
-  // We add createdAt and updatedAt fields to the model
-  // and they will be automatically managed by WatermelonDB
-  // @ts-ignore
+  // We add createdAt and updatedAt fields to the model and they will be automatically managed by WatermelonDB
   @readonly @date("created_at") createdAt!: Date;
-  // @ts-ignore
   @readonly @date("updated_at") updatedAt!: Date;
-  // we'll use this on server side. Client side watermelonDB has its own mechanism for handling deletions
-  // @ts-ignore
-  @date("deleted_at") deletedAt;
-  // @ts-ignore
+  @readonly @date("deleted_at") deletedAt?: Date; // We'll use this on server side. Client side watermelonDB has its own mechanism for handling deletions
+
   @text("name") name!: string;
-  // @ts-ignore
   @text("gender") gender!: GENDER;
-  // @ts-ignore
   @text("birth_date") birthDate!: string;
-  // @ts-ignore
   @text("picture_url") pictureUrl?: string;
-  // @ts-ignore
   @field("is_selected") isSelected?: boolean;
 
   get formattedBirthDate() {
@@ -61,7 +53,6 @@ export class BabyModel extends Model {
     return `${days} day${days > 1 ? "s" : ""}`;
   }
 
-  // @ts-ignore
   @writer async markAsSelected() {
     await this.update((baby) => {
       baby.isSelected = true;

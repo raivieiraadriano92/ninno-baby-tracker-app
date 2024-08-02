@@ -11,30 +11,12 @@ import { ObserveSelectedBabyWrapper } from "src/components/ObserveSelectedBabyWr
 import { Text } from "src/components/Text";
 import activities from "src/data/activities.json";
 import { TabScreen } from "src/navigation/types";
-import { genderColor } from "src/utils/global";
-
-const activityType: Record<
-  string,
-  { color: keyof typeof colors; emoji: string }
-> = {
-  nursing: { color: "rose", emoji: "🤱" },
-  expressed: { color: "rose", emoji: "🍼" },
-  formula: { color: "rose", emoji: "🍼" },
-  supplement: { color: "rose", emoji: "🥣" },
-  diaper: { color: "amber", emoji: "💩" },
-  sleep: { color: "sky", emoji: "😴" },
-  growth: { color: "lime", emoji: "🌱" },
-  milestone: { color: "lime", emoji: "🎯" },
-  other: { color: "lime", emoji: "🧸" },
-  joy: { color: "lime", emoji: "😃" },
-  temperature: { color: "lime", emoji: "🌡️" },
-  medication: { color: "lime", emoji: "💊" },
-  vaccine: { color: "lime", emoji: "💉" }
-};
+import { ActivityType } from "src/services/database/models/ActivityModel";
+import { activityTypeAttributes, genderColor } from "src/utils/global";
 
 const todaysActivities = activities.filter((item) => isToday(item.date)) as {
   notes: string;
-  type: keyof typeof activityType;
+  type: ActivityType;
   date: string;
 }[];
 
@@ -79,11 +61,13 @@ export const HomeTab: TabScreen<"Home"> = ({ navigation }) => (
             <View className="space-y-3">
               {todaysActivities.map((item, index) => (
                 <Card.Container
-                  color={activityType[item.type].color}
+                  color={activityTypeAttributes[item.type].color}
                   key={index}
                 >
                   <Card.RoundedSquare withBorder>
-                    <Card.Title>{activityType[item.type].emoji}</Card.Title>
+                    <Card.Title>
+                      {activityTypeAttributes[item.type].emoji}
+                    </Card.Title>
                   </Card.RoundedSquare>
                   <View className="flex-1">
                     <Card.Title>{item.type}</Card.Title>

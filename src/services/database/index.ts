@@ -4,6 +4,7 @@ import { setGenerator } from "@nozbe/watermelondb/utils/common/randomId";
 import * as Crypto from "expo-crypto";
 
 import { migrations } from "./migrations";
+import { ActivityModel } from "./models/ActivityModel";
 import { BabyModel } from "./models/BabyModel";
 import { schema } from "./schema";
 
@@ -19,7 +20,7 @@ const adapter = new SQLiteAdapter({
 
 export const database = new Database({
   adapter,
-  modelClasses: [BabyModel]
+  modelClasses: [ActivityModel, BabyModel]
 });
 
 // We need to setup the random id generator to use UUID v4

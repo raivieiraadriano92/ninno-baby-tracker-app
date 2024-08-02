@@ -15,6 +15,18 @@ export const schema = appSchema({
         { name: "updated_at", type: "number" }, // sync field
         { name: "deleted_at", type: "number", isOptional: true } // sync field
       ]
+    }),
+    tableSchema({
+      name: "activities",
+      columns: [
+        { name: "type", type: "string", isIndexed: true },
+        { name: "type_metadata", type: "string", isOptional: true },
+        { name: "notes", type: "string", isOptional: true },
+        { name: "baby_id", type: "string", isIndexed: true },
+        { name: "created_at", type: "number" }, // sync field
+        { name: "updated_at", type: "number" }, // sync field
+        { name: "deleted_at", type: "number", isOptional: true } // sync field
+      ]
     })
   ]
 });
