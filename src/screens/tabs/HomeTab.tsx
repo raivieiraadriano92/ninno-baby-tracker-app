@@ -99,8 +99,8 @@ export const HomeTab: TabScreen<"Home"> = ({ navigation }) => (
         </ScrollView>
         <View className="absolute bottom-6 right-6">
           <Button
-            className="w-16 rounded-full"
-            onPress={async () => navigation.navigate("ActivityForm")}
+            className="h-14 p-0 w-14"
+            onPress={() => navigation.navigate("ActivityForm")}
           >
             <Ionicons name="add" size={24} color={colors.white} />
           </Button>
