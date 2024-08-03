@@ -4,7 +4,6 @@ import colors from "tailwindcss/colors";
 
 import { BabyCard } from "src/components/BabyCard";
 import { Button } from "src/components/Button";
-import { Header } from "src/components/Header";
 import { ObserveBabiesWrapper } from "src/components/ObserveBabiesWrapper";
 import { TabScreen } from "src/navigation/types";
 import { BabyModel } from "src/services/database/models/BabyModel";
@@ -17,7 +16,6 @@ export const BabiesTab: TabScreen<"Babies"> = ({ navigation }) => {
 
   return (
     <>
-      <Header title="My Babies" />
       <ScrollView showsVerticalScrollIndicator={false}>
         <ObserveBabiesWrapper>
           {({ babies }) => (
@@ -54,7 +52,6 @@ export const BabiesTab: TabScreen<"Babies"> = ({ navigation }) => {
           <Ionicons name="add" size={24} color={colors.white} />
         </Button>
       </View>
-      {/* <Button title={"Sync"} onPress={sync} /> */}
     </>
   );
 };

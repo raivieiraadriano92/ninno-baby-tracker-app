@@ -32,7 +32,6 @@ export const TabNavigator: RootStackScreen<"Tabs"> = ({ navigation }) => (
               <BottomTab.Navigator
                 sceneContainerStyle={{ backgroundColor: colors.white }}
                 screenOptions={{
-                  headerShown: false,
                   tabBarShowLabel: false,
                   tabBarActiveTintColor:
                     colors[genderColor[selectedBaby.gender]][500],
@@ -43,6 +42,7 @@ export const TabNavigator: RootStackScreen<"Tabs"> = ({ navigation }) => (
                   component={HomeTab}
                   name="Home"
                   options={{
+                    headerShown: false,
                     tabBarIcon: ({ color, size }) => (
                       <Ionicons color={color} name="list" size={size} />
                     )
@@ -54,7 +54,8 @@ export const TabNavigator: RootStackScreen<"Tabs"> = ({ navigation }) => (
                   options={{
                     tabBarIcon: ({ color, size }) => (
                       <Ionicons color={color} name="people" size={size} />
-                    )
+                    ),
+                    title: "My Little Ones"
                   }}
                 />
                 <BottomTab.Screen

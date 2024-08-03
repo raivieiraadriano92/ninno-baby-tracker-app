@@ -85,7 +85,7 @@ export const RootNavigator: FunctionComponent = () => {
               component={ActivityFormScreen}
               name="ActivityForm"
               options={{
-                headerShown: false,
+                title: "New Activity",
                 presentation: "modal",
                 ...(Platform.OS === "android" && {
                   animation: "slide_from_bottom"
