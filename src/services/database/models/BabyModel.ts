@@ -1,4 +1,4 @@
-import { Model } from "@nozbe/watermelondb";
+import { Model, Query } from "@nozbe/watermelondb";
 import {
   children,
   date,
@@ -7,12 +7,15 @@ import {
   text,
   writer
 } from "@nozbe/watermelondb/decorators";
+import { Associations } from "@nozbe/watermelondb/Model";
 import {
   differenceInDays,
   differenceInMonths,
   differenceInYears,
   parseISO
 } from "date-fns";
+
+import { ActivityModel } from "./ActivityModel";
 
 export enum GENDER {
   F = "F",
@@ -22,11 +25,11 @@ export enum GENDER {
 export class BabyModel extends Model {
   static table = "babies";
 
-  static associations = {
+  static associations: Associations = {
     activities: { type: "has_many", foreignKey: "baby_id" }
   };
 
-  @children("activities") activities;
+  @children("activities") activities!: Query<ActivityModel>;
 
   // We add createdAt and updatedAt fields to the model and they will be automatically managed by WatermelonDB
   @readonly @date("created_at") createdAt!: Date;

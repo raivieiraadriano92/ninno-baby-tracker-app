@@ -1,4 +1,4 @@
-import { Model } from "@nozbe/watermelondb";
+import { Model, Relation } from "@nozbe/watermelondb";
 import {
   date,
   json,
@@ -6,6 +6,9 @@ import {
   relation,
   text
 } from "@nozbe/watermelondb/decorators";
+import { Associations } from "@nozbe/watermelondb/Model";
+
+import { BabyModel } from "./BabyModel";
 
 export enum ActivityType {
   NURSING = "nursing",
@@ -26,11 +29,11 @@ export enum ActivityType {
 export class ActivityModel extends Model {
   static table = "activities";
 
-  static associations = {
+  static associations: Associations = {
     baby: { type: "belongs_to", key: "baby_id" }
   };
 
-  @relation("baby", "baby_id") baby;
+  @relation("baby", "baby_id") baby!: Relation<BabyModel>;
 
   // We add createdAt and updatedAt fields to the model and they will be automatically managed by WatermelonDB
   @readonly @date("created_at") createdAt!: Date;
