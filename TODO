@@ -3,3 +3,6 @@
 - set up ads
 - set up revenue cat
 - enable prod mode on google sign in
+- set a notification or something similar while the field "woke up at" is null
+  - maybe dispatch a notification each x hours
+  - or set a banner inside the app

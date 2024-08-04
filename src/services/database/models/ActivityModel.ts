@@ -30,5 +30,7 @@ export class ActivityModel extends Model {
 
   @text("type") type!: ActivityType;
   @json("type_metadata", (json) => json) typeMetadata?: Record<string, any>;
+  @date("started_at") startedAt!: Date;
+  @date("ended_at") endedAt?: Date;
   @text("notes") notes?: string;
 }

@@ -3,12 +3,15 @@ import { FunctionComponent, useState } from "react";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { format } from "date-fns";
 import { Pressable, PressableProps, View } from "react-native";
-import DateTimePickerModal from "react-native-modal-datetime-picker";
+import DateTimePickerModal, {
+  DateTimePickerProps
+} from "react-native-modal-datetime-picker";
 import colors from "tailwindcss/colors";
 
 import { Text } from "./Text";
 
 type DatePickerInputProps = Omit<PressableProps, "onPress"> & {
+  mode?: DateTimePickerProps["mode"];
   onChange: (_date: Date) => void;
   placeholder: string;
   value?: Date;
@@ -16,6 +19,7 @@ type DatePickerInputProps = Omit<PressableProps, "onPress"> & {
 
 export const DatePickerInput: FunctionComponent<DatePickerInputProps> = ({
   className,
+  mode = "date",
   onChange,
   placeholder,
   value,
@@ -37,6 +41,16 @@ export const DatePickerInput: FunctionComponent<DatePickerInputProps> = ({
     hideDatePicker();
   };
 
+  const formatValue = (value: Date) => {
+    if (mode === "date") {
+      return format(value, "MMM d, yyyy");
+    } else if (mode === "time") {
+      return format(value, "h:mm a");
+    }
+
+    return format(value, "MMM d, yyyy h:mm a");
+  };
+
   return (
     <>
       <Pressable
@@ -48,7 +62,7 @@ export const DatePickerInput: FunctionComponent<DatePickerInputProps> = ({
           <Text
             className={`text-sm ${value ? "text-black" : "text-neutral-300"}`}
           >
-            {value ? format(value, "MMM d, yyyy") : placeholder}
+            {value ? formatValue(value) : placeholder}
           </Text>
         </View>
         <Ionicons name="calendar" size={20} color={colors.neutral[300]} />
@@ -56,7 +70,7 @@ export const DatePickerInput: FunctionComponent<DatePickerInputProps> = ({
       <DateTimePickerModal
         date={value || new Date()}
         isVisible={isDatePickerVisible}
-        mode="date"
+        mode={mode}
         onConfirm={handleConfirm}
         onCancel={hideDatePicker}
       />

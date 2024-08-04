@@ -4,7 +4,7 @@ import { ActivityType } from "src/services/database/models/ActivityModel";
 import { GENDER } from "src/services/database/models/BabyModel";
 
 export const genderColor: Record<GENDER, keyof typeof colors> = {
-  [GENDER.F]: "rose",
+  [GENDER.F]: "pink",
   [GENDER.M]: "sky"
 };
 
@@ -21,7 +21,7 @@ export const activityTypeAttributes: Record<
     title: "Supplement"
   },
   [ActivityType.DIAPER]: { color: "amber", emoji: "💩", title: "Diaper" },
-  [ActivityType.SLEEP]: { color: "sky", emoji: "😴", title: "Sleep" },
+  [ActivityType.SLEEP]: { color: "blue", emoji: "😴", title: "Sleep" },
   [ActivityType.GROWTH]: { color: "lime", emoji: "🌱", title: "Growth" },
   [ActivityType.MILESTONE]: { color: "lime", emoji: "🎯", title: "Milestone" },
   [ActivityType.OTHER]: { color: "lime", emoji: "🧸", title: "Other" },
