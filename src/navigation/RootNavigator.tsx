@@ -19,6 +19,7 @@ import type { RootStackParamList } from "./types";
 import { ActivityFormScreen } from "src/screens/ActivityFormScreen";
 import { ActivityListScreen } from "src/screens/ActivityListScreen";
 import { ActivityReportScreen } from "src/screens/ActivityReportScreen";
+import { ActivityTypeScreen } from "src/screens/ActivityTypeScreen";
 import { BabyFormScreen } from "src/screens/BabyFormScreen";
 import { OnboardingScreen } from "src/screens/OnboardingScreen";
 import { UpgradeScreen } from "src/screens/UpgradeScreen";
@@ -82,10 +83,20 @@ export const RootNavigator: FunctionComponent = () => {
               options={{ headerShown: false }}
             />
             <NativeStack.Screen
+              component={ActivityTypeScreen}
+              name="ActivityType"
+              options={{
+                title: "New Activity",
+                presentation: "modal",
+                ...(Platform.OS === "android" && {
+                  animation: "slide_from_bottom"
+                })
+              }}
+            />
+            <NativeStack.Screen
               component={ActivityFormScreen}
               name="ActivityForm"
               options={{
-                title: "New Activity",
                 presentation: "modal",
                 ...(Platform.OS === "android" && {
                   animation: "slide_from_bottom"

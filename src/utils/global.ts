@@ -10,19 +10,31 @@ export const genderColor: Record<GENDER, keyof typeof colors> = {
 
 export const activityTypeAttributes: Record<
   ActivityType,
-  { color: keyof typeof colors; emoji: string }
+  { color: keyof typeof colors; emoji: string; title: string }
 > = {
-  [ActivityType.NURSING]: { color: "rose", emoji: "🤱" },
-  [ActivityType.EXPRESSED]: { color: "rose", emoji: "🍼" },
-  [ActivityType.FORMULA]: { color: "rose", emoji: "🍼" },
-  [ActivityType.SUPPLEMENT]: { color: "rose", emoji: "🥣" },
-  [ActivityType.DIAPER]: { color: "amber", emoji: "💩" },
-  [ActivityType.SLEEP]: { color: "sky", emoji: "😴" },
-  [ActivityType.GROWTH]: { color: "lime", emoji: "🌱" },
-  [ActivityType.MILESTONE]: { color: "lime", emoji: "🎯" },
-  [ActivityType.OTHER]: { color: "lime", emoji: "🧸" },
-  [ActivityType.JOY]: { color: "lime", emoji: "😃" },
-  [ActivityType.TEMPERATURE]: { color: "lime", emoji: "🌡️" },
-  [ActivityType.MEDICATION]: { color: "lime", emoji: "💊" },
-  [ActivityType.VACCINE]: { color: "lime", emoji: "💉" }
+  [ActivityType.NURSING]: { color: "rose", emoji: "🤱", title: "Nursing" },
+  [ActivityType.EXPRESSED]: { color: "rose", emoji: "🍼", title: "Expressed" },
+  [ActivityType.FORMULA]: { color: "rose", emoji: "🍼", title: "Formula" },
+  [ActivityType.SUPPLEMENT]: {
+    color: "rose",
+    emoji: "🥣",
+    title: "Supplement"
+  },
+  [ActivityType.DIAPER]: { color: "amber", emoji: "💩", title: "Diaper" },
+  [ActivityType.SLEEP]: { color: "sky", emoji: "😴", title: "Sleep" },
+  [ActivityType.GROWTH]: { color: "lime", emoji: "🌱", title: "Growth" },
+  [ActivityType.MILESTONE]: { color: "lime", emoji: "🎯", title: "Milestone" },
+  [ActivityType.OTHER]: { color: "lime", emoji: "🧸", title: "Other" },
+  [ActivityType.JOY]: { color: "lime", emoji: "😃", title: "Joy" },
+  [ActivityType.TEMPERATURE]: {
+    color: "lime",
+    emoji: "🌡️",
+    title: "Temperature"
+  },
+  [ActivityType.MEDICATION]: {
+    color: "lime",
+    emoji: "💊",
+    title: "Medication"
+  },
+  [ActivityType.VACCINE]: { color: "lime", emoji: "💉", title: "Vaccine" }
 };

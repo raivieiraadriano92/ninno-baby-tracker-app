@@ -70,7 +70,9 @@ export const HomeTab: TabScreen<"Home"> = ({ navigation }) => (
                     </Card.Title>
                   </Card.RoundedSquare>
                   <View className="flex-1">
-                    <Card.Title>{item.type}</Card.Title>
+                    <Card.Title>
+                      {activityTypeAttributes[item.type].title}
+                    </Card.Title>
                     <Card.Caption>{item.notes}</Card.Caption>
                   </View>
                   <Card.Caption>
@@ -84,7 +86,7 @@ export const HomeTab: TabScreen<"Home"> = ({ navigation }) => (
         <View className="absolute bottom-6 right-6">
           <Button
             className="h-14 p-0 w-14"
-            onPress={() => navigation.navigate("ActivityForm")}
+            onPress={() => navigation.navigate("ActivityType")}
           >
             <Ionicons name="add" size={24} color={colors.white} />
           </Button>
