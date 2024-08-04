@@ -2,6 +2,7 @@ import { FunctionComponent } from "react";
 
 import { AppState } from "react-native";
 
+import { CustomThemeProvider } from "src/context/CustomThemeProvider";
 import { RootNavigator } from "src/navigation/RootNavigator";
 import { supabase } from "src/services/supabase";
 
@@ -17,6 +18,10 @@ AppState.addEventListener("change", (state) => {
   }
 });
 
-const App: FunctionComponent = () => <RootNavigator />;
+const App: FunctionComponent = () => (
+  <CustomThemeProvider>
+    <RootNavigator />
+  </CustomThemeProvider>
+);
 
 export default App;

@@ -16,6 +16,7 @@ import { TabNavigator } from "./TabNavigator";
 
 import type { RootStackParamList } from "./types";
 
+import { useCustomThemeContext } from "src/context/CustomThemeProvider";
 import { ActivityFormScreen } from "src/screens/ActivityFormScreen";
 import { ActivityListScreen } from "src/screens/ActivityListScreen";
 import { ActivityReportScreen } from "src/screens/ActivityReportScreen";
@@ -31,6 +32,8 @@ export const RootNavigator: FunctionComponent = () => {
   const [appIsReady] = useState(true);
 
   const [session, setSession] = useState<Session | null | undefined>(undefined);
+
+  const { theme } = useCustomThemeContext();
 
   const onLayoutRootView = useCallback(async () => {
     if (appIsReady && session !== undefined) {
@@ -71,7 +74,7 @@ export const RootNavigator: FunctionComponent = () => {
   }
 
   return (
-    <NavigationContainer onReady={onLayoutRootView}>
+    <NavigationContainer onReady={onLayoutRootView} theme={theme}>
       <NativeStack.Navigator
         screenOptions={{ contentStyle: { backgroundColor: colors.white } }}
       >
