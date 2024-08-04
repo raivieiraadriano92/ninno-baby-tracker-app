@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 
 import { format, parseISO } from "date-fns";
 import * as ImagePicker from "expo-image-picker";
@@ -10,8 +10,8 @@ import { Button } from "src/components/Button";
 import { DatePickerInput } from "src/components/DatePickerInput";
 import { GenderPicker } from "src/components/GenderPicker";
 import { TextInput } from "src/components/TextInput";
+import { useFetchBabyById } from "src/hooks/useFetchBabyById";
 import { RootStackScreen } from "src/navigation/types";
-import { database } from "src/services/database";
 import { BabyModel, GENDER } from "src/services/database/models/BabyModel";
 import { createBaby, updateBaby } from "src/services/database/utils/babies";
 
@@ -20,6 +20,21 @@ export const BabyFormScreen: RootStackScreen<"BabyForm"> = ({
   route: { params }
 }) => {
   const refBaby = useRef<BabyModel>();
+
+  useFetchBabyById({
+    id: params?.babyId,
+    onSuccess: useCallback((baby: BabyModel) => {
+      refBaby.current = baby;
+
+      setName(refBaby.current.name);
+
+      setGender(refBaby.current.gender);
+
+      setBirthDate(parseISO(refBaby.current.birthDate));
+
+      setImageUrl(refBaby.current.pictureUrl);
+    }, [])
+  });
 
   const [name, setName] = useState<string>();
 
@@ -64,26 +79,6 @@ export const BabyFormScreen: RootStackScreen<"BabyForm"> = ({
       setImageUrl(result.assets[0].uri);
     }
   };
-
-  useEffect(() => {
-    if (params?.babyId) {
-      const fetchBabyById = async () => {
-        refBaby.current = await database
-          .get<BabyModel>("babies")
-          .find(params.babyId);
-
-        setName(refBaby.current.name);
-
-        setGender(refBaby.current.gender);
-
-        setBirthDate(parseISO(refBaby.current.birthDate));
-
-        setImageUrl(refBaby.current.pictureUrl);
-      };
-
-      fetchBabyById();
-    }
-  }, [params]);
 
   return (
     <>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useRef, useState } from "react";
 
 import { Platform, View } from "react-native";
 import { Edge, SafeAreaView } from "react-native-safe-area-context";
@@ -7,37 +7,49 @@ import colors from "tailwindcss/colors";
 import { ActivityFormHandler } from "src/components/ActivityFormHandler/ActivityFormHandler";
 import { Button } from "src/components/Button";
 import { Text } from "src/components/Text";
+import { useFetchBabyById } from "src/hooks/useFetchBabyById";
 import { RootStackScreen } from "src/navigation/types";
-import { ActivityModel } from "src/services/database/models/ActivityModel";
+import { BabyModel } from "src/services/database/models/BabyModel";
+import {
+  ActivityPayload,
+  createActivity
+} from "src/services/database/utils/activities";
 import { activityTypeAttributes } from "src/utils/global";
 
 export const ActivityFormScreen: RootStackScreen<"ActivityForm"> = ({
   navigation,
   route: { params }
 }) => {
+  const refBaby = useRef<BabyModel>();
+
+  useFetchBabyById({
+    id: params?.babyId,
+    onSuccess: useCallback((baby: BabyModel) => {
+      refBaby.current = baby;
+    }, [])
+  });
+
   const attrs = activityTypeAttributes[params.type];
 
-  const [payload, setPayload] = useState<Partial<ActivityModel>>({
-    startedAt: new Date(),
-    typeMetadata: {}
+  const [payload, setPayload] = useState<ActivityPayload>({
+    type: params.type,
+    typeMetadata: {},
+    startedAt: new Date()
   });
 
   const handleSave = () => {
-    if (!payload.createdAt) {
+    if (!refBaby.current) {
       return;
     }
-    // const payload = {
-    //   name,
-    //   gender,
-    //   birthDate: format(birthDate, "yyyy-MM-dd"),
-    //   pictureUrl: imageUrl
-    // };
-    // const onSuccess = () => navigation.goBack();
+
+    const onSuccess = () => navigation.popToTop();
+
     // if (refBaby.current) {
     //   updateBaby(refBaby.current, payload, onSuccess);
     //   return;
     // }
-    // createBaby(payload, onSuccess);
+
+    createActivity(refBaby.current, payload, onSuccess);
   };
 
   return (

@@ -1,13 +1,11 @@
 import { Dispatch, SetStateAction } from "react";
 
-import {
-  ActivityModel,
-  ActivityType
-} from "src/services/database/models/ActivityModel";
+import { ActivityType } from "src/services/database/models/ActivityModel";
+import { ActivityPayload } from "src/services/database/utils/activities";
 
 export type ActivityFormHandlerProps = {
-  payload: Partial<ActivityModel>;
-  setPayload: Dispatch<SetStateAction<Partial<ActivityModel>>>;
+  payload: ActivityPayload;
+  setPayload: Dispatch<SetStateAction<ActivityPayload>>;
   type: ActivityType;
 };
 

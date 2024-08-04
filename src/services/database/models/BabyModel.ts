@@ -1,5 +1,6 @@
 import { Model } from "@nozbe/watermelondb";
 import {
+  children,
   date,
   field,
   readonly,
@@ -20,9 +21,12 @@ export enum GENDER {
 
 export class BabyModel extends Model {
   static table = "babies";
+
   static associations = {
     activities: { type: "has_many", foreignKey: "baby_id" }
   };
+
+  @children("activities") activities;
 
   // We add createdAt and updatedAt fields to the model and they will be automatically managed by WatermelonDB
   @readonly @date("created_at") createdAt!: Date;

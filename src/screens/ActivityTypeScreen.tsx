@@ -14,7 +14,8 @@ import { activityTypeAttributes } from "src/utils/global";
 const activityTypes = Object.entries(activityTypeAttributes);
 
 export const ActivityTypeScreen: RootStackScreen<"ActivityType"> = ({
-  navigation
+  navigation,
+  route: { params }
 }) => {
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -34,6 +35,7 @@ export const ActivityTypeScreen: RootStackScreen<"ActivityType"> = ({
             key={type}
             onPress={() =>
               navigation.navigate("ActivityForm", {
+                babyId: params.babyId,
                 type: type as ActivityType
               })
             }
