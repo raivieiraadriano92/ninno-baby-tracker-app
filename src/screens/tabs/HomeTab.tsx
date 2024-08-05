@@ -1,5 +1,6 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { format } from "date-fns";
+import { Q } from "@nozbe/watermelondb";
+import { endOfToday, format, startOfToday } from "date-fns";
 import { Pressable, ScrollView, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import colors from "tailwindcss/colors";
@@ -60,7 +61,13 @@ export const HomeTab: TabScreen<"Home"> = ({ navigation }) => {
                 </View>
               </View>
               <ObserveActivitiesWrapper
-                activitiesQuery={selectedBaby.activities}
+                activitiesQuery={selectedBaby.activities.extend(
+                  Q.where(
+                    "started_at",
+                    Q.between(startOfToday().getTime(), endOfToday().getTime())
+                  ),
+                  Q.sortBy("started_at", Q.desc)
+                )}
               >
                 {({ activities }) => (
                   <View className="space-y-3">
@@ -79,7 +86,9 @@ export const HomeTab: TabScreen<"Home"> = ({ navigation }) => {
                             {activityTypeAttributes[activity.type].title}
                           </Card.Title>
                           {!!activity.notes && (
-                            <Card.Caption>{activity.notes}</Card.Caption>
+                            <Card.Caption numberOfLines={1}>
+                              {activity.notes}
+                            </Card.Caption>
                           )}
                         </View>
                         <Card.Caption>
