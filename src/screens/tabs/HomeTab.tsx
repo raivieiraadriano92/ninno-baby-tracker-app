@@ -59,7 +59,9 @@ export const HomeTab: TabScreen<"Home"> = ({ navigation }) => {
                   </Pressable>
                 </View>
               </View>
-              <ObserveActivitiesWrapper>
+              <ObserveActivitiesWrapper
+                activitiesQuery={selectedBaby.activities}
+              >
                 {({ activities }) => (
                   <View className="space-y-3">
                     {activities.map((activity) => (
@@ -79,9 +81,6 @@ export const HomeTab: TabScreen<"Home"> = ({ navigation }) => {
                           {!!activity.notes && (
                             <Card.Caption>{activity.notes}</Card.Caption>
                           )}
-                          <Card.Caption>
-                            {activity.baby.name ?? "no baby"}
-                          </Card.Caption>
                         </View>
                         <Card.Caption>
                           {format(activity.startedAt, "h:mm a")}
