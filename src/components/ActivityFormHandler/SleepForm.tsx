@@ -19,8 +19,6 @@ export const SleepForm: FunctionComponent<ActivityFormProps> = ({
 
   const [isAwake, setIsAwake] = useState(!!payload.endedAt);
 
-  const [notes] = useState<string>();
-
   return (
     <View className="flex-1 space-y-4">
       <DatePickerInput
@@ -31,7 +29,7 @@ export const SleepForm: FunctionComponent<ActivityFormProps> = ({
         placeholder="Fell asleep at"
         value={payload.startedAt}
       />
-      {isAwake ? (
+      {payload.endedAt || isAwake ? (
         <DatePickerInput
           mode="datetime"
           onChange={(date) =>
@@ -56,7 +54,7 @@ export const SleepForm: FunctionComponent<ActivityFormProps> = ({
         onChangeText={(notes) => setPayload((prev) => ({ ...prev, notes }))}
         multiline
         placeholder="Notes"
-        value={notes}
+        value={payload.notes}
       />
     </View>
   );

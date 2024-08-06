@@ -11,13 +11,11 @@ import { ActivityCardProps } from "./types";
 import { activityTypeAttributes } from "src/utils/global";
 
 export const SleepCard: FunctionComponent<ActivityCardProps> = ({
-  activity,
-  ...props
+  activity
 }) => (
   <Card.Container
     color={activityTypeAttributes[activity.type].color}
     key={activity.id}
-    {...props}
   >
     <Card.RoundedSquare withBorder>
       <Card.Title>{activityTypeAttributes[activity.type].emoji}</Card.Title>

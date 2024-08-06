@@ -34,3 +34,28 @@ export const createActivity = (
       .then(onSuccess)
       .catch(onError)
   );
+
+export const updateActivity = (
+  activity: ActivityModel,
+  payload: ActivityPayload,
+  onSuccess?: (_activity: ActivityModel) => void,
+  onError?: (_error: any) => void
+) =>
+  database.write(() =>
+    activity
+      .update((activity) => {
+        activity.type = payload.type;
+
+        activity.typeMetadata = payload.typeMetadata;
+
+        activity.startedAt = payload.startedAt;
+
+        if (payload.endedAt) {
+          activity.endedAt = payload.endedAt;
+        }
+
+        activity.notes = payload.notes;
+      })
+      .then(onSuccess)
+      .catch(onError)
+  );

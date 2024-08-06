@@ -74,6 +74,13 @@ export const HomeTab: TabScreen<"Home"> = ({ navigation }) => {
                       <ActivityCardHandler
                         activity={activity}
                         key={activity.id}
+                        onPress={() =>
+                          navigation.navigate("ActivityForm", {
+                            babyId: selectedBaby.id,
+                            activityId: activity.id,
+                            type: activity.type
+                          })
+                        }
                       />
                     ))}
                   </View>

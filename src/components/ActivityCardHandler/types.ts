@@ -1,9 +1,9 @@
-import { ViewProps } from "react-native";
+import { PressableProps } from "react-native";
 
 import { ActivityModel } from "src/services/database/models/ActivityModel";
 
-export type ActivityCardHandlerProps = ViewProps & {
+export type ActivityCardHandlerProps = PressableProps & {
   activity: ActivityModel;
 };
 
-export type ActivityCardProps = ActivityCardHandlerProps;
+export type ActivityCardProps = Pick<ActivityCardHandlerProps, "activity">;

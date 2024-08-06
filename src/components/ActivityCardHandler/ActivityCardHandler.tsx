@@ -1,5 +1,7 @@
 import { FunctionComponent } from "react";
 
+import { PressableWithScaleEffect } from "../PressableWithScaleEffect";
+
 import { DefaultCard } from "./DefaultCard";
 import { SleepCard } from "./SleepCard";
 import { ActivityCardHandlerProps, ActivityCardProps } from "./types";
@@ -17,9 +19,13 @@ export const ActivityCardHandler: FunctionComponent<
 > = ({ activity, ...props }) => {
   const CardComponent = CardComponentMap[activity.type];
 
-  return CardComponent ? (
-    <CardComponent {...{ activity, ...props }} />
-  ) : (
-    <DefaultCard {...{ activity, ...props }} />
+  return (
+    <PressableWithScaleEffect {...props}>
+      {CardComponent ? (
+        <CardComponent {...{ activity }} />
+      ) : (
+        <DefaultCard {...{ activity }} />
+      )}
+    </PressableWithScaleEffect>
   );
 };

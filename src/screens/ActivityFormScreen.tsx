@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 
 import { Platform, View } from "react-native";
 import { Edge, SafeAreaView } from "react-native-safe-area-context";
@@ -9,10 +9,12 @@ import { Button } from "src/components/Button";
 import { Text } from "src/components/Text";
 import { useFetchBabyById } from "src/hooks/useFetchBabyById";
 import { RootStackScreen } from "src/navigation/types";
+import { ActivityModel } from "src/services/database/models/ActivityModel";
 import { BabyModel } from "src/services/database/models/BabyModel";
 import {
   ActivityPayload,
-  createActivity
+  createActivity,
+  updateActivity
 } from "src/services/database/utils/activities";
 import { activityTypeAttributes } from "src/utils/global";
 
@@ -20,22 +22,43 @@ export const ActivityFormScreen: RootStackScreen<"ActivityForm"> = ({
   navigation,
   route: { params }
 }) => {
+  const activityRef = useRef<ActivityModel>();
+
   const [baby, setBaby] = useState<BabyModel>();
-
-  useFetchBabyById({
-    id: params?.babyId,
-    onSuccess: useCallback((selectedBaby: BabyModel) => {
-      setBaby(selectedBaby);
-    }, [])
-  });
-
-  const attrs = activityTypeAttributes[params.type];
 
   const [payload, setPayload] = useState<ActivityPayload>({
     type: params.type,
     typeMetadata: {},
     startedAt: new Date()
   });
+
+  useFetchBabyById({
+    id: params.babyId,
+    onSuccess: useCallback(
+      async (selectedBaby: BabyModel) => {
+        setBaby(selectedBaby);
+
+        if (params?.activityId) {
+          activityRef.current = await selectedBaby.activities.collection.find(
+            params.activityId
+          );
+
+          if (activityRef.current) {
+            setPayload({
+              startedAt: activityRef.current.startedAt,
+              type: activityRef.current.type,
+              endedAt: activityRef.current.endedAt,
+              notes: activityRef.current.notes,
+              typeMetadata: activityRef.current.typeMetadata
+            });
+          }
+        }
+      },
+      [params?.activityId]
+    )
+  });
+
+  const attrs = activityTypeAttributes[params.type];
 
   const handleSave = () => {
     if (!baby) {
@@ -44,10 +67,11 @@ export const ActivityFormScreen: RootStackScreen<"ActivityForm"> = ({
 
     const onSuccess = () => navigation.popToTop();
 
-    // if (baby) {
-    //   updateBaby(baby, payload, onSuccess);
-    //   return;
-    // }
+    if (activityRef.current) {
+      updateActivity(activityRef.current, payload, onSuccess);
+
+      return;
+    }
 
     createActivity(baby, payload, onSuccess);
   };
