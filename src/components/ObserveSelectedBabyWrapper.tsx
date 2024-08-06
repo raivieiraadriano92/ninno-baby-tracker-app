@@ -37,7 +37,7 @@ const Wrapper: FunctionComponent<WrapperProps> = ({ babies, children }) => {
     }
   }, [selectedBaby, setTheme]);
 
-  return children({ selectedBaby });
+  return selectedBaby ? children({ selectedBaby }) : <></>;
 };
 
 export const ObserveSelectedBabyWrapper: FunctionComponent<ObserveSelectedBabyWrapperProps> =

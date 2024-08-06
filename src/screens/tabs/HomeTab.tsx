@@ -85,7 +85,9 @@ export const HomeTab: TabScreen<"Home"> = ({ navigation }) => {
             <Button
               className="h-14 p-0 w-14"
               onPress={() =>
-                navigation.navigate("ActivityType", { babyId: selectedBaby.id })
+                navigation.navigate("ActivityType", {
+                  babyId: selectedBaby.id
+                })
               }
             >
               <Ionicons name="add" size={24} color={colors.white} />

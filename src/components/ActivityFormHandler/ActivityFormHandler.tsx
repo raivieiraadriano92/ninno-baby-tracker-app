@@ -14,12 +14,12 @@ const FormComponentMap: Partial<
 
 export const ActivityFormHandler: FunctionComponent<
   ActivityFormHandlerProps
-> = ({ payload, setPayload, type }) => {
+> = ({ baby, payload, setPayload, type }) => {
   const FormComponent = FormComponentMap[type];
 
   return FormComponent ? (
-    <FormComponent {...{ payload, setPayload }} />
+    <FormComponent {...{ baby, payload, setPayload }} />
   ) : (
-    <DefaultForm {...{ payload, setPayload }} />
+    <DefaultForm {...{ baby, payload, setPayload }} />
   );
 };

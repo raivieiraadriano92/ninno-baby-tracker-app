@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useState } from "react";
 
 import { Platform, View } from "react-native";
 import { Edge, SafeAreaView } from "react-native-safe-area-context";
@@ -20,12 +20,12 @@ export const ActivityFormScreen: RootStackScreen<"ActivityForm"> = ({
   navigation,
   route: { params }
 }) => {
-  const refBaby = useRef<BabyModel>();
+  const [baby, setBaby] = useState<BabyModel>();
 
   useFetchBabyById({
     id: params?.babyId,
-    onSuccess: useCallback((baby: BabyModel) => {
-      refBaby.current = baby;
+    onSuccess: useCallback((selectedBaby: BabyModel) => {
+      setBaby(selectedBaby);
     }, [])
   });
 
@@ -38,19 +38,23 @@ export const ActivityFormScreen: RootStackScreen<"ActivityForm"> = ({
   });
 
   const handleSave = () => {
-    if (!refBaby.current) {
+    if (!baby) {
       return;
     }
 
     const onSuccess = () => navigation.popToTop();
 
-    // if (refBaby.current) {
-    //   updateBaby(refBaby.current, payload, onSuccess);
+    // if (baby) {
+    //   updateBaby(baby, payload, onSuccess);
     //   return;
     // }
 
-    createActivity(refBaby.current, payload, onSuccess);
+    createActivity(baby, payload, onSuccess);
   };
+
+  if (!baby) {
+    return null;
+  }
 
   return (
     <>
@@ -74,6 +78,7 @@ export const ActivityFormScreen: RootStackScreen<"ActivityForm"> = ({
       </Text>
       <SafeAreaView className="flex-1 p-6" edges={["bottom"]}>
         <ActivityFormHandler
+          baby={baby}
           payload={payload}
           setPayload={setPayload}
           type={params.type}

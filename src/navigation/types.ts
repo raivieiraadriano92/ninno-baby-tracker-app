@@ -8,12 +8,19 @@ import {
 import type { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 
-import { ActivityType } from "src/services/database/models/ActivityModel";
+import {
+  ActivityModel,
+  ActivityType
+} from "src/services/database/models/ActivityModel";
 import { BabyModel } from "src/services/database/models/BabyModel";
 
 export type RootStackParamList = {
   ActivityType: { babyId: BabyModel["id"] };
-  ActivityForm: { babyId: BabyModel["id"]; type: ActivityType };
+  ActivityForm: {
+    activityId?: ActivityModel["id"];
+    babyId: BabyModel["id"];
+    type: ActivityType;
+  };
   ActivityList: undefined;
   ActivityReport: undefined;
   BabyForm: { babyId: BabyModel["id"] } | undefined;
