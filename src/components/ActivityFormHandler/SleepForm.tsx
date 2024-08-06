@@ -1,6 +1,7 @@
 import { FunctionComponent, useState } from "react";
 
 import { TouchableOpacity, View } from "react-native";
+import Animated, { FadeInUp, LinearTransition } from "react-native-reanimated";
 
 import { Text } from "../Text";
 
@@ -30,14 +31,16 @@ export const SleepForm: FunctionComponent<ActivityFormProps> = ({
         value={payload.startedAt}
       />
       {payload.endedAt || isAwake ? (
-        <DatePickerInput
-          mode="datetime"
-          onChange={(date) =>
-            setPayload((prev) => ({ ...prev, endedAt: date }))
-          }
-          placeholder="Woke up at"
-          value={payload.endedAt}
-        />
+        <Animated.View entering={FadeInUp} layout={LinearTransition}>
+          <DatePickerInput
+            mode="datetime"
+            onChange={(date) =>
+              setPayload((prev) => ({ ...prev, endedAt: date }))
+            }
+            placeholder="Woke up at"
+            value={payload.endedAt}
+          />
+        </Animated.View>
       ) : (
         <TouchableOpacity onPress={() => setIsAwake(true)}>
           <Text style={{ color: theme.colors.primary }}>
@@ -49,13 +52,15 @@ export const SleepForm: FunctionComponent<ActivityFormProps> = ({
           </Text>
         </TouchableOpacity>
       )}
-      <TextInput
-        className="h-20"
-        onChangeText={(notes) => setPayload((prev) => ({ ...prev, notes }))}
-        multiline
-        placeholder="Notes"
-        value={payload.notes}
-      />
+      <Animated.View layout={LinearTransition}>
+        <TextInput
+          className="h-20"
+          onChangeText={(notes) => setPayload((prev) => ({ ...prev, notes }))}
+          multiline
+          placeholder="Notes"
+          value={payload.notes}
+        />
+      </Animated.View>
     </View>
   );
 };
