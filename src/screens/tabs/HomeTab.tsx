@@ -1,19 +1,18 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Q } from "@nozbe/watermelondb";
-import { endOfToday, format, startOfToday } from "date-fns";
+import { endOfToday, startOfToday } from "date-fns";
 import { Pressable, ScrollView, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import colors from "tailwindcss/colors";
 
+import { ActivityCardHandler } from "src/components/ActivityCardHandler/ActivityCardHandler";
 import { BabyProfileHeader } from "src/components/BabyProfileHeader";
 import { Button } from "src/components/Button";
-import { Card } from "src/components/Card";
 import { ObserveActivitiesWrapper } from "src/components/ObserveActivitiesWrapper";
 import { ObserveSelectedBabyWrapper } from "src/components/ObserveSelectedBabyWrapper";
 import { Text } from "src/components/Text";
 import { useCustomThemeContext } from "src/context/CustomThemeProvider";
 import { TabScreen } from "src/navigation/types";
-import { activityTypeAttributes } from "src/utils/global";
 
 export const HomeTab: TabScreen<"Home"> = ({ navigation }) => {
   const { theme } = useCustomThemeContext();
@@ -72,29 +71,10 @@ export const HomeTab: TabScreen<"Home"> = ({ navigation }) => {
                 {({ activities }) => (
                   <View className="space-y-3">
                     {activities.map((activity) => (
-                      <Card.Container
-                        color={activityTypeAttributes[activity.type].color}
+                      <ActivityCardHandler
+                        activity={activity}
                         key={activity.id}
-                      >
-                        <Card.RoundedSquare withBorder>
-                          <Card.Title>
-                            {activityTypeAttributes[activity.type].emoji}
-                          </Card.Title>
-                        </Card.RoundedSquare>
-                        <View className="flex-1">
-                          <Card.Title>
-                            {activityTypeAttributes[activity.type].title}
-                          </Card.Title>
-                          {!!activity.notes && (
-                            <Card.Caption numberOfLines={1}>
-                              {activity.notes}
-                            </Card.Caption>
-                          )}
-                        </View>
-                        <Card.Caption>
-                          {format(activity.startedAt, "h:mm a")}
-                        </Card.Caption>
-                      </Card.Container>
+                      />
                     ))}
                   </View>
                 )}

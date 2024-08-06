@@ -7,10 +7,7 @@ export const CardCaption: FunctionComponent<PropsWithChildren<TextProps>> = ({
   className,
   ...props
 }) => (
-  <Text
-    className={`font-light text-neutral-500 text-xs ${className}`}
-    {...props}
-  >
+  <Text className={`text-neutral-500 text-xs ${className}`} {...props}>
     {children}
   </Text>
 );
