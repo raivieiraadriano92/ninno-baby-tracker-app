@@ -8,23 +8,29 @@ import { Text } from './text'
 import type { TouchableOpacityProps } from 'react-native'
 
 const buttonVariants = tv({
-  base: 'items-center justify-center rounded-full',
+  slots: {
+    button: 'items-center justify-center rounded-full',
+    text: 'text-xl'
+  },
   variants: {
     variant: {
-      link: 'bg-transparent',
-      outline: 'border-custom-primary border-2 h-14',
-      solid: 'bg-custom-primary h-14'
-    }
-  }
-})
-
-const buttonTextVariants = tv({
-  base: 'text-xl',
-  variants: {
-    variant: {
-      link: 'text-base text-custom-primary',
-      outline: 'text-custom-primary',
-      solid: 'text-white'
+      link: {
+        button: 'bg-transparent',
+        text: 'text-base text-custom-primary'
+      },
+      outline: {
+        button: 'border-custom-primary border-2 h-14',
+        text: 'text-custom-primary'
+      },
+      solid: {
+        button: 'bg-custom-primary h-14',
+        text: 'text-white'
+      }
+    },
+    isDisabled: {
+      true: {
+        button: 'bg-opacity-80'
+      }
     }
   }
 })
@@ -44,18 +50,16 @@ export const Button: FunctionComponent<ButtonProps> = ({
   variant = 'solid',
   ...props
 }) => {
+  const { button, text } = buttonVariants({ variant, isDisabled: disabled, className })
+
   const isDisabled = disabled ?? isLoading
 
   return (
-    <TouchableOpacity
-      className={`${buttonVariants({ variant })} ${className}`}
-      disabled={isDisabled}
-      style={[style, isDisabled && { opacity: 0.8 }]}
-      {...props}>
+    <TouchableOpacity className={button()} disabled={isDisabled} style={style} {...props}>
       {isLoading ? (
         <ActivityIndicator color="white" />
       ) : (
-        <Text bold className={buttonTextVariants({ variant })}>
+        <Text bold className={text()}>
           {title}
         </Text>
       )}
