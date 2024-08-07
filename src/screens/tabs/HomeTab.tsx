@@ -1,5 +1,5 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { Pressable, ScrollView, View } from "react-native";
+import { ScrollView, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { ActivityCardHandler } from "src/components/ActivityCardHandler/ActivityCardHandler";
@@ -37,7 +37,7 @@ export const HomeTab: TabScreen<"Home"> = ({ navigation }) => {
                   Today's Activities
                 </Text>
                 <View className="flex-row items-center space-x-4">
-                  <Pressable
+                  <TouchableOpacity
                     onPress={() => navigation.navigate("ActivityList")}
                   >
                     <Ionicons
@@ -45,8 +45,8 @@ export const HomeTab: TabScreen<"Home"> = ({ navigation }) => {
                       size={24}
                       color={theme.colors.primary}
                     />
-                  </Pressable>
-                  <Pressable
+                  </TouchableOpacity>
+                  <TouchableOpacity
                     onPress={() => navigation.navigate("ActivityReport")}
                   >
                     <Ionicons
@@ -54,7 +54,7 @@ export const HomeTab: TabScreen<"Home"> = ({ navigation }) => {
                       size={24}
                       color={theme.colors.primary}
                     />
-                  </Pressable>
+                  </TouchableOpacity>
                 </View>
               </View>
               <ObserveActivitiesWrapper

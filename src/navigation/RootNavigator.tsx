@@ -110,10 +110,16 @@ export const RootNavigator: FunctionComponent = () => {
             <NativeStack.Screen
               component={ActivityListScreen}
               name="ActivityList"
+              options={{
+                title: "Activities"
+              }}
             />
             <NativeStack.Screen
               component={ActivityReportScreen}
               name="ActivityReport"
+              options={{
+                title: "Activity Reports"
+              }}
             />
             <NativeStack.Screen
               component={BabyFormScreen}
