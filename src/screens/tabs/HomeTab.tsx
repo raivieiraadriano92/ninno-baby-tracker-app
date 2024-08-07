@@ -3,11 +3,10 @@ import { Q } from "@nozbe/watermelondb";
 import { endOfToday, startOfToday } from "date-fns";
 import { Pressable, ScrollView, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import colors from "tailwindcss/colors";
 
 import { ActivityCardHandler } from "src/components/ActivityCardHandler/ActivityCardHandler";
+import { AddButton } from "src/components/AddButton";
 import { BabyProfileHeader } from "src/components/BabyProfileHeader";
-import { Button } from "src/components/Button";
 import { ObserveActivitiesWrapper } from "src/components/ObserveActivitiesWrapper";
 import { ObserveSelectedBabyWrapper } from "src/components/ObserveSelectedBabyWrapper";
 import { Text } from "src/components/Text";
@@ -88,17 +87,28 @@ export const HomeTab: TabScreen<"Home"> = ({ navigation }) => {
               </ObserveActivitiesWrapper>
             </SafeAreaView>
           </ScrollView>
-          <View className="absolute bottom-6 right-6">
-            <Button
-              className="h-12 p-0 w-12"
+          <View className="absolute bottom-6 right-6 space-y-6">
+            {/* <Button
+              className="border-[2px] h-12 p-0 w-12"
+              customColors={[
+                colors[activityTypeAttributes.sleep.color][100],
+                colors[activityTypeAttributes.sleep.color][50]
+              ]}
+              enableShadow
+              style={{
+                borderColor: colors[activityTypeAttributes.sleep.color][400],
+                shadowColor: colors[activityTypeAttributes.sleep.color][500]
+              }}
+            >
+              <Text>{activityTypeAttributes.sleep.emoji}</Text>
+            </Button> */}
+            <AddButton
               onPress={() =>
                 navigation.navigate("ActivityType", {
                   babyId: selectedBaby.id
                 })
               }
-            >
-              <Ionicons name="add" size={24} color={colors.white} />
-            </Button>
+            />
           </View>
         </>
       )}

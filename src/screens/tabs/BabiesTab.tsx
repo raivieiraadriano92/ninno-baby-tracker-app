@@ -2,8 +2,8 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { Pressable, ScrollView, View } from "react-native";
 import colors from "tailwindcss/colors";
 
+import { AddButton } from "src/components/AddButton";
 import { BabyCard } from "src/components/BabyCard";
-import { Button } from "src/components/Button";
 import { ObserveBabiesWrapper } from "src/components/ObserveBabiesWrapper";
 import { TabScreen } from "src/navigation/types";
 import { BabyModel } from "src/services/database/models/BabyModel";
@@ -45,12 +45,7 @@ export const BabiesTab: TabScreen<"Babies"> = ({ navigation }) => {
         </ObserveBabiesWrapper>
       </ScrollView>
       <View className="absolute bottom-6 right-6">
-        <Button
-          className="h-12 p-0 w-12"
-          onPress={() => navigation.navigate("BabyForm")}
-        >
-          <Ionicons name="add" size={24} color={colors.white} />
-        </Button>
+        <AddButton onPress={() => navigation.navigate("BabyForm")} />
       </View>
     </>
   );
