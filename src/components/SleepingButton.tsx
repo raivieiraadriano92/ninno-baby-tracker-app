@@ -14,7 +14,7 @@ import { Text } from "./Text";
 
 import { activityTypeAttributes } from "src/utils/global";
 
-export const SleepingButton: typeof Button = ({}) => {
+export const SleepingButton: typeof Button = ({ ...props }) => {
   const progress = useSharedValue(0);
 
   const animatedStyle = useAnimatedStyle(() => ({
@@ -37,6 +37,7 @@ export const SleepingButton: typeof Button = ({}) => {
         borderColor: colors[activityTypeAttributes.sleep.color][400],
         shadowColor: colors[activityTypeAttributes.sleep.color][500]
       }}
+      {...props}
     >
       <Animated.View style={animatedStyle}>
         <Text>{activityTypeAttributes.sleep.emoji}</Text>
