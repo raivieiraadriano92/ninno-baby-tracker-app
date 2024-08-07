@@ -13,6 +13,9 @@ import colors from "tailwindcss/colors";
 import { Text } from "./Text";
 
 type ButtonProps = PressableProps & {
+  customColors?: string[];
+  enableShadow?: boolean;
+  shadowColor?: string;
   title?: string;
   variant?: ButtonVariant;
 };
@@ -35,8 +38,11 @@ const variants: Record<ButtonVariant, { container: string; text: string }> = {
 export const Button: FunctionComponent<ButtonProps> = ({
   children,
   className,
+  customColors,
+  enableShadow,
   onPressIn,
   onPressOut,
+  shadowColor = colors.neutral[500],
   style,
   title,
   variant = "solid",
@@ -51,7 +57,9 @@ export const Button: FunctionComponent<ButtonProps> = ({
         : interpolateColor(
             progress.value,
             [0, 1],
-            [colors.black, colors.neutral[800]]
+            customColors?.length === 2
+              ? customColors
+              : [colors.black, colors.neutral[800]]
           ),
     transform: [{ scale: interpolate(progress.value, [0, 1], [1, 0.98]) }]
   }));
@@ -73,7 +81,20 @@ export const Button: FunctionComponent<ButtonProps> = ({
       className={`bg-black items-center justify-center rounded-2xl ${variants[variant].container} ${className}`}
       onPressIn={handleOnPressIn}
       onPressOut={handleOnPressOut}
-      style={[animatedStyle, style]}
+      style={[
+        animatedStyle,
+        enableShadow && {
+          shadowColor,
+          shadowOffset: {
+            width: 0,
+            height: 5
+          },
+          shadowOpacity: 0.4,
+          shadowRadius: 6,
+          elevation: 10
+        },
+        style
+      ]}
       {...props}
     >
       {!!title && (
