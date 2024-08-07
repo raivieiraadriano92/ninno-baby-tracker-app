@@ -32,6 +32,10 @@ const Wrapper: FunctionComponent<WrapperProps> = ({ babies, children }) => {
         colors: {
           ...prev.colors,
           primary: colors[genderColor[selectedBaby.gender]][500]
+        },
+        colorTokens: {
+          ...prev.colorTokens,
+          primary: genderColor[selectedBaby.gender]
         }
       }));
     }
