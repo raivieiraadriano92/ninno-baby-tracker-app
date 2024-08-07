@@ -37,6 +37,11 @@ export type DiaperTypeMetadata = {
   status: DiaperStatus;
 };
 
+export type ExpressedTypeMetadata = {
+  amount: number;
+  unit: "ml";
+};
+
 export class ActivityModel extends Model {
   static table = "activities";
 

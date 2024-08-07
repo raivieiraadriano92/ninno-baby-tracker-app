@@ -4,6 +4,7 @@ import { PressableWithScaleEffect } from "../PressableWithScaleEffect";
 
 import { DefaultCard } from "./DefaultCard";
 import { DiaperCard } from "./DiaperCard";
+import { ExpressedCard } from "./ExpressedCard";
 import { SleepCard } from "./SleepCard";
 import { ActivityCardHandlerProps, ActivityCardProps } from "./types";
 
@@ -13,6 +14,7 @@ const CardComponentMap: Partial<
   Record<ActivityType, FunctionComponent<ActivityCardProps>>
 > = {
   [ActivityType.DIAPER]: DiaperCard,
+  [ActivityType.EXPRESSED]: ExpressedCard,
   [ActivityType.SLEEP]: SleepCard
 };
 
