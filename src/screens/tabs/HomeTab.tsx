@@ -1,6 +1,4 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { Q } from "@nozbe/watermelondb";
-import { endOfToday, startOfToday } from "date-fns";
 import { Pressable, ScrollView, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -9,6 +7,7 @@ import { AddButton } from "src/components/AddButton";
 import { BabyProfileHeader } from "src/components/BabyProfileHeader";
 import { ObserveActivitiesWrapper } from "src/components/ObserveActivitiesWrapper";
 import { ObserveSelectedBabyWrapper } from "src/components/ObserveSelectedBabyWrapper";
+import { SleepingButton } from "src/components/SleepingButton";
 import { Text } from "src/components/Text";
 import { useCustomThemeContext } from "src/context/CustomThemeProvider";
 import { TabScreen } from "src/navigation/types";
@@ -59,17 +58,11 @@ export const HomeTab: TabScreen<"Home"> = ({ navigation }) => {
                 </View>
               </View>
               <ObserveActivitiesWrapper
-                activitiesQuery={selectedBaby.activities.extend(
-                  Q.where(
-                    "started_at",
-                    Q.between(startOfToday().getTime(), endOfToday().getTime())
-                  ),
-                  Q.sortBy("started_at", Q.desc)
-                )}
+                activitiesQuery={selectedBaby.todaysActivities}
               >
-                {({ activities }) => (
+                {({ activities: todaysActivities }) => (
                   <View className="space-y-3">
-                    {activities.map((activity) => (
+                    {todaysActivities.map((activity) => (
                       <ActivityCardHandler
                         activity={activity}
                         key={activity.id}
@@ -88,20 +81,25 @@ export const HomeTab: TabScreen<"Home"> = ({ navigation }) => {
             </SafeAreaView>
           </ScrollView>
           <View className="absolute bottom-6 right-6 space-y-6">
-            {/* <Button
-              className="border-[2px] h-12 p-0 w-12"
-              customColors={[
-                colors[activityTypeAttributes.sleep.color][100],
-                colors[activityTypeAttributes.sleep.color][50]
-              ]}
-              enableShadow
-              style={{
-                borderColor: colors[activityTypeAttributes.sleep.color][400],
-                shadowColor: colors[activityTypeAttributes.sleep.color][500]
-              }}
+            <ObserveActivitiesWrapper
+              activitiesQuery={selectedBaby.unfinishedSleepActivities}
             >
-              <Text>{activityTypeAttributes.sleep.emoji}</Text>
-            </Button> */}
+              {({ activities: unfinishedSleepActivities }) =>
+                !unfinishedSleepActivities.length ? (
+                  <></>
+                ) : (
+                  <SleepingButton
+                    onPress={() =>
+                      navigation.navigate("ActivityForm", {
+                        babyId: selectedBaby.id,
+                        activityId: unfinishedSleepActivities[0].id,
+                        type: unfinishedSleepActivities[0].type
+                      })
+                    }
+                  />
+                )
+              }
+            </ObserveActivitiesWrapper>
             <AddButton
               onPress={() =>
                 navigation.navigate("ActivityType", {

@@ -42,7 +42,13 @@ export const SleepForm: FunctionComponent<ActivityFormProps> = ({
           />
         </Animated.View>
       ) : (
-        <TouchableOpacity onPress={() => setIsAwake(true)}>
+        <TouchableOpacity
+          onPress={() => {
+            setPayload((prev) => ({ ...prev, endedAt: new Date() }));
+
+            setIsAwake(true);
+          }}
+        >
           <Text style={{ color: theme.colors.primary }}>
             {"Is "}
             <Text className="font-bold" style={{ color: theme.colors.primary }}>
