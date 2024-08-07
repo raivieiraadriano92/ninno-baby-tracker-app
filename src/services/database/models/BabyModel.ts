@@ -1,8 +1,9 @@
-import { Model, Query } from "@nozbe/watermelondb";
+import { Model, Q, Query } from "@nozbe/watermelondb";
 import {
   children,
   date,
   field,
+  lazy,
   readonly,
   text,
   writer
@@ -12,10 +13,12 @@ import {
   differenceInDays,
   differenceInMonths,
   differenceInYears,
-  parseISO
+  endOfToday,
+  parseISO,
+  startOfToday
 } from "date-fns";
 
-import { ActivityModel } from "./ActivityModel";
+import { ActivityModel, ActivityType } from "./ActivityModel";
 
 export enum GENDER {
   F = "F",
@@ -30,6 +33,20 @@ export class BabyModel extends Model {
   };
 
   @children("activities") activities!: Query<ActivityModel>;
+
+  @lazy todaysActivities = this.activities.extend(
+    Q.where(
+      "started_at",
+      Q.between(startOfToday().getTime(), endOfToday().getTime())
+    ),
+    Q.sortBy("started_at", Q.desc)
+  );
+
+  @lazy unfinishedSleepActivities = this.activities.extend(
+    Q.where("ended_at", null),
+    Q.and(Q.where("type", ActivityType.SLEEP)),
+    Q.sortBy("started_at", Q.desc)
+  );
 
   // We add createdAt and updatedAt fields to the model and they will be automatically managed by WatermelonDB
   @readonly @date("created_at") createdAt!: Date;
