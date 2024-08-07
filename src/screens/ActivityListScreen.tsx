@@ -34,7 +34,7 @@ export const ActivityListScreen: RootStackScreen<"ActivityList"> = ({
         </View>
       )
     });
-  }, []);
+  }, [navigation, theme.colors.primary]);
 
   return (
     <ObserveSelectedBabyWrapper>
@@ -43,7 +43,7 @@ export const ActivityListScreen: RootStackScreen<"ActivityList"> = ({
           <ScrollView showsVerticalScrollIndicator={false}>
             <SafeAreaView className="p-6" edges={["bottom"]}>
               <ObserveActivitiesWrapper
-                activitiesQuery={selectedBaby.activities}
+                activitiesQuery={selectedBaby.allActivities}
               >
                 {({ activities }) => (
                   <View className="space-y-3">
@@ -55,7 +55,8 @@ export const ActivityListScreen: RootStackScreen<"ActivityList"> = ({
                           navigation.navigate("ActivityForm", {
                             babyId: selectedBaby.id,
                             activityId: activity.id,
-                            type: activity.type
+                            type: activity.type,
+                            useGoBackOnSave: true
                           })
                         }
                       />

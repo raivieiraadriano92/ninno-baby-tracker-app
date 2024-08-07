@@ -20,6 +20,7 @@ export type RootStackParamList = {
     activityId?: ActivityModel["id"];
     babyId: BabyModel["id"];
     type: ActivityType;
+    useGoBackOnSave?: boolean;
   };
   ActivityList: undefined;
   ActivityReport: undefined;

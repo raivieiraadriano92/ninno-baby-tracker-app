@@ -34,6 +34,8 @@ export class BabyModel extends Model {
 
   @children("activities") activities!: Query<ActivityModel>;
 
+  @lazy allActivities = this.activities.extend(Q.sortBy("started_at", Q.desc));
+
   @lazy todaysActivities = this.activities.extend(
     Q.where(
       "started_at",

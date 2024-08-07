@@ -65,7 +65,8 @@ export const ActivityFormScreen: RootStackScreen<"ActivityForm"> = ({
       return;
     }
 
-    const onSuccess = () => navigation.popToTop();
+    const onSuccess = () =>
+      params.useGoBackOnSave ? navigation.goBack() : navigation.popToTop();
 
     if (activityRef.current) {
       updateActivity(activityRef.current, payload, onSuccess);
@@ -102,6 +103,7 @@ export const ActivityFormScreen: RootStackScreen<"ActivityForm"> = ({
       </Text>
       <SafeAreaView className="flex-1 p-6" edges={["bottom"]}>
         <ActivityFormHandler
+          activityId={params.activityId}
           baby={baby}
           payload={payload}
           setPayload={setPayload}

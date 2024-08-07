@@ -23,13 +23,13 @@ const diaperStatus = Object.entries(diaperStatusAttributes);
 
 export const DiaperForm: FunctionComponent<
   ActivityFormProps<DiaperTypeMetadata>
-> = ({ payload, setPayload, type }) => {
+> = ({ activityId, payload, setPayload, type }) => {
   const color = activityTypeAttributes[type].color;
 
   const typeMetadata = payload.typeMetadata;
 
   useEffect(() => {
-    if (!payload.typeMetadata.status) {
+    if (!activityId) {
       setPayload((prev) => ({
         ...prev,
         typeMetadata: {
@@ -38,7 +38,7 @@ export const DiaperForm: FunctionComponent<
         }
       }));
     }
-  }, [payload.typeMetadata.status, setPayload]);
+  }, [activityId, setPayload]);
 
   return (
     <View className="flex-1 space-y-4">
