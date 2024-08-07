@@ -20,7 +20,7 @@ export const schema = appSchema({
       name: "activities",
       columns: [
         { name: "type", type: "string", isIndexed: true },
-        { name: "type_metadata", type: "string", isOptional: true },
+        { name: "type_metadata", type: "string" },
         { name: "notes", type: "string", isOptional: true },
         { name: "baby_id", type: "string", isIndexed: true },
         { name: "started_at", type: "number", isIndexed: true },

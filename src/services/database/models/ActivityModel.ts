@@ -26,6 +26,17 @@ export enum ActivityType {
   VACCINE = "vaccine"
 }
 
+export enum DiaperStatus {
+  WET = "wet",
+  DIRTY = "dirty",
+  MIXED = "mixed",
+  DRY = "dry"
+}
+
+export type DiaperTypeMetadata = {
+  status: DiaperStatus;
+};
+
 export class ActivityModel extends Model {
   static table = "activities";
 
@@ -41,7 +52,7 @@ export class ActivityModel extends Model {
   @readonly @date("deleted_at") deletedAt?: Date; // We'll use this on server side. Client side watermelonDB has its own mechanism for handling deletions
 
   @text("type") type!: ActivityType;
-  @json("type_metadata", (json) => json) typeMetadata?: Record<string, any>;
+  @json("type_metadata", (json) => json) typeMetadata!: unknown;
   @date("started_at") startedAt!: Date;
   @date("ended_at") endedAt?: Date;
   @text("notes") notes?: string;

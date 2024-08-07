@@ -2,10 +2,12 @@ import { database } from "..";
 import { ActivityModel } from "../models/ActivityModel";
 import { BabyModel } from "../models/BabyModel";
 
-export type ActivityPayload = Pick<
+export type ActivityPayload<TypeMetadata = unknown> = Pick<
   ActivityModel,
-  "type" | "typeMetadata" | "startedAt" | "endedAt" | "notes"
->;
+  "type" | "startedAt" | "endedAt" | "notes"
+> & {
+  typeMetadata: TypeMetadata;
+};
 
 export const createActivity = (
   baby: BabyModel,

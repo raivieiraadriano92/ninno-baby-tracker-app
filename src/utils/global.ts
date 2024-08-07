@@ -1,6 +1,9 @@
 import colors from "tailwindcss/colors";
 
-import { ActivityType } from "src/services/database/models/ActivityModel";
+import {
+  ActivityType,
+  DiaperStatus
+} from "src/services/database/models/ActivityModel";
 import { GENDER } from "src/services/database/models/BabyModel";
 
 export const genderColor: Record<GENDER, keyof typeof colors> = {
@@ -37,4 +40,11 @@ export const activityTypeAttributes: Record<
     title: "Medication"
   },
   [ActivityType.VACCINE]: { color: "lime", emoji: "💉", title: "Vaccine" }
+};
+
+export const diaperStatusAttributes: Record<DiaperStatus, { title: string }> = {
+  [DiaperStatus.WET]: { title: "Wet" },
+  [DiaperStatus.DIRTY]: { title: "Dirty" },
+  [DiaperStatus.MIXED]: { title: "Mixed" },
+  [DiaperStatus.DRY]: { title: "Dry" }
 };

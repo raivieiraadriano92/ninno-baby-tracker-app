@@ -1,6 +1,4 @@
-import { FunctionComponent } from "react";
-
-import { Pressable, PressableProps } from "react-native";
+import { Pressable } from "react-native";
 import Animated, {
   interpolate,
   useAnimatedStyle,
@@ -10,7 +8,7 @@ import Animated, {
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
-export const PressableWithScaleEffect: FunctionComponent<PressableProps> = ({
+export const PressableWithScaleEffect: typeof AnimatedPressable = ({
   children,
   className,
   onPressIn,
