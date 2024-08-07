@@ -9,6 +9,8 @@ import { DatePickerInput } from "src/components/DatePickerInput";
 import { TextInput } from "src/components/TextInput";
 import { ExpressedTypeMetadata } from "src/services/database/models/ActivityModel";
 
+const UNIT = "ml";
+
 export const ExpressedForm: FunctionComponent<
   ActivityFormProps<ExpressedTypeMetadata>
 > = ({ payload, setPayload }) => (
@@ -27,11 +29,12 @@ export const ExpressedForm: FunctionComponent<
           typeMetadata: {
             ...prev.typeMetadata,
             amount: Number(amountStr),
-            unit: "ml"
+            unit: UNIT
           }
         }))
       }
       placeholder="Amount"
+      suffix={UNIT}
       value={`${payload.typeMetadata.amount ?? ""}`}
     />
     <Animated.View layout={LinearTransition}>

@@ -9,9 +9,12 @@ import {
 } from "react-native";
 import colors from "tailwindcss/colors";
 
+import { Text } from "./Text";
+
 type TextInputProps = RNTextInputProps & {
   iconRight?: ComponentProps<typeof Ionicons>["name"];
   onPressIconRight?: () => void;
+  suffix?: string;
 };
 
 export const TextInput: FunctionComponent<TextInputProps> = ({
@@ -19,6 +22,7 @@ export const TextInput: FunctionComponent<TextInputProps> = ({
   iconRight,
   onPressIconRight,
   style,
+  suffix,
   ...props
 }) => (
   <View
@@ -30,6 +34,11 @@ export const TextInput: FunctionComponent<TextInputProps> = ({
       placeholderTextColor={colors.neutral[300]}
       {...props}
     />
+    {!!suffix && (
+      <View className="mr-4">
+        <Text className="font-medium text-neutral-300 text-sm">{suffix}</Text>
+      </View>
+    )}
     {!!iconRight && (
       <View className="mr-4">
         <Pressable onPress={onPressIconRight}>
