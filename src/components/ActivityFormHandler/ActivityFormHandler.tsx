@@ -3,6 +3,7 @@ import { FunctionComponent } from "react";
 import { DefaultForm } from "./DefaultForm";
 import { DiaperForm } from "./DiaperForm";
 import { ExpressedForm } from "./ExpressedForm";
+import { FormulaForm } from "./FormulaForm";
 import { SleepForm } from "./SleepForm";
 import { ActivityFormHandlerProps, ActivityFormProps } from "./types";
 
@@ -13,6 +14,7 @@ const FormComponentMap: Partial<
 > = {
   [ActivityType.DIAPER]: DiaperForm,
   [ActivityType.EXPRESSED]: ExpressedForm,
+  [ActivityType.FORMULA]: FormulaForm,
   [ActivityType.SLEEP]: SleepForm
 };
 
