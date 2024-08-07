@@ -2,7 +2,6 @@ import { FunctionComponent } from "react";
 
 import { format } from "date-fns";
 import { View } from "react-native";
-import colors from "tailwindcss/colors";
 
 import { Card } from "../Card";
 
@@ -26,12 +25,7 @@ export const ExpressedCard: FunctionComponent<ActivityCardProps> = ({
       </Card.RoundedSquare>
       <View className="flex-1">
         <Card.Title>{activityTypeAttributes[activity.type].title}</Card.Title>
-        <Card.Caption
-          className="font-bold"
-          style={{
-            color: colors[activityTypeAttributes[activity.type].color][500]
-          }}
-        >
+        <Card.Caption>
           {`${typeMetadata.amount} ${typeMetadata.unit}`}
         </Card.Caption>
       </View>
