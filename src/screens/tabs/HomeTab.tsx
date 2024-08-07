@@ -22,7 +22,7 @@ export const HomeTab: TabScreen<"Home"> = ({ navigation }) => {
       {({ selectedBaby }) => (
         <>
           <ScrollView showsVerticalScrollIndicator={false}>
-            <SafeAreaView className="p-6" edges={["top"]}>
+            <SafeAreaView className="p-6 pb-21" edges={["top"]}>
               <BabyProfileHeader
                 className="rounded-2xl"
                 gender={selectedBaby.gender}
@@ -90,7 +90,7 @@ export const HomeTab: TabScreen<"Home"> = ({ navigation }) => {
           </ScrollView>
           <View className="absolute bottom-6 right-6">
             <Button
-              className="h-14 p-0 w-14"
+              className="h-12 p-0 w-12"
               onPress={() =>
                 navigation.navigate("ActivityType", {
                   babyId: selectedBaby.id

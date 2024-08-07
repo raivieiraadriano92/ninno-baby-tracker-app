@@ -19,7 +19,7 @@ export const BabiesTab: TabScreen<"Babies"> = ({ navigation }) => {
       <ScrollView showsVerticalScrollIndicator={false}>
         <ObserveBabiesWrapper>
           {({ babies }) => (
-            <View className="flex-1 p-6 space-y-5">
+            <View className="flex-1 p-6 space-y-3">
               {babies.map((baby) => (
                 <View className="flex-row items-center space-x-4" key={baby.id}>
                   <Pressable onPress={() => handleMarkBabyAsSelected(baby)}>
@@ -46,7 +46,7 @@ export const BabiesTab: TabScreen<"Babies"> = ({ navigation }) => {
       </ScrollView>
       <View className="absolute bottom-6 right-6">
         <Button
-          className="h-14 p-0 w-14"
+          className="h-12 p-0 w-12"
           onPress={() => navigation.navigate("BabyForm")}
         >
           <Ionicons name="add" size={24} color={colors.white} />
