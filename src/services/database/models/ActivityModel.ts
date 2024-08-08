@@ -47,6 +47,12 @@ export type FormulaTypeMetadata = {
   unit: "ml";
 };
 
+export type SupplementTypeMetadata = {
+  amount: number;
+  unit: string;
+  supplement: string;
+};
+
 export class ActivityModel extends Model {
   static table = "activities";
 

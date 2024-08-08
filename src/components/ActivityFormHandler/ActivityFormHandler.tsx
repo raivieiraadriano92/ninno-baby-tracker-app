@@ -5,6 +5,7 @@ import { DiaperForm } from "./DiaperForm";
 import { ExpressedForm } from "./ExpressedForm";
 import { FormulaForm } from "./FormulaForm";
 import { SleepForm } from "./SleepForm";
+import { SupplementForm } from "./SupplementForm";
 import { ActivityFormHandlerProps, ActivityFormProps } from "./types";
 
 import { ActivityType } from "src/services/database/models/ActivityModel";
@@ -15,7 +16,8 @@ const FormComponentMap: Partial<
   [ActivityType.DIAPER]: DiaperForm,
   [ActivityType.EXPRESSED]: ExpressedForm,
   [ActivityType.FORMULA]: FormulaForm,
-  [ActivityType.SLEEP]: SleepForm
+  [ActivityType.SLEEP]: SleepForm,
+  [ActivityType.SUPPLEMENT]: SupplementForm
 };
 
 export const ActivityFormHandler: FunctionComponent<

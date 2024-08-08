@@ -1,7 +1,6 @@
 import { FunctionComponent } from "react";
 
 import { View } from "react-native";
-import Animated, { LinearTransition } from "react-native-reanimated";
 
 import { ActivityFormProps } from "./types";
 
@@ -37,14 +36,12 @@ export const ExpressedForm: FunctionComponent<
       suffix={UNIT}
       value={`${payload.typeMetadata.amount ?? ""}`}
     />
-    <Animated.View layout={LinearTransition}>
-      <TextInput
-        className="h-20"
-        onChangeText={(notes) => setPayload((prev) => ({ ...prev, notes }))}
-        multiline
-        placeholder="Notes"
-        value={payload.notes}
-      />
-    </Animated.View>
+    <TextInput
+      className="h-20"
+      onChangeText={(notes) => setPayload((prev) => ({ ...prev, notes }))}
+      multiline
+      placeholder="Notes"
+      value={payload.notes}
+    />
   </View>
 );
