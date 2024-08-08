@@ -20,7 +20,18 @@ export const SupplementForm: FunctionComponent<
       placeholder="Fell asleep at"
       value={payload.startedAt}
     />
-    <SupplementPicker />
+    <SupplementPicker
+      onChange={(supplement) =>
+        setPayload((prev) => ({
+          ...prev,
+          typeMetadata: {
+            ...prev.typeMetadata,
+            supplement
+          }
+        }))
+      }
+      value={payload.typeMetadata.supplement}
+    />
     <View className="flex-row space-x-4">
       <TextInput
         className="flex-1"

@@ -26,6 +26,7 @@ export type RootStackParamList = {
   ActivityReport: undefined;
   BabyForm: { babyId: BabyModel["id"] } | undefined;
   Onboarding: undefined;
+  Supplements: { selectedSupplement: string } | undefined;
   Tabs: undefined | NavigatorScreenParams<TabParamList>;
   Upgrade: undefined;
 };
