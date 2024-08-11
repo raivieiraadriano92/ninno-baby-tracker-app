@@ -7,6 +7,7 @@ import { DiaperCard } from "./DiaperCard";
 import { ExpressedCard } from "./ExpressedCard";
 import { FormulaCard } from "./FormulaCard";
 import { SleepCard } from "./SleepCard";
+import { SupplementCard } from "./SupplementCard";
 import { ActivityCardHandlerProps, ActivityCardProps } from "./types";
 
 import { ActivityType } from "src/services/database/models/ActivityModel";
@@ -17,7 +18,8 @@ const CardComponentMap: Partial<
   [ActivityType.DIAPER]: DiaperCard,
   [ActivityType.EXPRESSED]: ExpressedCard,
   [ActivityType.FORMULA]: FormulaCard,
-  [ActivityType.SLEEP]: SleepCard
+  [ActivityType.SLEEP]: SleepCard,
+  [ActivityType.SUPPLEMENT]: SupplementCard
 };
 
 export const ActivityCardHandler: FunctionComponent<
