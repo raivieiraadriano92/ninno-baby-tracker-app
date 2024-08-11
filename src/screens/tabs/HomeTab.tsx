@@ -60,23 +60,29 @@ export const HomeTab: TabScreen<"Home"> = ({ navigation }) => {
               <ObserveActivitiesWrapper
                 activitiesQuery={selectedBaby.todaysActivities}
               >
-                {({ activities: todaysActivities }) => (
-                  <View className="space-y-3">
-                    {todaysActivities.map((activity) => (
-                      <ActivityCardHandler
-                        activity={activity}
-                        key={activity.id}
-                        onPress={() =>
-                          navigation.navigate("ActivityForm", {
-                            babyId: selectedBaby.id,
-                            activityId: activity.id,
-                            type: activity.type
-                          })
-                        }
-                      />
-                    ))}
-                  </View>
-                )}
+                {({ activities: todaysActivities }) =>
+                  todaysActivities.length ? (
+                    <View className="space-y-3">
+                      {todaysActivities.map((activity) => (
+                        <ActivityCardHandler
+                          activity={activity}
+                          key={activity.id}
+                          onPress={() =>
+                            navigation.navigate("ActivityForm", {
+                              babyId: selectedBaby.id,
+                              activityId: activity.id,
+                              type: activity.type
+                            })
+                          }
+                        />
+                      ))}
+                    </View>
+                  ) : (
+                    <Text className="mt-10 text-center text-neutral-300 text-sm">
+                      No activities yet!
+                    </Text>
+                  )
+                }
               </ObserveActivitiesWrapper>
             </SafeAreaView>
           </ScrollView>
