@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Text /> Snapshot 1`] = `
+<Text
+  style={
+    [
+      {
+        "fontWeight": "400",
+      },
+      {
+        "fontSize": 16,
+        "lineHeight": 24,
+      },
+      {
+        "color": "#000",
+      },
+    ]
+  }
+>
+  My Text
+</Text>
+`;
