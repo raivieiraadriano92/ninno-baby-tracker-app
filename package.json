@@ -8,7 +8,8 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "lint": "tsc && eslint .",
-    "test": "jest --watchAll"
+    "test": "jest --watchAll",
+    "build:ios:dev:simulator": "eas build --platform ios --profile development:simulator"
   },
   "dependencies": {
     "@expo/vector-icons": "^14.0.2",
@@ -31,6 +32,7 @@
     "expo-dev-client": "~4.0.21",
     "expo-image": "~1.12.13",
     "expo-image-picker": "~15.0.7",
+    "expo-keep-awake": "~13.0.2",
     "expo-media-library": "~16.0.4",
     "expo-splash-screen": "~0.27.5",
     "expo-status-bar": "~1.12.1",
