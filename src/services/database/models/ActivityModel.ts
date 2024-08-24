@@ -33,6 +33,11 @@ export enum DiaperStatus {
   DRY = "dry"
 }
 
+export enum NursingSide {
+  LEFT = "left",
+  RIGHT = "right"
+}
+
 export type DiaperTypeMetadata = {
   status: DiaperStatus;
 };
@@ -51,6 +56,14 @@ export type SupplementTypeMetadata = {
   amount: number;
   unit: string;
   supplement: string;
+};
+
+export type NursingTypeMetadata = {
+  duration: {
+    left: number;
+    right: number;
+  };
+  startSide: NursingSide;
 };
 
 export class ActivityModel extends Model {

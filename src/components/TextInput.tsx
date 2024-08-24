@@ -15,11 +15,20 @@ type TextInputProps = RNTextInputProps & {
   iconRight?: ComponentProps<typeof Ionicons>["name"];
   onPressIconRight?: () => void;
   suffix?: string;
+  textInputClassName?: string;
 };
 
 export const TextInput = forwardRef<RNTextInput, TextInputProps>(
   (
-    { className, iconRight, onPressIconRight, style, suffix, ...props },
+    {
+      className,
+      iconRight,
+      onPressIconRight,
+      style,
+      suffix,
+      textInputClassName,
+      ...props
+    },
     ref
   ) => (
     <View
@@ -27,7 +36,7 @@ export const TextInput = forwardRef<RNTextInput, TextInputProps>(
       style={style}
     >
       <RNTextInput
-        className="flex-1 h-13 px-4 text-black text-sm leading-4"
+        className={`flex-1 h-13 px-4 text-black text-sm leading-4 ${textInputClassName}`}
         placeholderTextColor={colors.neutral[300]}
         ref={ref}
         {...props}

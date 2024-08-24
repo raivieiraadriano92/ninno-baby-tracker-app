@@ -5,8 +5,6 @@ import { createClient } from "@supabase/supabase-js";
 
 import type { Database } from "./types";
 
-console.log(process.env);
-
 const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL;
 
 if (!supabaseUrl) {

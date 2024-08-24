@@ -74,7 +74,7 @@ export const AnimatedCheckbox: FunctionComponent<AnimatedCheckboxProps> = ({
       )}
       <Animated.View layout={LinearTransition}>
         <Text
-          className="font-medium text-sm"
+          className="capitalize font-medium text-sm"
           style={{
             color: isSelected ? colors[color][500] : colors.neutral[300]
           }}

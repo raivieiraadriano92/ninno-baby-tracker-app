@@ -50,8 +50,8 @@ export const DiaperForm: FunctionComponent<
         placeholder="Fell asleep at"
         value={payload.startedAt}
       />
-      <View className="space-y-2">
-        <Text className="font-bold" style={{ color: colors[color][500] }}>
+      <View className="border-neutral-100 border-[1px] p-4 rounded-2xl space-y-2">
+        <Text className="text-sm" style={{ color: colors[color][500] }}>
           Diaper Status
         </Text>
         <View className="flex-row space-x-2">
