@@ -1,5 +1,7 @@
 import { Dispatch, SetStateAction } from "react";
 
+import { ViewProps } from "react-native";
+
 import {
   ActivityModel,
   ActivityType
@@ -7,7 +9,7 @@ import {
 import { BabyModel } from "src/services/database/models/BabyModel";
 import { ActivityPayload } from "src/services/database/utils/activities";
 
-export type ActivityFormHandlerProps<TypeMetadata = unknown> = {
+export type ActivityFormHandlerProps<TypeMetadata = unknown> = ViewProps & {
   activityId?: ActivityModel["id"];
   baby: BabyModel;
   payload: ActivityPayload<TypeMetadata>;
@@ -15,7 +17,7 @@ export type ActivityFormHandlerProps<TypeMetadata = unknown> = {
   type: ActivityType;
 };
 
-export type ActivityFormProps<TypeMetadata = unknown> = Pick<
+export type ActivityFormProps<TypeMetadata = unknown> = Omit<
   ActivityFormHandlerProps<TypeMetadata>,
-  "activityId" | "baby" | "payload" | "setPayload" | "type"
+  "type"
 >;

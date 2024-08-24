@@ -13,8 +13,15 @@ const UNIT = "ml";
 
 export const FormulaForm: FunctionComponent<
   ActivityFormProps<FormulaTypeMetadata>
-> = ({ payload, setPayload }) => (
-  <View className="flex-1 space-y-4">
+> = ({
+  className,
+  activityId: _activityId,
+  baby: _baby,
+  payload,
+  setPayload,
+  ...props
+}) => (
+  <View className={`flex-1 space-y-4 ${className}`} {...props}>
     <DatePickerInput
       mode="datetime"
       onChange={(date) => setPayload((prev) => ({ ...prev, startedAt: date }))}

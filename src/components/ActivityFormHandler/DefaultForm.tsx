@@ -8,10 +8,14 @@ import { DatePickerInput } from "src/components/DatePickerInput";
 import { TextInput } from "src/components/TextInput";
 
 export const DefaultForm: FunctionComponent<ActivityFormProps> = ({
+  className,
+  activityId: _activityId,
+  baby: _baby,
   payload,
-  setPayload
+  setPayload,
+  ...props
 }) => (
-  <View className="flex-1 space-y-4">
+  <View className={`flex-1 space-y-4 ${className}`} {...props}>
     <DatePickerInput
       mode="datetime"
       onChange={(date) => setPayload((prev) => ({ ...prev, startedAt: date }))}

@@ -11,6 +11,7 @@ import { ActivityFormProps } from "./types";
 import { DatePickerInput } from "src/components/DatePickerInput";
 import { TextInput } from "src/components/TextInput";
 import {
+  ActivityType,
   DiaperStatus,
   DiaperTypeMetadata
 } from "src/services/database/models/ActivityModel";
@@ -23,8 +24,8 @@ const diaperStatus = Object.entries(diaperStatusAttributes);
 
 export const DiaperForm: FunctionComponent<
   ActivityFormProps<DiaperTypeMetadata>
-> = ({ activityId, payload, setPayload, type }) => {
-  const color = activityTypeAttributes[type].color;
+> = ({ className, activityId, baby: _baby, payload, setPayload, ...props }) => {
+  const color = activityTypeAttributes[ActivityType.DIAPER].color;
 
   const typeMetadata = payload.typeMetadata;
 
@@ -41,7 +42,7 @@ export const DiaperForm: FunctionComponent<
   }, [activityId, setPayload]);
 
   return (
-    <View className="flex-1 space-y-4">
+    <View className={`flex-1 space-y-4 ${className}`} {...props}>
       <DatePickerInput
         mode="datetime"
         onChange={(date) =>

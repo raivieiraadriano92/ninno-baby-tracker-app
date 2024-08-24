@@ -12,8 +12,15 @@ import { SupplementTypeMetadata } from "src/services/database/models/ActivityMod
 
 export const SupplementForm: FunctionComponent<
   ActivityFormProps<SupplementTypeMetadata>
-> = ({ payload, setPayload }) => (
-  <View className="flex-1 space-y-4">
+> = ({
+  className,
+  activityId: _activityId,
+  baby: _baby,
+  payload,
+  setPayload,
+  ...props
+}) => (
+  <View className={`flex-1 space-y-4 ${className}`} {...props}>
     <DatePickerInput
       mode="datetime"
       onChange={(date) => setPayload((prev) => ({ ...prev, startedAt: date }))}

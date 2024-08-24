@@ -1,6 +1,6 @@
 import { useCallback, useRef, useState } from "react";
 
-import { Platform, View } from "react-native";
+import { Platform, ScrollView, View } from "react-native";
 import { Edge, SafeAreaView } from "react-native-safe-area-context";
 import colors from "tailwindcss/colors";
 
@@ -95,20 +95,24 @@ export const ActivityFormScreen: RootStackScreen<"ActivityForm"> = ({
           <Text className="text-3xl text-center">{attrs.emoji}</Text>
         </View>
       </SafeAreaView>
-      <Text
-        className="mt-7 font-bold text-2xl text-center"
-        style={{ color: colors[attrs.color][500] }}
-      >
-        {attrs.title}
-      </Text>
-      <SafeAreaView className="flex-1 p-6" edges={["bottom"]}>
-        <ActivityFormHandler
-          activityId={params.activityId}
-          baby={baby}
-          payload={payload}
-          setPayload={setPayload}
-          type={params.type}
-        />
+      <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
+        <View className="flex-1 p-6 pt-7 space-y-6">
+          <Text
+            className="font-bold text-2xl text-center"
+            style={{ color: colors[attrs.color][500] }}
+          >
+            {attrs.title}
+          </Text>
+          <ActivityFormHandler
+            activityId={params.activityId}
+            baby={baby}
+            payload={payload}
+            setPayload={setPayload}
+            type={params.type}
+          />
+        </View>
+      </ScrollView>
+      <SafeAreaView className="p-6 pt-0" edges={["bottom"]}>
         <View className="space-y-4">
           <Button onPress={handleSave} title="Save" />
           <Button onPress={navigation.goBack} title="Cancel" variant="link" />

@@ -12,16 +12,19 @@ import { TextInput } from "src/components/TextInput";
 import { useCustomThemeContext } from "src/context/CustomThemeProvider";
 
 export const SleepForm: FunctionComponent<ActivityFormProps> = ({
+  className,
+  activityId: _activityId,
   baby,
   payload,
-  setPayload
+  setPayload,
+  ...props
 }) => {
   const { theme } = useCustomThemeContext();
 
   const [isAwake, setIsAwake] = useState(!!payload.endedAt);
 
   return (
-    <View className="flex-1 space-y-4">
+    <View className={`flex-1 space-y-4 ${className}`} {...props}>
       <DatePickerInput
         mode="datetime"
         onChange={(date) =>
