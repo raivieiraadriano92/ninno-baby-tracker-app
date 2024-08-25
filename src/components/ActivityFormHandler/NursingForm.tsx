@@ -1,4 +1,4 @@
-import { FunctionComponent, useEffect, useRef } from "react";
+import { FunctionComponent, useEffect, useRef, useState } from "react";
 
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { TouchableOpacity, View } from "react-native";
@@ -24,12 +24,14 @@ import { activityTypeAttributes } from "src/utils/global";
 
 export const NursingForm: FunctionComponent<
   ActivityFormProps<NursingTypeMetadata>
-> = ({ className, activityId, baby: _baby, payload, setPayload, ...props }) => {
+> = ({ className, activityId, baby, payload, setPayload, ...props }) => {
   const color = activityTypeAttributes[ActivityType.NURSING].color;
 
   const typeMetadata = payload.typeMetadata;
 
   const refNursingStopwatchModal = useRef<NursingStopwatchModalRef>(null);
+
+  const [lastStartSide, setLastStartSide] = useState("-");
 
   const handleStartTimer = (side: NursingSide) =>
     refNursingStopwatchModal.current?.start({
@@ -50,6 +52,32 @@ export const NursingForm: FunctionComponent<
     }
   }, [activityId, setPayload]);
 
+  useEffect(() => {
+    baby.lastNursingActivity?.then((activities) => {
+      const lastNursingActivity = activities.shift();
+
+      if (lastNursingActivity) {
+        const typeMetadata =
+          lastNursingActivity.typeMetadata as NursingTypeMetadata;
+
+        setLastStartSide(typeMetadata.startSide);
+
+        setTimeout(() => {
+          setPayload((prev) => ({
+            ...prev,
+            typeMetadata: {
+              ...prev.typeMetadata,
+              startSide:
+                typeMetadata.startSide === NursingSide.LEFT
+                  ? NursingSide.RIGHT
+                  : NursingSide.LEFT
+            }
+          }));
+        }, 100);
+      }
+    });
+  }, [baby.lastNursingActivity, setPayload]);
+
   return (
     <>
       <View className={`flex-1 space-y-4 ${className}`} {...props}>
@@ -66,8 +94,11 @@ export const NursingForm: FunctionComponent<
             <Text className="text-sm" style={{ color: colors[color][500] }}>
               Last start side
             </Text>
-            <Text className="font-bold" style={{ color: colors[color][500] }}>
-              Left
+            <Text
+              className="capitalize font-bold"
+              style={{ color: colors[color][500] }}
+            >
+              {lastStartSide}
             </Text>
           </View>
           <View className="bg-neutral-100 h-[1px]" />

@@ -50,6 +50,12 @@ export class BabyModel extends Model {
     Q.sortBy("started_at", Q.desc)
   );
 
+  @lazy lastNursingActivity = this.activities.extend(
+    Q.and(Q.where("type", ActivityType.NURSING)),
+    Q.sortBy("started_at", Q.desc),
+    Q.take(1)
+  );
+
   // We add createdAt and updatedAt fields to the model and they will be automatically managed by WatermelonDB
   @readonly @date("created_at") createdAt!: Date;
   @readonly @date("updated_at") updatedAt!: Date;
