@@ -9,8 +9,8 @@ import { TextInput } from "src/components/TextInput";
 
 export const DefaultForm: FunctionComponent<ActivityFormProps> = ({
   className,
-  activityId: _activityId,
-  baby: _baby,
+  activityId,
+  baby,
   payload,
   setPayload,
   ...props

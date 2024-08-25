@@ -12,14 +12,7 @@ const UNIT = "ml";
 
 export const ExpressedForm: FunctionComponent<
   ActivityFormProps<ExpressedTypeMetadata>
-> = ({
-  className,
-  activityId: _activityId,
-  baby: _baby,
-  payload,
-  setPayload,
-  ...props
-}) => (
+> = ({ className, activityId, baby, payload, setPayload, ...props }) => (
   <View className={`flex-1 space-y-4 ${className}`} {...props}>
     <DatePickerInput
       mode="datetime"

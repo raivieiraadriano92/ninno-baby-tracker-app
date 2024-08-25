@@ -40,19 +40,6 @@ export const NursingForm: FunctionComponent<
     });
 
   useEffect(() => {
-    if (!activityId) {
-      setPayload((prev) => ({
-        ...prev,
-        typeMetadata: {
-          ...prev.typeMetadata,
-          duration: { left: 0, right: 0 },
-          startSide: NursingSide.LEFT
-        }
-      }));
-    }
-  }, [activityId, setPayload]);
-
-  useEffect(() => {
     baby.lastNursingActivity?.then((activities) => {
       const lastNursingActivity = activities.shift();
 
@@ -62,18 +49,16 @@ export const NursingForm: FunctionComponent<
 
         setLastStartSide(typeMetadata.startSide);
 
-        setTimeout(() => {
-          setPayload((prev) => ({
-            ...prev,
-            typeMetadata: {
-              ...prev.typeMetadata,
-              startSide:
-                typeMetadata.startSide === NursingSide.LEFT
-                  ? NursingSide.RIGHT
-                  : NursingSide.LEFT
-            }
-          }));
-        }, 100);
+        setPayload((prev) => ({
+          ...prev,
+          typeMetadata: {
+            ...prev.typeMetadata,
+            startSide:
+              typeMetadata.startSide === NursingSide.LEFT
+                ? NursingSide.RIGHT
+                : NursingSide.LEFT
+          }
+        }));
       }
     });
   }, [baby.lastNursingActivity, setPayload]);

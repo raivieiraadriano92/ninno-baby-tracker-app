@@ -9,20 +9,22 @@ type SupplementStoreState = {
 
 const STORAGE_KEY = "supplementStore";
 
+export const initialSupplementList = [
+  "Cereal",
+  "Finger Foods",
+  "Fruit",
+  "Juice",
+  "Meat",
+  "Milk",
+  "Veggies",
+  "Vitamins",
+  "Water"
+];
+
 export const useSupplementStore = create<SupplementStoreState>()(
   persist(
     (set) => ({
-      list: [
-        "Cereal",
-        "Finger Foods",
-        "Fruit",
-        "Juice",
-        "Meat",
-        "Milk",
-        "Veggies",
-        "Vitamins",
-        "Water"
-      ],
+      list: initialSupplementList,
       add: (value) =>
         set((state) => ({ ...state, list: [value, ...state.list] }))
     }),

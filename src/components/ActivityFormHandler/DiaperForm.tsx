@@ -1,4 +1,4 @@
-import { FunctionComponent, useEffect } from "react";
+import { FunctionComponent } from "react";
 
 import { View } from "react-native";
 import colors from "tailwindcss/colors";
@@ -28,18 +28,6 @@ export const DiaperForm: FunctionComponent<
   const color = activityTypeAttributes[ActivityType.DIAPER].color;
 
   const typeMetadata = payload.typeMetadata;
-
-  useEffect(() => {
-    if (!activityId) {
-      setPayload((prev) => ({
-        ...prev,
-        typeMetadata: {
-          ...prev.typeMetadata,
-          status: DiaperStatus.WET
-        }
-      }));
-    }
-  }, [activityId, setPayload]);
 
   return (
     <View className={`flex-1 space-y-4 ${className}`} {...props}>

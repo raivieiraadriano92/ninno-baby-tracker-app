@@ -13,7 +13,7 @@ import { useCustomThemeContext } from "src/context/CustomThemeProvider";
 
 export const SleepForm: FunctionComponent<ActivityFormProps> = ({
   className,
-  activityId: _activityId,
+  activityId,
   baby,
   payload,
   setPayload,

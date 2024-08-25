@@ -28,7 +28,7 @@ export const ActivityFormScreen: RootStackScreen<"ActivityForm"> = ({
 
   const [payload, setPayload] = useState<ActivityPayload>({
     type: params.type,
-    typeMetadata: {},
+    typeMetadata: activityTypeAttributes[params.type].initialTypeMetadata ?? {},
     startedAt: new Date()
   });
 
