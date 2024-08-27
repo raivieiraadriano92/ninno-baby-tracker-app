@@ -92,7 +92,7 @@ export const NursingForm: FunctionComponent<
               Start side
             </Text>
             <View className="flex-row space-x-2">
-              {[NursingSide.LEFT, NursingSide.RIGHT].map((side) => (
+              {Object.values(NursingSide).map((side) => (
                 <AnimatedCheckbox
                   color={color}
                   isSelected={typeMetadata.startSide === side}
@@ -102,7 +102,7 @@ export const NursingForm: FunctionComponent<
                       ...prev,
                       typeMetadata: {
                         ...prev.typeMetadata,
-                        startSide: side as NursingSide
+                        startSide: side
                       }
                     }))
                   }

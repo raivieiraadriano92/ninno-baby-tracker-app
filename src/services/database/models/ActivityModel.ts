@@ -38,6 +38,16 @@ export enum NursingSide {
   RIGHT = "right"
 }
 
+export enum WeightUnit {
+  LBS = "lbs.",
+  KG = "kg"
+}
+
+export enum LengthUnit {
+  INCH = "inch",
+  CM = "cm"
+}
+
 export type DiaperTypeMetadata = {
   status: DiaperStatus;
 };
@@ -64,6 +74,21 @@ export type NursingTypeMetadata = {
     right: number;
   };
   startSide: NursingSide;
+};
+
+export type GrowthTypeMetadata = {
+  height: {
+    value: number;
+    unit: LengthUnit;
+  };
+  weight: {
+    value: number;
+    unit: WeightUnit;
+  };
+  head: {
+    value: number;
+    unit: LengthUnit;
+  };
 };
 
 export class ActivityModel extends Model {

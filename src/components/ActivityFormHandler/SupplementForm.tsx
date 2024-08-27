@@ -46,7 +46,7 @@ export const SupplementForm: FunctionComponent<
           }))
         }
         placeholder="Amount"
-        value={`${payload.typeMetadata.amount ?? ""}`}
+        value={`${payload.typeMetadata.amount || ""}`}
       />
       <TextInput
         autoCapitalize="none"

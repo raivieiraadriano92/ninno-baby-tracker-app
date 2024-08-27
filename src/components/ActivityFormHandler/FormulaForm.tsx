@@ -35,7 +35,7 @@ export const FormulaForm: FunctionComponent<
       }
       placeholder="Amount"
       suffix={UNIT}
-      value={`${payload.typeMetadata.amount ?? ""}`}
+      value={`${payload.typeMetadata.amount || ""}`}
     />
     <Animated.View layout={LinearTransition}>
       <TextInput

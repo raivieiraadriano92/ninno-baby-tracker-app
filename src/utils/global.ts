@@ -6,6 +6,7 @@ import {
   DiaperTypeMetadata,
   ExpressedTypeMetadata,
   FormulaTypeMetadata,
+  GrowthTypeMetadata,
   NursingSide,
   NursingTypeMetadata,
   SupplementTypeMetadata
@@ -44,6 +45,21 @@ const initialNursingTypeMetadata: NursingTypeMetadata = {
     right: 0
   },
   startSide: NursingSide.LEFT
+};
+
+const initialGrowthTypeMetadata: GrowthTypeMetadata = {
+  head: {
+    unit: "cm",
+    value: 0
+  },
+  height: {
+    unit: "cm",
+    value: 0
+  },
+  weight: {
+    unit: "kg",
+    value: 0
+  }
 };
 
 export const activityTypeAttributes: Record<
@@ -94,7 +110,7 @@ export const activityTypeAttributes: Record<
   [ActivityType.GROWTH]: {
     color: "lime",
     emoji: "🌱",
-    initialTypeMetadata: {},
+    initialTypeMetadata: initialGrowthTypeMetadata,
     title: "Growth"
   },
   [ActivityType.MILESTONE]: {

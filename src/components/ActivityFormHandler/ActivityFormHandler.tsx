@@ -4,6 +4,7 @@ import { DefaultForm } from "./DefaultForm";
 import { DiaperForm } from "./DiaperForm";
 import { ExpressedForm } from "./ExpressedForm";
 import { FormulaForm } from "./FormulaForm";
+import { GrowthForm } from "./GrowthForm";
 import { NursingForm } from "./NursingForm";
 import { SleepForm } from "./SleepForm";
 import { SupplementForm } from "./SupplementForm";
@@ -17,6 +18,7 @@ const FormComponentMap: Partial<
   [ActivityType.DIAPER]: DiaperForm,
   [ActivityType.EXPRESSED]: ExpressedForm,
   [ActivityType.FORMULA]: FormulaForm,
+  [ActivityType.GROWTH]: GrowthForm,
   [ActivityType.NURSING]: NursingForm,
   [ActivityType.SLEEP]: SleepForm,
   [ActivityType.SUPPLEMENT]: SupplementForm

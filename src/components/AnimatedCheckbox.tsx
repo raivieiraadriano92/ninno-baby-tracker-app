@@ -18,6 +18,7 @@ import { Text } from "./Text";
 type AnimatedCheckboxProps = ComponentProps<typeof PressableWithScaleEffect> & {
   color: keyof typeof colors;
   isSelected: boolean;
+  textClassName?: string;
   title: string;
 };
 
@@ -26,6 +27,7 @@ export const AnimatedCheckbox: FunctionComponent<AnimatedCheckboxProps> = ({
   color,
   isSelected,
   style,
+  textClassName,
   title,
   ...props
 }) => {
@@ -74,7 +76,7 @@ export const AnimatedCheckbox: FunctionComponent<AnimatedCheckboxProps> = ({
       )}
       <Animated.View layout={LinearTransition}>
         <Text
-          className="capitalize font-medium text-sm"
+          className={`capitalize font-medium text-sm ${textClassName}`}
           style={{
             color: isSelected ? colors[color][500] : colors.neutral[300]
           }}

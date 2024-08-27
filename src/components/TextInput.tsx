@@ -14,6 +14,7 @@ import { Text } from "./Text";
 type TextInputProps = RNTextInputProps & {
   iconRight?: ComponentProps<typeof Ionicons>["name"];
   onPressIconRight?: () => void;
+  renderRight?: () => JSX.Element;
   suffix?: string;
   textInputClassName?: string;
 };
@@ -24,6 +25,7 @@ export const TextInput = forwardRef<RNTextInput, TextInputProps>(
       className,
       iconRight,
       onPressIconRight,
+      renderRight,
       style,
       suffix,
       textInputClassName,
@@ -53,6 +55,7 @@ export const TextInput = forwardRef<RNTextInput, TextInputProps>(
           </Pressable>
         </View>
       )}
+      {renderRight && <View className="mr-4">{renderRight()}</View>}
     </View>
   )
 );

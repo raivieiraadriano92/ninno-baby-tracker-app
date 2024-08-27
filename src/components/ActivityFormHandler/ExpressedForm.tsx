@@ -34,7 +34,7 @@ export const ExpressedForm: FunctionComponent<
       }
       placeholder="Amount"
       suffix={UNIT}
-      value={`${payload.typeMetadata.amount ?? ""}`}
+      value={`${payload.typeMetadata.amount || ""}`}
     />
     <TextInput
       className="h-20"
