@@ -4,7 +4,7 @@ import { BabyModel } from "../models/BabyModel";
 
 export type ActivityPayload<TypeMetadata = unknown> = Pick<
   ActivityModel,
-  "type" | "startedAt" | "endedAt" | "notes"
+  "type" | "startedAt" | "endedAt" | "notes" | "pictureUrl"
 > & {
   typeMetadata: TypeMetadata;
 };
@@ -32,6 +32,8 @@ export const createActivity = (
         }
 
         activity.notes = payload.notes;
+
+        activity.pictureUrl = payload.pictureUrl;
       })
       .then(onSuccess)
       .catch(onError)
@@ -57,6 +59,8 @@ export const updateActivity = (
         }
 
         activity.notes = payload.notes;
+
+        activity.pictureUrl = payload.pictureUrl;
       })
       .then(onSuccess)
       .catch(onError)

@@ -24,6 +24,7 @@ export const ObserveActivitiesWrapper: FunctionComponent<ObserveActivitiesWrappe
       "type_metadata",
       "started_at",
       "ended_at",
-      "notes"
+      "notes",
+      "picture_url"
     ])
   }))(Wrapper);

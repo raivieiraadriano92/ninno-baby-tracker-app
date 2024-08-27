@@ -49,7 +49,8 @@ export const ActivityFormScreen: RootStackScreen<"ActivityForm"> = ({
               type: activityRef.current.type,
               endedAt: activityRef.current.endedAt,
               notes: activityRef.current.notes,
-              typeMetadata: activityRef.current.typeMetadata
+              typeMetadata: activityRef.current.typeMetadata,
+              pictureUrl: activityRef.current.pictureUrl
             });
           }
         }

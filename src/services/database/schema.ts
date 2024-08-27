@@ -25,6 +25,7 @@ export const schema = appSchema({
         { name: "baby_id", type: "string", isIndexed: true },
         { name: "started_at", type: "number", isIndexed: true },
         { name: "ended_at", type: "number", isOptional: true, isIndexed: true },
+        { name: "picture_url", type: "string", isOptional: true },
         { name: "created_at", type: "number" }, // sync field
         { name: "updated_at", type: "number" }, // sync field
         { name: "deleted_at", type: "number", isOptional: true } // sync field

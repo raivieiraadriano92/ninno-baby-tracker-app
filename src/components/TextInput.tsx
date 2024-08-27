@@ -12,6 +12,7 @@ import colors from "tailwindcss/colors";
 import { Text } from "./Text";
 
 type TextInputProps = RNTextInputProps & {
+  containerRightClassName?: string;
   iconRight?: ComponentProps<typeof Ionicons>["name"];
   onPressIconRight?: () => void;
   renderRight?: () => JSX.Element;
@@ -23,6 +24,7 @@ export const TextInput = forwardRef<RNTextInput, TextInputProps>(
   (
     {
       className,
+      containerRightClassName,
       iconRight,
       onPressIconRight,
       renderRight,
@@ -44,18 +46,22 @@ export const TextInput = forwardRef<RNTextInput, TextInputProps>(
         {...props}
       />
       {!!suffix && (
-        <View className="mr-4">
+        <View className={`mr-4 ${containerRightClassName}`}>
           <Text className="font-medium text-neutral-300 text-sm">{suffix}</Text>
         </View>
       )}
       {!!iconRight && (
-        <View className="mr-4">
+        <View className={`mr-4 ${containerRightClassName}`}>
           <Pressable onPress={onPressIconRight}>
             <Ionicons name={iconRight} size={20} color={colors.neutral[300]} />
           </Pressable>
         </View>
       )}
-      {renderRight && <View className="mr-4">{renderRight()}</View>}
+      {renderRight && (
+        <View className={`mr-4 ${containerRightClassName}`}>
+          {renderRight()}
+        </View>
+      )}
     </View>
   )
 );

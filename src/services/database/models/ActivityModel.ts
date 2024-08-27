@@ -110,4 +110,5 @@ export class ActivityModel extends Model {
   @date("started_at") startedAt!: Date;
   @date("ended_at") endedAt?: Date;
   @text("notes") notes?: string;
+  @text("picture_url") pictureUrl?: string;
 }
