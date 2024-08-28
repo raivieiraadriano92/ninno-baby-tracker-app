@@ -1,5 +1,6 @@
 import { FunctionComponent } from "react";
 
+import { StatusBar } from "expo-status-bar";
 import { AppState } from "react-native";
 
 import { CustomThemeProvider } from "src/context/CustomThemeProvider";
@@ -20,6 +21,7 @@ AppState.addEventListener("change", (state) => {
 
 const App: FunctionComponent = () => (
   <CustomThemeProvider>
+    <StatusBar style="dark" />
     <RootNavigator />
   </CustomThemeProvider>
 );
