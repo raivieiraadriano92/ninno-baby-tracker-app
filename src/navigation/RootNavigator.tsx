@@ -22,6 +22,7 @@ import { ActivityListScreen } from "src/screens/ActivityListScreen";
 import { ActivityReportScreen } from "src/screens/ActivityReportScreen";
 import { ActivityTypeScreen } from "src/screens/ActivityTypeScreen";
 import { BabyFormScreen } from "src/screens/BabyFormScreen";
+import { MilestonesScreen } from "src/screens/MilestonesScreen";
 import { OnboardingScreen } from "src/screens/OnboardingScreen";
 import { SupplementsScreen } from "src/screens/SupplementsScreen";
 import { UpgradeScreen } from "src/screens/UpgradeScreen";
@@ -127,6 +128,16 @@ export const RootNavigator: FunctionComponent = () => {
               name="BabyForm"
               options={{
                 headerShown: false,
+                presentation: "modal",
+                ...(Platform.OS === "android" && {
+                  animation: "slide_from_bottom"
+                })
+              }}
+            />
+            <NativeStack.Screen
+              component={MilestonesScreen}
+              name="Milestones"
+              options={{
                 presentation: "modal",
                 ...(Platform.OS === "android" && {
                   animation: "slide_from_bottom"

@@ -25,6 +25,7 @@ export type RootStackParamList = {
   ActivityList: undefined;
   ActivityReport: undefined;
   BabyForm: { babyId: BabyModel["id"] } | undefined;
+  Milestones: { selectedMilestone: string } | undefined;
   Onboarding: undefined;
   Supplements: { selectedSupplement: string } | undefined;
   Tabs: undefined | NavigatorScreenParams<TabParamList>;

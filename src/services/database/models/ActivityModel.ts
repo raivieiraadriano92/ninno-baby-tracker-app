@@ -91,6 +91,10 @@ export type GrowthTypeMetadata = {
   };
 };
 
+export type MilestoneTypeMetadata = {
+  milestone: string;
+};
+
 export class ActivityModel extends Model {
   static table = "activities";
 

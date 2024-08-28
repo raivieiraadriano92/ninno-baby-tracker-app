@@ -7,6 +7,7 @@ import { DiaperCard } from "./DiaperCard";
 import { ExpressedCard } from "./ExpressedCard";
 import { FormulaCard } from "./FormulaCard";
 import { GrowthCard } from "./GrowthCard";
+import { MilestoneCard } from "./MilestoneCard";
 import { NursingCard } from "./NursingCard";
 import { SleepCard } from "./SleepCard";
 import { SupplementCard } from "./SupplementCard";
@@ -21,6 +22,7 @@ const CardComponentMap: Partial<
   [ActivityType.EXPRESSED]: ExpressedCard,
   [ActivityType.FORMULA]: FormulaCard,
   [ActivityType.GROWTH]: GrowthCard,
+  [ActivityType.MILESTONE]: MilestoneCard,
   [ActivityType.NURSING]: NursingCard,
   [ActivityType.SLEEP]: SleepCard,
   [ActivityType.SUPPLEMENT]: SupplementCard
