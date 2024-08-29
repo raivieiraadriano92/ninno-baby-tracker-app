@@ -1,22 +1,17 @@
-import { BarChart } from "react-native-gifted-charts";
+import { ScrollView } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
+import { ActivityBarChart } from "src/components/ActivityBarChart";
 import { RootStackScreen } from "src/navigation/types";
-
-const barData = [
-  { value: 230, label: "Jan", frontColor: "#4ABFF4" },
-  { value: 180, label: "Feb", frontColor: "#79C3DB" },
-  { value: 200, label: "Mar", frontColor: "#28B2B3" },
-  { value: 250, label: "Apr", frontColor: "#4ADDBA" },
-  { value: 320, label: "May", frontColor: "#91E3E3" }
-];
+import { ActivityType } from "src/services/database/models/ActivityModel";
 
 export const ActivityReportScreen: RootStackScreen<"ActivityReport"> = ({}) => (
-  <BarChart
-    showFractionalValues
-    showYAxisIndices
-    noOfSections={4}
-    maxValue={400}
-    data={barData}
-    isAnimated
-  />
+  <ScrollView showsVerticalScrollIndicator={false}>
+    <SafeAreaView className="p-6 space-y-6" edges={["bottom"]}>
+      <ActivityBarChart activityType={ActivityType.NURSING} />
+      <ActivityBarChart activityType={ActivityType.DIAPER} />
+      <ActivityBarChart activityType={ActivityType.SLEEP} />
+      <ActivityBarChart activityType={ActivityType.GROWTH} />
+    </SafeAreaView>
+  </ScrollView>
 );
