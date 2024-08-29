@@ -66,6 +66,7 @@ export const activityTypeAttributes: Record<
   ActivityType,
   {
     color: keyof typeof colors;
+    commingSoon?: boolean;
     emoji: string;
     initialTypeMetadata: object; // @todo enforce the correct type here
     title: string;
@@ -121,30 +122,35 @@ export const activityTypeAttributes: Record<
   },
   [ActivityType.OTHER]: {
     color: "lime",
+    commingSoon: true,
     emoji: "🧸",
     initialTypeMetadata: {},
     title: "Other"
   },
   [ActivityType.JOY]: {
     color: "lime",
+    commingSoon: true,
     emoji: "😃",
     initialTypeMetadata: {},
     title: "Joy"
   },
   [ActivityType.TEMPERATURE]: {
     color: "lime",
+    commingSoon: true,
     emoji: "🌡️",
     initialTypeMetadata: {},
     title: "Temperature"
   },
   [ActivityType.MEDICATION]: {
     color: "lime",
+    commingSoon: true,
     emoji: "💊",
     initialTypeMetadata: {},
     title: "Medication"
   },
   [ActivityType.VACCINE]: {
     color: "lime",
+    commingSoon: true,
     emoji: "💉",
     initialTypeMetadata: {},
     title: "Vaccine"

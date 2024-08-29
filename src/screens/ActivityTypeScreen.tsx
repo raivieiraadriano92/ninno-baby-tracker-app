@@ -1,7 +1,7 @@
 import { useLayoutEffect } from "react";
 
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { ScrollView } from "react-native";
+import { ScrollView, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import colors from "tailwindcss/colors";
 
@@ -34,6 +34,7 @@ export const ActivityTypeScreen: RootStackScreen<"ActivityType"> = ({
           <PressableWithScaleEffect
             key={type}
             onPress={() =>
+              !attributes.commingSoon &&
               navigation.navigate("ActivityForm", {
                 babyId: params.babyId,
                 type: type as ActivityType
@@ -44,7 +45,21 @@ export const ActivityTypeScreen: RootStackScreen<"ActivityType"> = ({
               <Card.RoundedSquare withBorder>
                 <Card.Title>{attributes.emoji}</Card.Title>
               </Card.RoundedSquare>
-              <Card.Title>{attributes.title}</Card.Title>
+              <View className="flex-1">
+                <Card.Title>{attributes.title}</Card.Title>
+              </View>
+              {attributes.commingSoon && (
+                <View
+                  className="px-1 py-0.5 rounded-md"
+                  style={{ backgroundColor: colors[attributes.color][200] }}
+                >
+                  <Card.Caption
+                    style={{ color: colors[attributes.color][500] }}
+                  >
+                    Available soon
+                  </Card.Caption>
+                </View>
+              )}
             </Card.Container>
           </PressableWithScaleEffect>
         ))}
