@@ -1,9 +1,13 @@
-import { useLayoutEffect } from "react";
+import { useLayoutEffect, useRef } from "react";
 
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { FlatList, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import {
+  ActivitiesFilterModal,
+  ActivitiesFilterModalRef
+} from "src/components/ActivitiesFilterModal";
 import { ActivityCardHandler } from "src/components/ActivityCardHandler/ActivityCardHandler";
 import { ObserveActivitiesWrapper } from "src/components/ObserveActivitiesWrapper";
 import { ObserveSelectedBabyWrapper } from "src/components/ObserveSelectedBabyWrapper";
@@ -13,6 +17,8 @@ import { RootStackScreen } from "src/navigation/types";
 export const ActivityListScreen: RootStackScreen<"ActivityList"> = ({
   navigation
 }) => {
+  const refActivitiesFilterModal = useRef<ActivitiesFilterModalRef>(null);
+
   const { theme } = useCustomThemeContext();
 
   const insets = useSafeAreaInsets();
@@ -30,7 +36,7 @@ export const ActivityListScreen: RootStackScreen<"ActivityList"> = ({
               color={theme.colors.primary}
             />
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={refActivitiesFilterModal.current?.open}>
             <Ionicons name="calendar" size={24} color={theme.colors.primary} />
           </TouchableOpacity>
         </View>
@@ -39,52 +45,41 @@ export const ActivityListScreen: RootStackScreen<"ActivityList"> = ({
   }, [navigation, theme.colors.primary]);
 
   return (
-    <ObserveSelectedBabyWrapper>
-      {({ selectedBaby }) => (
-        <ObserveActivitiesWrapper activitiesQuery={selectedBaby.allActivities}>
-          {({ activities }) => (
-            <FlatList
-              contentContainerStyle={{
-                padding: 24,
-                paddingBottom: 24 + insets.bottom
-              }}
-              data={activities}
-              keyExtractor={(item) => item.id}
-              ItemSeparatorComponent={() => <View className="h-3" />}
-              renderItem={({ item }) => (
-                <ActivityCardHandler
-                  activity={item}
-                  onPress={() =>
-                    navigation.navigate("ActivityForm", {
-                      babyId: selectedBaby.id,
-                      activityId: item.id,
-                      type: item.type,
-                      useGoBackOnSave: true
-                    })
-                  }
-                />
-              )}
-              showsVerticalScrollIndicator={false}
-            />
-            // <View className="space-y-3">
-            //   {activities.map((activity) => (
-            //     <ActivityCardHandler
-            //       activity={activity}
-            //       key={activity.id}
-            //       onPress={() =>
-            //         navigation.navigate("ActivityForm", {
-            //           babyId: selectedBaby.id,
-            //           activityId: activity.id,
-            //           type: activity.type,
-            //           useGoBackOnSave: true
-            //         })
-            //       }
-            //     />
-            //   ))}
-            // </View>
-          )}
-        </ObserveActivitiesWrapper>
-      )}
-    </ObserveSelectedBabyWrapper>
+    <>
+      <ObserveSelectedBabyWrapper>
+        {({ selectedBaby }) => (
+          <ObserveActivitiesWrapper
+            activitiesQuery={selectedBaby.allActivities}
+          >
+            {({ activities }) => (
+              <FlatList
+                contentContainerStyle={{
+                  padding: 24,
+                  paddingBottom: 24 + insets.bottom
+                }}
+                data={activities}
+                keyExtractor={(item) => item.id}
+                ItemSeparatorComponent={() => <View className="h-3" />}
+                renderItem={({ item }) => (
+                  <ActivityCardHandler
+                    activity={item}
+                    onPress={() =>
+                      navigation.navigate("ActivityForm", {
+                        babyId: selectedBaby.id,
+                        activityId: item.id,
+                        type: item.type,
+                        useGoBackOnSave: true
+                      })
+                    }
+                  />
+                )}
+                showsVerticalScrollIndicator={false}
+              />
+            )}
+          </ObserveActivitiesWrapper>
+        )}
+      </ObserveSelectedBabyWrapper>
+      <ActivitiesFilterModal ref={refActivitiesFilterModal} />
+    </>
   );
 };
