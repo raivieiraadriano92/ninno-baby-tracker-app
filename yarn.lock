@@ -4666,6 +4666,11 @@ expo-asset@~10.0.10:
     invariant "^2.2.4"
     md5-file "^3.2.3"
 
+expo-blur@~13.0.2:
+  version "13.0.2"
+  resolved "https://registry.yarnpkg.com/expo-blur/-/expo-blur-13.0.2.tgz#c2d179b19b13830db1d8b90c51373235f462e958"
+  integrity sha512-t2p7BChO3Reykued++QJRMZ/og6J3aXtSQ+bU31YcBeXhZLkHwjWEhiPKPnJka7J2/yTs4+jOCNDY0kCZmcE3w==
+
 expo-build-properties@~0.12.4:
   version "0.12.4"
   resolved "https://registry.yarnpkg.com/expo-build-properties/-/expo-build-properties-0.12.4.tgz#b4844e8727bb163a2f31e130bf9fa6481b76e800"

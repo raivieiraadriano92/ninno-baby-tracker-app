@@ -8,6 +8,7 @@ import {
 
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { format } from "date-fns";
+import { BlurView } from "expo-blur";
 import { activateKeepAwakeAsync, deactivateKeepAwake } from "expo-keep-awake";
 import { Modal, Switch, TouchableOpacity, View } from "react-native";
 import colors from "tailwindcss/colors";
@@ -100,9 +101,10 @@ export const NursingStopwatchModal = forwardRef<
 
   return (
     <Modal animationType="fade" transparent visible={state.isVisible}>
-      <View
+      <BlurView
         className="flex-1 items-center justify-center px-6"
-        style={{ backgroundColor: "rgba(0,0,0,0.7)" }}
+        experimentalBlurMethod="dimezisBlurView"
+        intensity={100}
       >
         <View className="bg-white p-6 rounded-2xl space-y-6 w-full">
           <Text
@@ -155,7 +157,7 @@ export const NursingStopwatchModal = forwardRef<
             </View>
           </View>
         </View>
-      </View>
+      </BlurView>
     </Modal>
   );
 });
