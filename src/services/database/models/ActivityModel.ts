@@ -26,6 +26,14 @@ export enum ActivityType {
   VACCINE = "vaccine"
 }
 
+export enum ActivityTypeGroup {
+  FEEDING = "feeding",
+  DIAPER = "diaper",
+  SLEEP = "sleep",
+  GROWTH = "growth",
+  OTHER = "other"
+}
+
 export enum DiaperStatus {
   WET = "wet",
   DIRTY = "dirty",

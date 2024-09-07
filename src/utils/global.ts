@@ -2,14 +2,17 @@ import colors from "tailwindcss/colors";
 
 import {
   ActivityType,
+  ActivityTypeGroup,
   DiaperStatus,
   DiaperTypeMetadata,
   ExpressedTypeMetadata,
   FormulaTypeMetadata,
   GrowthTypeMetadata,
+  LengthUnit,
   NursingSide,
   NursingTypeMetadata,
-  SupplementTypeMetadata
+  SupplementTypeMetadata,
+  WeightUnit
 } from "src/services/database/models/ActivityModel";
 import { GENDER } from "src/services/database/models/BabyModel";
 import { initialSupplementList } from "src/store/supplementStore";
@@ -49,22 +52,58 @@ const initialNursingTypeMetadata: NursingTypeMetadata = {
 
 const initialGrowthTypeMetadata: GrowthTypeMetadata = {
   head: {
-    unit: "cm",
+    unit: LengthUnit.CM,
     value: 0
   },
   height: {
-    unit: "cm",
+    unit: LengthUnit.CM,
     value: 0
   },
   weight: {
-    unit: "kg",
+    unit: WeightUnit.KG,
     value: 0
+  }
+};
+
+export const activityTypeGroupAttributes: Record<
+  ActivityTypeGroup,
+  {
+    color: keyof typeof colors;
+    emoji: string;
+    title: string;
+  }
+> = {
+  [ActivityTypeGroup.FEEDING]: {
+    color: "rose",
+    emoji: "🍼",
+    title: "Feeding"
+  },
+  [ActivityTypeGroup.DIAPER]: {
+    color: "amber",
+    emoji: "💩",
+    title: "Diaper"
+  },
+  [ActivityTypeGroup.SLEEP]: {
+    color: "blue",
+    emoji: "😴",
+    title: "Sleep"
+  },
+  [ActivityTypeGroup.GROWTH]: {
+    color: "lime",
+    emoji: "🌱",
+    title: "Growth"
+  },
+  [ActivityTypeGroup.OTHER]: {
+    color: "purple",
+    emoji: "🧸",
+    title: "Other"
   }
 };
 
 export const activityTypeAttributes: Record<
   ActivityType,
   {
+    group: ActivityTypeGroup;
     color: keyof typeof colors;
     commingSoon?: boolean;
     emoji: string;
@@ -76,82 +115,95 @@ export const activityTypeAttributes: Record<
     color: "rose",
     emoji: "🤱",
     initialTypeMetadata: initialNursingTypeMetadata,
+    group: ActivityTypeGroup.FEEDING,
     title: "Nursing"
   },
   [ActivityType.EXPRESSED]: {
     color: "rose",
     emoji: "🍼",
     initialTypeMetadata: initialExpressedTypeMetadata,
+    group: ActivityTypeGroup.FEEDING,
     title: "Expressed"
   },
   [ActivityType.FORMULA]: {
     color: "rose",
     emoji: "🍼",
     initialTypeMetadata: initialFormulaTypeMetadata,
+    group: ActivityTypeGroup.FEEDING,
     title: "Formula"
   },
   [ActivityType.SUPPLEMENT]: {
     color: "rose",
     emoji: "🥣",
     initialTypeMetadata: initialSupplementTypeMetadata,
+    group: ActivityTypeGroup.FEEDING,
     title: "Supplement"
   },
   [ActivityType.DIAPER]: {
     color: "amber",
     emoji: "💩",
     initialTypeMetadata: initialDiaperTypeMetadata,
+    group: ActivityTypeGroup.DIAPER,
     title: "Diaper"
   },
   [ActivityType.SLEEP]: {
     color: "blue",
     emoji: "😴",
     initialTypeMetadata: {},
+    group: ActivityTypeGroup.SLEEP,
     title: "Sleep"
   },
   [ActivityType.GROWTH]: {
     color: "lime",
     emoji: "🌱",
     initialTypeMetadata: initialGrowthTypeMetadata,
+    group: ActivityTypeGroup.GROWTH,
     title: "Growth"
   },
   [ActivityType.MILESTONE]: {
-    color: "lime",
+    color: "purple",
     emoji: "🎯",
     initialTypeMetadata: {},
+    group: ActivityTypeGroup.OTHER,
     title: "Milestone"
   },
   [ActivityType.OTHER]: {
-    color: "lime",
+    color: "purple",
     commingSoon: true,
     emoji: "🧸",
+    group: ActivityTypeGroup.OTHER,
     initialTypeMetadata: {},
     title: "Other"
   },
   [ActivityType.JOY]: {
-    color: "lime",
+    color: "purple",
     commingSoon: true,
     emoji: "😃",
+    group: ActivityTypeGroup.OTHER,
     initialTypeMetadata: {},
     title: "Joy"
   },
   [ActivityType.TEMPERATURE]: {
-    color: "lime",
+    color: "purple",
     commingSoon: true,
     emoji: "🌡️",
+    group: ActivityTypeGroup.OTHER,
     initialTypeMetadata: {},
     title: "Temperature"
   },
   [ActivityType.MEDICATION]: {
-    color: "lime",
+    color: "purple",
     commingSoon: true,
     emoji: "💊",
+    group: ActivityTypeGroup.OTHER,
     initialTypeMetadata: {},
     title: "Medication"
   },
   [ActivityType.VACCINE]: {
-    color: "lime",
+    color: "purple",
     commingSoon: true,
     emoji: "💉",
+    group: ActivityTypeGroup.OTHER,
     initialTypeMetadata: {},
     title: "Vaccine"
   }

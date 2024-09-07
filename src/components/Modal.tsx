@@ -55,7 +55,7 @@ export const Modal = forwardRef<ModalRef, ModalProps>(
                 {isVisible && (
                   <TouchableWithoutFeedback onPress={() => {}}>
                     <Animated.View
-                      className="bg-white p-6 rounded-2xl space-y-6 w-full"
+                      className="bg-white p-6 rounded-2xl"
                       entering={SlideInDown}
                       exiting={SlideOutDown}
                     >

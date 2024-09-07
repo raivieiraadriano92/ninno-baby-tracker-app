@@ -1,27 +1,77 @@
-import { useLayoutEffect, useRef } from "react";
+import { useLayoutEffect, useMemo } from "react";
 
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { Q } from "@nozbe/watermelondb";
+import { startOfMonth, startOfWeek, subDays } from "date-fns";
 import { FlatList, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import {
-  ActivitiesFilterModal,
-  ActivitiesFilterModalRef
-} from "src/components/ActivitiesFilterModal";
 import { ActivityCardHandler } from "src/components/ActivityCardHandler/ActivityCardHandler";
 import { ObserveActivitiesWrapper } from "src/components/ObserveActivitiesWrapper";
 import { ObserveSelectedBabyWrapper } from "src/components/ObserveSelectedBabyWrapper";
 import { useCustomThemeContext } from "src/context/CustomThemeProvider";
 import { RootStackScreen } from "src/navigation/types";
+import {
+  ActivityFiltersPeriod,
+  useActivityFiltersStore
+} from "src/store/activityFiltersStore";
+import { activityTypeAttributes } from "src/utils/global";
+import { refActivityFiltersModal } from "src/utils/refs";
 
 export const ActivityListScreen: RootStackScreen<"ActivityList"> = ({
   navigation
 }) => {
-  const refActivitiesFilterModal = useRef<ActivitiesFilterModalRef>(null);
-
   const { theme } = useCustomThemeContext();
 
   const insets = useSafeAreaInsets();
+
+  const { period, activityTypeGroup } = useActivityFiltersStore();
+
+  const extendedQueryFilters = useMemo(() => {
+    const whereClause = [];
+
+    if (activityTypeGroup !== "All") {
+      const entries = Object.entries(activityTypeAttributes);
+
+      const activityTypes = entries
+        .filter(([_, activityType]) => activityType.group === activityTypeGroup)
+        .map(([key]) => key);
+
+      whereClause.push(Q.where("type", Q.oneOf(activityTypes)));
+    }
+
+    if (period !== ActivityFiltersPeriod.ALL) {
+      let date: Date;
+
+      switch (period) {
+        case ActivityFiltersPeriod.WEEKLY:
+          date = startOfWeek(new Date(), { weekStartsOn: 1 });
+
+          break;
+
+        case ActivityFiltersPeriod.MONTHLY:
+          date = startOfMonth(new Date());
+
+          break;
+
+        case ActivityFiltersPeriod.SEVEN_DAY:
+          date = subDays(new Date(), 6);
+
+          break;
+
+        case ActivityFiltersPeriod.THIRTY_DAY:
+          date = subDays(new Date(), 29);
+
+          break;
+      }
+
+      if (date) {
+        whereClause.push(Q.where("started_at", Q.gte(date.getTime())));
+      }
+    }
+
+    return whereClause;
+  }, [activityTypeGroup, period]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -36,8 +86,8 @@ export const ActivityListScreen: RootStackScreen<"ActivityList"> = ({
               color={theme.colors.primary}
             />
           </TouchableOpacity>
-          <TouchableOpacity onPress={refActivitiesFilterModal.current?.open}>
-            <Ionicons name="calendar" size={24} color={theme.colors.primary} />
+          <TouchableOpacity onPress={refActivityFiltersModal.current?.open}>
+            <Ionicons name="filter" size={24} color={theme.colors.primary} />
           </TouchableOpacity>
         </View>
       )
@@ -49,7 +99,9 @@ export const ActivityListScreen: RootStackScreen<"ActivityList"> = ({
       <ObserveSelectedBabyWrapper>
         {({ selectedBaby }) => (
           <ObserveActivitiesWrapper
-            activitiesQuery={selectedBaby.allActivities}
+            activitiesQuery={selectedBaby.allActivities.extend(
+              ...extendedQueryFilters
+            )}
           >
             {({ activities }) => (
               <FlatList
@@ -79,7 +131,6 @@ export const ActivityListScreen: RootStackScreen<"ActivityList"> = ({
           </ObserveActivitiesWrapper>
         )}
       </ObserveSelectedBabyWrapper>
-      <ActivitiesFilterModal ref={refActivitiesFilterModal} />
     </>
   );
 };

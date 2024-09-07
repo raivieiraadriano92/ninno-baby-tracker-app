@@ -94,17 +94,11 @@ export const NursingStopwatchModal = forwardRef<
   const handleKeepAwake = (keepAwake: boolean, changeState = true) => {
     if (keepAwake) {
       activateKeepAwakeAsync();
-
-      console.log("Keep awake activated");
     } else {
-      console.log("Keep awake deactivated");
-
       deactivateKeepAwake();
     }
 
     if (changeState) {
-      console.log("Keep awake state changed");
-
       setState((prev) => ({ ...prev, keepAwake }));
     }
   };
@@ -129,58 +123,60 @@ export const NursingStopwatchModal = forwardRef<
       onOpen={() => handleKeepAwake(INITIAL_STATE.keepAwake, false)}
       ref={refModal}
     >
-      <Text
-        className="font-bold text-3xl text-center"
-        style={{ color: colors[color][500] }}
-      >
-        {format(state.seconds * 1000, "mm:ss")}
-      </Text>
-      <TouchableOpacity
-        className="self-center"
-        onPress={state.isPaused ? startTimer : pause}
-      >
-        <Ionicons
-          color={colors.neutral[300]}
-          name={state.isPaused ? "play" : "pause"}
-          size={48}
-        />
-      </TouchableOpacity>
-      <View className="border-neutral-100 border-[1px] px-4 rounded-2xl">
-        <View className="flex-row items-center h-13 justify-between space-x-2">
-          <Text className="text-sm" style={{ color: colors[color][500] }}>
-            Side
-          </Text>
-          <Text
-            className="capitalize font-bold"
-            style={{ color: colors[color][500] }}
-          >
-            {state.side}
-          </Text>
-        </View>
-        <View className="bg-neutral-100 h-[1px]" />
-        <View className="flex-row items-center h-13 justify-between space-x-2">
-          <Text className="text-sm" style={{ color: colors[color][500] }}>
-            Keep screen awake
-          </Text>
-          <Switch
-            trackColor={{
-              false: colors.neutral[300],
-              true: colors[color][500]
-            }}
-            thumbColor={colors.white}
-            ios_backgroundColor={colors.neutral[300]}
-            onValueChange={handleKeepAwake}
-            value={state.keepAwake}
+      <View className="space-y-6">
+        <Text
+          className="font-bold text-3xl text-center"
+          style={{ color: colors[color][500] }}
+        >
+          {format(state.seconds * 1000, "mm:ss")}
+        </Text>
+        <TouchableOpacity
+          className="self-center"
+          onPress={state.isPaused ? startTimer : pause}
+        >
+          <Ionicons
+            color={colors.neutral[300]}
+            name={state.isPaused ? "play" : "pause"}
+            size={48}
           />
+        </TouchableOpacity>
+        <View className="border-neutral-100 border-[1px] px-4 rounded-2xl">
+          <View className="flex-row items-center h-13 justify-between space-x-2">
+            <Text className="text-sm" style={{ color: colors[color][500] }}>
+              Side
+            </Text>
+            <Text
+              className="capitalize font-bold"
+              style={{ color: colors[color][500] }}
+            >
+              {state.side}
+            </Text>
+          </View>
+          <View className="bg-neutral-100 h-[1px]" />
+          <View className="flex-row items-center h-13 justify-between space-x-2">
+            <Text className="text-sm" style={{ color: colors[color][500] }}>
+              Keep screen awake
+            </Text>
+            <Switch
+              trackColor={{
+                false: colors.neutral[300],
+                true: colors[color][500]
+              }}
+              thumbColor={colors.white}
+              ios_backgroundColor={colors.neutral[300]}
+              onValueChange={handleKeepAwake}
+              value={state.keepAwake}
+            />
+          </View>
         </View>
-      </View>
-      <View className="space-y-4">
-        <Button
-          customColors={[colors[color][500], colors[color][600]]}
-          onPress={save}
-          title="Save"
-        />
-        <Button onPress={cancel} title="Cancel" variant="link" />
+        <View className="space-y-4">
+          <Button
+            customColors={[colors[color][500], colors[color][600]]}
+            onPress={save}
+            title="Save"
+          />
+          <Button onPress={cancel} title="Cancel" variant="link" />
+        </View>
       </View>
     </Modal>
   );

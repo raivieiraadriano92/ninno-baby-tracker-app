@@ -3,9 +3,11 @@ import { FunctionComponent } from "react";
 import { StatusBar } from "expo-status-bar";
 import { AppState } from "react-native";
 
+import { ActivityFiltersModal } from "src/components/ActivityFiltersModal";
 import { CustomThemeProvider } from "src/context/CustomThemeProvider";
 import { RootNavigator } from "src/navigation/RootNavigator";
 import { supabase } from "src/services/supabase";
+import { refActivityFiltersModal } from "src/utils/refs";
 
 // Tells Supabase Auth to continuously refresh the session automatically if
 // the app is in the foreground. When this is added, you will continue to receive
@@ -23,6 +25,7 @@ const App: FunctionComponent = () => (
   <CustomThemeProvider>
     <StatusBar style="dark" />
     <RootNavigator />
+    <ActivityFiltersModal ref={refActivityFiltersModal} />
   </CustomThemeProvider>
 );
 
