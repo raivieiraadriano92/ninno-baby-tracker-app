@@ -115,7 +115,11 @@ export const ActivityFormScreen: RootStackScreen<"ActivityForm"> = ({
       </ScrollView>
       <SafeAreaView className="p-6 pt-0" edges={["bottom"]}>
         <View className="space-y-4">
-          <Button onPress={handleSave} title="Save" />
+          <Button
+            customColors={[colors[attrs.color][500], colors[attrs.color][600]]}
+            onPress={handleSave}
+            title="Save"
+          />
           <Button onPress={navigation.goBack} title="Cancel" variant="link" />
         </View>
       </SafeAreaView>
