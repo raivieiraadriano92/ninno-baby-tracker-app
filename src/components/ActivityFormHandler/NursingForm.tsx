@@ -207,7 +207,7 @@ export const NursingForm: FunctionComponent<
       </View>
       <NursingStopwatchModal
         color={color}
-        onStop={({ durationInMinutes, side }) =>
+        onSave={({ durationInMinutes, side }) =>
           setPayload((prev) => ({
             ...prev,
             typeMetadata: {
