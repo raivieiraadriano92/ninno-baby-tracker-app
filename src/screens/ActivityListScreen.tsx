@@ -2,13 +2,16 @@ import { useLayoutEffect, useMemo } from "react";
 
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Q } from "@nozbe/watermelondb";
-import { startOfMonth, startOfWeek, subDays } from "date-fns";
-import { FlatList, TouchableOpacity, View } from "react-native";
+import { format, parseISO, startOfMonth, startOfWeek, subDays } from "date-fns";
+import { BlurView } from "expo-blur";
+import groupBy from "lodash.groupby";
+import { SectionList, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { ActivityCardHandler } from "src/components/ActivityCardHandler/ActivityCardHandler";
 import { ObserveActivitiesWrapper } from "src/components/ObserveActivitiesWrapper";
 import { ObserveSelectedBabyWrapper } from "src/components/ObserveSelectedBabyWrapper";
+import { Text } from "src/components/Text";
 import { useCustomThemeContext } from "src/context/CustomThemeProvider";
 import { RootStackScreen } from "src/navigation/types";
 import {
@@ -103,31 +106,81 @@ export const ActivityListScreen: RootStackScreen<"ActivityList"> = ({
               ...extendedQueryFilters
             )}
           >
-            {({ activities }) => (
-              <FlatList
-                contentContainerStyle={{
-                  padding: 24,
-                  paddingBottom: 24 + insets.bottom
-                }}
-                data={activities}
-                keyExtractor={(item) => item.id}
-                ItemSeparatorComponent={() => <View className="h-3" />}
-                renderItem={({ item }) => (
-                  <ActivityCardHandler
-                    activity={item}
-                    onPress={() =>
-                      navigation.navigate("ActivityForm", {
-                        babyId: selectedBaby.id,
-                        activityId: item.id,
-                        type: item.type,
-                        useGoBackOnSave: true
-                      })
+            {({ activities }) => {
+              const sections = Object.entries(
+                groupBy(activities, (activity) =>
+                  format(activity.startedAt, "yyyy-MM-dd")
+                )
+              ).map(([date, activities]) => ({
+                date,
+                data: activities
+              }));
+
+              return (
+                <SectionList
+                  contentContainerStyle={{
+                    paddingBottom: 24 + insets.bottom
+                  }}
+                  sections={sections}
+                  data={activities}
+                  keyExtractor={(item) => item.id}
+                  ItemSeparatorComponent={() => <View className="h-3" />}
+                  renderItem={({ item }) => (
+                    <ActivityCardHandler
+                      activity={item}
+                      className="mx-6"
+                      onPress={() =>
+                        navigation.navigate("ActivityForm", {
+                          babyId: selectedBaby.id,
+                          activityId: item.id,
+                          type: item.type,
+                          useGoBackOnSave: true
+                        })
+                      }
+                    />
+                  )}
+                  renderSectionHeader={({ section: { date } }) => {
+                    const sectionDate = parseISO(date);
+
+                    const isToday =
+                      format(sectionDate, "yyyy-MM-dd") ===
+                      format(new Date(), "yyyy-MM-dd");
+
+                    const isYesterday =
+                      format(sectionDate, "yyyy-MM-dd") ===
+                      format(subDays(new Date(), 1), "yyyy-MM-dd");
+
+                    const isThisYear =
+                      format(sectionDate, "yyyy") ===
+                      format(new Date(), "yyyy");
+
+                    let title: string;
+
+                    if (isToday) {
+                      title = "Today";
+                    } else if (isYesterday) {
+                      title = "Yesterday";
+                    } else if (isThisYear) {
+                      title = format(sectionDate, "MMM d");
+                    } else {
+                      title = format(sectionDate, "MMM d, yyyy");
                     }
-                  />
-                )}
-                showsVerticalScrollIndicator={false}
-              />
-            )}
+
+                    return (
+                      <BlurView
+                        className="px-9 pb-3 pt-6"
+                        experimentalBlurMethod="dimezisBlurView"
+                        intensity={100}
+                        tint="light"
+                      >
+                        <Text className="font-bold text-lg">{title}</Text>
+                      </BlurView>
+                    );
+                  }}
+                  showsVerticalScrollIndicator={false}
+                />
+              );
+            }}
           </ObserveActivitiesWrapper>
         )}
       </ObserveSelectedBabyWrapper>
