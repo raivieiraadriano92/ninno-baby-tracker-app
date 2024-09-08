@@ -11,6 +11,7 @@ import Animated, { SlideInDown, SlideOutDown } from "react-native-reanimated";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 type ModalProps = PropsWithChildren<{
+  containerClassName?: string;
   onClose?: () => void;
   onOpen?: () => void;
 }>;
@@ -21,7 +22,7 @@ export type ModalRef = {
 };
 
 export const Modal = forwardRef<ModalRef, ModalProps>(
-  ({ children, onClose, onOpen }, ref) => {
+  ({ children, containerClassName, onClose, onOpen }, ref) => {
     const [isVisible, setIsVisible] = useState(false);
 
     const close = () => {
@@ -55,7 +56,7 @@ export const Modal = forwardRef<ModalRef, ModalProps>(
                 {isVisible && (
                   <TouchableWithoutFeedback onPress={() => {}}>
                     <Animated.View
-                      className="bg-white p-6 rounded-2xl"
+                      className={`bg-white p-6 rounded-2xl ${containerClassName}`}
                       entering={SlideInDown}
                       exiting={SlideOutDown}
                     >

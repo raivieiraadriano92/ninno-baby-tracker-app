@@ -15,7 +15,6 @@ import {
 import { BabyModel } from "src/services/database/models/BabyModel";
 
 export type RootStackParamList = {
-  ActivityType: { babyId: BabyModel["id"] };
   ActivityForm: {
     activityId?: ActivityModel["id"];
     babyId: BabyModel["id"];

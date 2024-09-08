@@ -1,8 +1,14 @@
+import { useRef } from "react";
+
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { ScrollView, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { ActivityCardHandler } from "src/components/ActivityCardHandler/ActivityCardHandler";
+import {
+  ActivityTypesModal,
+  ActivityTypesModalRef
+} from "src/components/ActivityTypesModal";
 import { AddButton } from "src/components/AddButton";
 import { BabyProfileHeader } from "src/components/BabyProfileHeader";
 import { ObserveActivitiesWrapper } from "src/components/ObserveActivitiesWrapper";
@@ -14,6 +20,8 @@ import { TabScreen } from "src/navigation/types";
 
 export const HomeTab: TabScreen<"Home"> = ({ navigation }) => {
   const { theme } = useCustomThemeContext();
+
+  const refActivityTypesModal = useRef<ActivityTypesModalRef>(null);
 
   return (
     <ObserveSelectedBabyWrapper>
@@ -106,14 +114,21 @@ export const HomeTab: TabScreen<"Home"> = ({ navigation }) => {
                 )
               }
             </ObserveActivitiesWrapper>
-            <AddButton
-              onPress={() =>
-                navigation.navigate("ActivityType", {
-                  babyId: selectedBaby.id
-                })
-              }
-            />
+            <AddButton onPress={refActivityTypesModal.current?.open} />
           </View>
+          <ActivityTypesModal
+            onPress={(type) => {
+              refActivityTypesModal.current?.close();
+
+              setTimeout(() => {
+                navigation.navigate("ActivityForm", {
+                  babyId: selectedBaby.id,
+                  type
+                });
+              }, 500);
+            }}
+            ref={refActivityTypesModal}
+          />
         </>
       )}
     </ObserveSelectedBabyWrapper>
