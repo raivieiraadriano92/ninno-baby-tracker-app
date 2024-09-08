@@ -11,6 +11,7 @@ import { MilestoneCard } from "./MilestoneCard";
 import { NursingCard } from "./NursingCard";
 import { SleepCard } from "./SleepCard";
 import { SupplementCard } from "./SupplementCard";
+import { TemperatureCard } from "./TemperatureCard";
 import { ActivityCardHandlerProps, ActivityCardProps } from "./types";
 
 import { ActivityType } from "src/services/database/models/ActivityModel";
@@ -25,7 +26,8 @@ const CardComponentMap: Partial<
   [ActivityType.MILESTONE]: MilestoneCard,
   [ActivityType.NURSING]: NursingCard,
   [ActivityType.SLEEP]: SleepCard,
-  [ActivityType.SUPPLEMENT]: SupplementCard
+  [ActivityType.SUPPLEMENT]: SupplementCard,
+  [ActivityType.TEMPERATURE]: TemperatureCard
 };
 
 export const ActivityCardHandler: FunctionComponent<

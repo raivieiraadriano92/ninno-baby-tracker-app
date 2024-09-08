@@ -12,6 +12,8 @@ import {
   NursingSide,
   NursingTypeMetadata,
   SupplementTypeMetadata,
+  TemperatureTypeMetadata,
+  TemperatureUnit,
   WeightUnit
 } from "src/services/database/models/ActivityModel";
 import { GENDER } from "src/services/database/models/BabyModel";
@@ -63,6 +65,11 @@ const initialGrowthTypeMetadata: GrowthTypeMetadata = {
     unit: WeightUnit.KG,
     value: 0
   }
+};
+
+const initialTemperatureTypeMetadata: TemperatureTypeMetadata = {
+  temperature: 37,
+  unit: TemperatureUnit.CELSIUS
 };
 
 export const activityTypeGroupAttributes: Record<
@@ -185,10 +192,9 @@ export const activityTypeAttributes: Record<
   },
   [ActivityType.TEMPERATURE]: {
     color: "purple",
-    commingSoon: true,
     emoji: "🌡️",
     group: ActivityTypeGroup.OTHER,
-    initialTypeMetadata: {},
+    initialTypeMetadata: initialTemperatureTypeMetadata,
     title: "Temperature"
   },
   [ActivityType.MEDICATION]: {

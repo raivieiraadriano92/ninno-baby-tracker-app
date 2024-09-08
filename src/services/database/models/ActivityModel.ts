@@ -56,6 +56,10 @@ export enum LengthUnit {
   CM = "cm"
 }
 
+export enum TemperatureUnit {
+  CELSIUS = "°C"
+}
+
 export type DiaperTypeMetadata = {
   status: DiaperStatus;
 };
@@ -101,6 +105,11 @@ export type GrowthTypeMetadata = {
 
 export type MilestoneTypeMetadata = {
   milestone: string;
+};
+
+export type TemperatureTypeMetadata = {
+  temperature: string;
+  unit: TemperatureUnit;
 };
 
 export class ActivityModel extends Model {

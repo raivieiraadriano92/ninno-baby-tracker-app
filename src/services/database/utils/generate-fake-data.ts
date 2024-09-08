@@ -7,6 +7,7 @@ import {
   DiaperStatus,
   LengthUnit,
   NursingSide,
+  TemperatureUnit,
   WeightUnit
 } from "../models/ActivityModel";
 import { BabyModel } from "../models/BabyModel";
@@ -47,7 +48,8 @@ const generateRandomItems = (length: number): Item[] => {
     "diaper",
     "sleep",
     "growth",
-    "milestone"
+    "milestone",
+    "temperature"
   ];
 
   return Array.from({ length }, () => {
@@ -157,6 +159,16 @@ const generateRandomItems = (length: number): Item[] => {
           typeMetadata: {
             milestone:
               initialMilestoneList[random(0, initialMilestoneList.length - 1)]
+          }
+        };
+
+      case "temperature":
+        return {
+          ...commonFields,
+          type,
+          typeMetadata: {
+            temperature: random(35, 40), // degrees Celsius
+            unit: TemperatureUnit.CELSIUS
           }
         };
 

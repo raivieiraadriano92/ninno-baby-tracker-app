@@ -9,6 +9,7 @@ import { MilestoneForm } from "./MilestoneForm";
 import { NursingForm } from "./NursingForm";
 import { SleepForm } from "./SleepForm";
 import { SupplementForm } from "./SupplementForm";
+import { TemperatureForm } from "./TemperatureForm";
 import { ActivityFormHandlerProps, ActivityFormProps } from "./types";
 
 import { ActivityType } from "src/services/database/models/ActivityModel";
@@ -23,7 +24,8 @@ const FormComponentMap: Partial<
   [ActivityType.MILESTONE]: MilestoneForm,
   [ActivityType.NURSING]: NursingForm,
   [ActivityType.SLEEP]: SleepForm,
-  [ActivityType.SUPPLEMENT]: SupplementForm
+  [ActivityType.SUPPLEMENT]: SupplementForm,
+  [ActivityType.TEMPERATURE]: TemperatureForm
 };
 
 export const ActivityFormHandler: FunctionComponent<
