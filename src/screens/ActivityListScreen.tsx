@@ -78,24 +78,46 @@ export const ActivityListScreen: RootStackScreen<"ActivityList"> = ({
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerRight: () => (
-        <View className="flex-row space-x-4">
-          <TouchableOpacity
-            onPress={() => navigation.navigate("ActivityReport")}
-          >
-            <Ionicons
-              name="stats-chart"
-              size={24}
-              color={theme.colors.primary}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={refActivityFiltersModal.current?.open}>
-            <Ionicons name="filter" size={24} color={theme.colors.primary} />
-          </TouchableOpacity>
-        </View>
-      )
+      headerRight: () => {
+        let filtersCount = 0;
+
+        if (activityTypeGroup !== "All") {
+          filtersCount++;
+        }
+
+        if (period !== "All") {
+          filtersCount++;
+        }
+
+        return (
+          <View className="flex-row space-x-4">
+            <TouchableOpacity
+              onPress={() => navigation.navigate("ActivityReport")}
+            >
+              <Ionicons
+                name="stats-chart"
+                size={24}
+                color={theme.colors.primary}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              className="items-center justify-center"
+              onPress={refActivityFiltersModal.current?.open}
+            >
+              <Ionicons name="filter" size={24} color={theme.colors.primary} />
+              {!!filtersCount && (
+                <View className="absolute bg-red-500 h-4 items-center justify-center rounded-full w-4 -right-1 -top-1">
+                  <Text className="font-bold text-[10px] leading-[13px] text-white">
+                    {filtersCount}
+                  </Text>
+                </View>
+              )}
+            </TouchableOpacity>
+          </View>
+        );
+      }
     });
-  }, [navigation, theme.colors.primary]);
+  }, [activityTypeGroup, navigation, period, theme.colors.primary]);
 
   return (
     <>
