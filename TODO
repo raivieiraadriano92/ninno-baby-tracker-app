@@ -9,3 +9,5 @@
 - implement Store Review https://docs.expo.dev/versions/latest/sdk/storereview/
 - Save users from deleting your app with expo-quick-actions (https://expo.dev/blog/expo-quick-actions)
 - implement live activities for Nursing and sleep
+- set up analytics
+- set up bugsnag or sentry
