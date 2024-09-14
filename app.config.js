@@ -33,14 +33,17 @@ export default {
       config: {
         usesNonExemptEncryption: false
       },
-      usesAppleSignIn: true
+      usesAppleSignIn: true,
+      appStoreUrl:
+        "https://apps.apple.com/us/app/ninno-baby-diary-tracker/id6480134467"
     },
     android: {
       adaptiveIcon: {
         foregroundImage: "./assets/adaptive-icon.png",
         backgroundColor: "#bae6fd"
       },
-      package: bundleIdentifier
+      package: bundleIdentifier,
+      playStoreUrl: "https://play.google.com/store/apps/details?id=app.ninno"
     },
     web: {
       favicon: "./assets/favicon.png"
