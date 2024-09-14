@@ -51,7 +51,14 @@ export default {
     plugins: [
       "expo-apple-authentication",
       "@react-native-google-signin/google-signin",
-      ["@morrowdigital/watermelondb-expo-plugin"],
+      /**
+       * @todo
+       * Android - SDK 51 - 'getJSIModulePackage' overrides nothing #45
+       * https://github.com/morrowdigital/watermelondb-expo-plugin/issues/45
+       *
+       * WORKAROUND: disableJsi: true
+       */
+      ["@morrowdigital/watermelondb-expo-plugin", { disableJsi: true }],
       [
         "expo-build-properties",
         {
