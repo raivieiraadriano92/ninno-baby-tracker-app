@@ -1,17 +1,29 @@
 const getAppInfo = () => {
   switch (process.env.APP_VARIANT) {
     case "production":
-      return { name: "Ninno", bundleIdentifier: "app.ninno" };
+      return {
+        name: "Ninno",
+        bundleIdentifier: "app.ninno",
+        googleServicesFilePath: "./credentials/production"
+      };
 
     case "preview":
-      return { name: "Ninno (Preview)", bundleIdentifier: "app.ninno.preview" };
+      return {
+        name: "Ninno (Preview)",
+        bundleIdentifier: "app.ninno.preview",
+        googleServicesFilePath: "./credentials/preview"
+      };
 
     default:
-      return { name: "Ninno (Dev)", bundleIdentifier: "app.ninno.dev" };
+      return {
+        name: "Ninno (Dev)",
+        bundleIdentifier: "app.ninno.dev",
+        googleServicesFilePath: "./credentials/development"
+      };
   }
 };
 
-const { bundleIdentifier, name } = getAppInfo();
+const { bundleIdentifier, name, googleServicesFilePath } = getAppInfo();
 
 export default {
   expo: {
@@ -35,7 +47,8 @@ export default {
       },
       usesAppleSignIn: true,
       appStoreUrl:
-        "https://apps.apple.com/us/app/ninno-baby-diary-tracker/id6480134467"
+        "https://apps.apple.com/us/app/ninno-baby-diary-tracker/id6480134467",
+      googleServicesFile: `${googleServicesFilePath}/GoogleService-Info.plist`
     },
     android: {
       adaptiveIcon: {
@@ -43,7 +56,8 @@ export default {
         backgroundColor: "#bae6fd"
       },
       package: bundleIdentifier,
-      playStoreUrl: "https://play.google.com/store/apps/details?id=app.ninno"
+      playStoreUrl: "https://play.google.com/store/apps/details?id=app.ninno",
+      googleServicesFile: `${googleServicesFilePath}/google-services.json`
     },
     web: {
       favicon: "./assets/favicon.png"
@@ -52,6 +66,9 @@ export default {
       tsconfigPaths: true
     },
     plugins: [
+      "@react-native-firebase/app",
+      "@react-native-firebase/auth",
+      "@react-native-firebase/crashlytics",
       "expo-apple-authentication",
       "@react-native-google-signin/google-signin",
       /**
@@ -70,6 +87,9 @@ export default {
             packagingOptions: {
               pickFirst: ["**/libc++_shared.so"]
             }
+          },
+          ios: {
+            useFrameworks: "static"
           }
         }
       ],
