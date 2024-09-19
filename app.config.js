@@ -17,7 +17,7 @@ const getAppInfo = () => {
     default:
       return {
         name: "Ninno (Dev)",
-        bundleIdentifier: "app.ninno.dev",
+        bundleIdentifier: "app.ninno.development",
         googleServicesFilePath: "./credentials/development"
       };
   }

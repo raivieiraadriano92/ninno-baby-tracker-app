@@ -9,5 +9,6 @@
 - implement Store Review https://docs.expo.dev/versions/latest/sdk/storereview/
 - Save users from deleting your app with expo-quick-actions (https://expo.dev/blog/expo-quick-actions)
 - implement live activities for Nursing and sleep
+ - for Android take a look ar foreground services: https://notifee.app/react-native/docs/android/foreground-service
 - set up analytics
 - set up bugsnag or sentry
